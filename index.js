@@ -1,7 +1,7 @@
 "use strict";
 
 import React from 'react';
-import {applyMiddleware, compose, createStore as storeCreator} from 'redux';
+import {applyMiddleware, combineReducers, compose, createStore as storeCreator} from 'redux';
 import {createLogger} from 'redux-logger';
 import createSagaMiddleware from "redux-saga";
 import { connect } from 'react-redux';
@@ -27,7 +27,7 @@ const getReducer = (actionList, initialState) => {
 }
 
 
-
+let reducers = {};
 
 module.exports = {
 	createContainer : (attrs) =>{
@@ -43,31 +43,28 @@ module.exports = {
 
 	},
 
-	createStore : (modules, new_middlewares) => {
+	createStore : (containers, new_middlewares) => {
 		let saga_array = [];
-		let modules = Object.keys(modules).map( key => {
-			let module = modules[key].attrs;
+		  Object.keys(containers).forEach( key => {
+			let module = containers[key].attrs;
 			saga_array.concat(module.sagas)
-			return { 
-				key : 
-				getReducer( module.mutations ,
-				module.state ) 
-			}
+			reducers[key] = getReducer( module.mutations , module.state ) 
 		})
 
-		function* rootSaga(){
-			yield all(saga_array)
-		}
+		// function* rootSaga(){
+		// 	yield all(saga_array)
+		// }
 
-		let middlewares = middlewares.concat(new_middlewares)
+		middlewares = middlewares.concat(new_middlewares)
 		let store = storeCreator(
-		    combineReducers(modules),
+		    combineReducers(reducers),
 		    composeEnhancers(
 		        applyMiddleware(...middlewares)
 		    )
 		);
 
-		sagaMiddleware.run(rootSaga)
+		// sagaMiddleware.run(rootSaga)
+		return store;
 	}
 
 }

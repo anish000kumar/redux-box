@@ -1,0 +1,32 @@
+{
+  "name": "redux-box",
+  "version": "1.0.0",
+  "description": "A redux container to scaffold a redux app as simple as possible while making perfect sense!",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anish000kumar/redux-box.git"
+  },
+  "keywords": [
+    "redux",
+    "react",
+    "javascript",
+    "react-native",
+    "vue"
+  ],
+  "author": "Anish Kumar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anish000kumar/redux-box/issues"
+  },
+  "dependencies": {
+      "react-redux": "^5.0.6",
+      "redux": "^3.7.2",
+      "redux-logger": "^3.0.6",
+      "redux-saga": "^0.16.0"
+    },
+  "homepage": "https://github.com/anish000kumar/redux-box#readme"
+}

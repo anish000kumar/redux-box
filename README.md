@@ -3,11 +3,13 @@
 Setting up and organizing a redux store in your react/ react-native projects can be a tedious and daunting task. 
 Redux-Box aims at extracting the complexity in setting up redux box, without loosing the flexibilty or without introducing new bizzare terms.
 
-#Installation
+# Installation
 Run this command in your terminal/cmd to install the package:
-`npm install --save redux-box`
+```
+npm install --save redux-box
+```
 
-#The Basics
+# The Basics
 
 Redux Box allows you to think your whole application in modules. For example, a typical e-commerce can be thought to be composed of some modiles like:
 1. Products 
@@ -21,5 +23,5 @@ Each of these modules manage their state seperately with the help of five files/
 4. actions (this file contains action creators for your module)
 5. index (this file exports a container which encloses the whole module and can be used with render props)
 
-#Usage
+# Usage
 ..todo..

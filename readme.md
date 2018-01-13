@@ -1,4 +1,7 @@
-[](redux-box.png)
+<p align="center"><a href="#" target="_blank">
+	<img src="https://image.ibb.co/e4Nce6/redux_box.png" alt="redux_box" border="0">
+</a></p>
+
 # Redux Box
 Setting up and organizing a redux store in your react/ react-native projects can be a tedious and daunting task. 
 Redux-Box aims at extracting the complexity in setting up redux with redux-saga, without loosing the flexibilty or without introducing new bizzare terms.

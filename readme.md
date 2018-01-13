@@ -108,7 +108,7 @@ export default createSagas({
 	}
 })
 ```
-Above code means when SET_USER_NAME action is dispatched anywhere in the app, run the saga mentioned against it. Also, notice the `latest` modifier alongside the action name. It's equivalent of `takeLatest` from 'redux-saga'. You can also use `every` which would produce the same effect as `takeEvery` from 'redux-saga'.
+Above code means when GET_ORDERS_LIST action is dispatched anywhere in the app, run the saga mentioned against it. Also, notice the `latest` modifier alongside the action name. It's equivalent of `takeLatest` from 'redux-saga'. You can also use `every` which would produce the same effect as `takeEvery` from 'redux-saga'.
 
 ## 4. index.js
 It's the heart of a module which binds all the pieces together. It exports two things : a module and a container (which will be used in any component where you need this module).

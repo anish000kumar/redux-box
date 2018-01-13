@@ -1,4 +1,5 @@
-# redux-box
+[](redux-box.png)
+# Redux Box
 Setting up and organizing a redux store in your react/ react-native projects can be a tedious and daunting task. 
 Redux-Box aims at extracting the complexity in setting up redux with redux-saga, without loosing the flexibilty or without introducing new bizzare terms.
 

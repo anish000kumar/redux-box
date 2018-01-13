@@ -19,7 +19,7 @@ export const createContainer = (module) =>{
 		 set: set
 	}) );
 	return connect(
-		mapStateToProps
+		mapStateToProps,{}
 	)(Container);
 }
 

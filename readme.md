@@ -58,8 +58,8 @@ export default createStore([
 Finally you  need to wrap your root component in the `<Provider> </Provider>` which can be imported from `redux`;
 And that's all you would need to setup redux and redux-saga for your application in a modular way.
 
-#Understaing the Module
-##1. state.js
+# Understaing the Module
+## 1. state.js
 It exports an object specifying the initial state for the parent module.
 Example:
 `userModule/state.js`
@@ -72,7 +72,7 @@ export default {
 }
 ```
 
-##2. mutations.js
+## 2. mutations.js
 It's a clutter-free version of the typical reducer we use with redux. it exports an object with multiple functions. Each function name matches certain action type. When an action is dispatched from anywhere in the application, the corresponding method is run and it mutates the state accordingly. Each `mutation` accepts two arguments: a copy of the state of it's module and the action that triggers the mutations. Here's an example : 
 `userModule/mutations.js`
 
@@ -86,7 +86,7 @@ export default {
 
 Each `mutation` receives a copy of the state hence you can directly change the object. Also, you don't need to return the changed state object, `redux-box` handles that for you behind the scenes.
 
-##3. Sagas
+## 3. Sagas
 Sagas are used to handle the async operations we might need to perform in our application. Usually to trigger an async process, you would need two sagas: Watcher saga and Worker saga. `redux-box` make this process clutter free as well, by providing you with a method called `createSagas`. It's optional to use, and you may want to stick to traditional process of managing sagas, if you need more flexibility. But for most use cases `createSagas` can extract away quite a bit of noise. Each Worker saga receives the triggering action as the argument:
 `userModule/Sagas.js`
 ```
@@ -109,9 +109,9 @@ export default createSagas({
 	}
 })
 ```
-Above code means when SET_USER_NAME action is dispatched anywhere in the app, run the saga mentioned against it. Also, notice the `latest` modifier alongside the action name. It's equivalent of `takeLatest` from 'redux-saga'. You can also use `every` which would produce the same effect as `takeEvery` from 'redux-saga'.
+Above code means when GET_ORDERS_LIST action is dispatched anywhere in the app, run the saga mentioned against it. Also, notice the `latest` modifier alongside the action name. It's equivalent of `takeLatest` from 'redux-saga'. You can also use `every` which would produce the same effect as `takeEvery` from 'redux-saga'.
 
-##4. index.js
+## 4. index.js
 It's the heart of a module which binds all the pieces together. It exports two things : a module and a container (which will be used in any component where you need this module).
 Here's how it typically goes:
 `userModule/index.js`
@@ -133,7 +133,7 @@ export default createContainer(module)
 
 ```
 
-#Now the magic!
+# Now the magic!
 Once you have structures the module and it's files. You are ready to "code at speed of thought" with redux-box. Let's say I need the userModule in my `App.js` file. Here we go:
 
 `App.js`
@@ -148,17 +148,17 @@ class App extends Component {
             {(user)=>(
                <h1> {user.name} </h1>
 
-				<button onClick={()=> store.commit('SET_USER_NAME', 'Roy') } > 
-				 Change name to Roy 
-				</button>
+		<button onClick={()=> user.commit('SET_USER_NAME', 'Roy') } > 
+		 Change name to Roy 
+		</button>
 
-				<button onClick={()=> {
-					store.dispatch('GET_ORDERS_LIST')
-					.then( res => alert('orders updated') )
-					.catch(err => alert(err.messsage) )
-				}} > 
-				 Get Orders from Api
-				</button>
+		<button onClick={()=> {
+			user.dispatch('GET_ORDERS_LIST')
+			.then( res => alert('orders updated') )
+			.catch(err => alert(err.messsage) )
+		}} > 
+		 Get Orders from Api
+		</button>
             )}
           </UserContainer>
     )
@@ -177,4 +177,4 @@ The above example illustrate the three major jobs of the module-container.
 	data : //.. data you attach as the second argumento to commit method
 }
 ```
--Thirdly, if you need to do something after your saga is finished, you would use `store.dispatch` instead of `store.commit`. it will also trigger the mutations and sagas, associated with the underlying action, but additionally it returns a `Promise`. The `store.dispatch` method basically attached `resolve` and `reject` keys to the causing action, which you can yield from you sagas, as you could see in the example saga above.
+- Thirdly, if you need to do something after your saga is finished, you would use `store.dispatch` instead of `store.commit`. it will also trigger the mutations and sagas, associated with the underlying action, but additionally it returns a `Promise`. The `store.dispatch` method basically attached `resolve` and `reject` keys to the causing action, which you can yield from you sagas, as you could see in the example saga above.

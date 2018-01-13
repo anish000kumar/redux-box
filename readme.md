@@ -90,12 +90,12 @@ Each `mutation` receives a copy of the state hence you can directly change the o
 Sagas are used to handle the async operations we might need to perform in our application. Usually to trigger an async process, you would need two sagas: Watcher saga and Worker saga. `redux-box` make this process clutter free as well, by providing you with a method called `createSagas`. It's optional to use, and you may want to stick to traditional process of managing sagas, if you need more flexibility. But for most use cases `createSagas` can extract away quite a bit of noise. Each Worker saga receives the triggering action as the argument:
 `userModule/Sagas.js`
 ```
-import {createSagas} from 'redux-box/helpers';
+import box from 'redux-box';
 import {put} from 'redux-saga';
 
 import api from './api'
 
-export default createSagas({
+export default box.createSagas({
 	'GET_ORDERS_LIST.latest' : function* (action){
 		try{
 			yield result = api.getOrders(action.data.id)
@@ -116,7 +116,7 @@ It's the heart of a module which binds all the pieces together. It exports two t
 Here's how it typically goes:
 `userModule/index.js`
 ```
-import {createContainer} from 'redux-box/helpers';
+import box from 'redux-box';
 
 import state from './state'
 import mutations from './mutations'
@@ -129,7 +129,7 @@ export const module = {
 	sagas
 }
 
-export default createContainer(module)
+export default box.createContainer(module)
 
 ```
 

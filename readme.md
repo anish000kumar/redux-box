@@ -147,12 +147,12 @@ class App extends Component {
             {(user)=>(
                <h1> {user.name} </h1>
 
-		<button onClick={()=> store.commit('SET_USER_NAME', 'Roy') } > 
+		<button onClick={()=> user.commit('SET_USER_NAME', 'Roy') } > 
 		 Change name to Roy 
 		</button>
 
 		<button onClick={()=> {
-			store.dispatch('GET_ORDERS_LIST')
+			user.dispatch('GET_ORDERS_LIST')
 			.then( res => alert('orders updated') )
 			.catch(err => alert(err.messsage) )
 		}} > 

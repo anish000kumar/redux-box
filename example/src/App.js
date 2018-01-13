@@ -6,13 +6,21 @@ import store from './store';
 import Test from './store/testModule';
 
 class App extends Component {
+
+  changeName = (e, store) =>{
+    store.commit('SET_NAME', e.target.value)
+  }
+
   render() {
     return (
       <Provider store={store}>
         <div className="App">
           <Test>
             {(store)=>(
-                <div>{store.name}</div>
+               <div>
+                  <div>{store.name}</div>
+                  <input type="text" onChange={(e)=> this.changeName(e, store)}/>
+               </div>
               )}
           </Test>
         </div>

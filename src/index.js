@@ -8,8 +8,9 @@ import {all, takeLatest, takeEvery, put} from 'redux-saga/effects';
 import {assign, createContainer, createSagas} from './helpers';
 import getReducer from './reducer';
 
+const devTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+const composeEnhancers =  devTools || compose;
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSIONS_COMPOSE__ || compose;
 const sagaMiddleware = createSagaMiddleware();
 let middlewares = [sagaMiddleware];
 
@@ -58,7 +59,7 @@ export const createContainer = (module) =>{
 	const mapStateToProps = state => state[module.name]
 	const set = function( target, value ){
 		STORE.dispatch({
-			type : module.name+'__SET',
+			type :'__SET__'+module.name,
 			data :{
 				target,
 				value

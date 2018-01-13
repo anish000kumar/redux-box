@@ -1,5 +1,5 @@
 export default {
-	test(){
-		
+	SET_NAME(state, {data} ){
+		state.name = data+'s';
 	}
 }

@@ -15,13 +15,13 @@ const assign = (obj, prop, value) => {
  const getReducer = (name, actionList, initialState) => {
 	actionList['__SET__'+name] = function(state, {data}){
 		try{
-			return assign(state, data.target, data.value )
+			 assign(state, data.target, data.value )
 		}
 		catch(err){
 			console.log('WARNING: the key specified for the setter wasnt valid', err)
-			return state;
 		}
 	}
+	
 	return  ( state = initialState, action) => {
 		let method = actionList[action.type];
 		if(method){

@@ -7,7 +7,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.0.17",
-    "redux-box": "^1.0.1",
+    "redux-box": "^1.0.5",
     "redux-saga": "^0.16.0"
   },
   "scripts": {

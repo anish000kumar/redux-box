@@ -1,4 +1,4 @@
-import box from 'redux-box';
+import {createContainer} from 'redux-box';
 import state from './state';
 import mutations from './mutations';
 import sagas from './sagas';
@@ -10,4 +10,4 @@ export const module ={
 	sagas
 }
 
-export default box.createContainer(module)
+export default createContainer(module)

@@ -34,13 +34,13 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 
 ```
 |-src
-|---store
-|------userModule
-|--------state.js
-|--------mutations.js
-|--------sagas.js
-|----index.js
-|---index.js
+|---|store
+|------|userModule
+|--------|state.js
+|--------|mutations.js
+|--------|sagas.js
+|--------|index.js
+|---|index.js
 ```
 
 2. Creating a redux store : 

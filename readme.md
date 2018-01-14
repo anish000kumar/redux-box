@@ -40,7 +40,7 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 |--------|mutations.js
 |--------|sagas.js
 |--------|index.js
-|---|index.js
+|------|index.js
 ```
 
 2. Creating a redux store : 

@@ -33,14 +33,14 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
  The  directory structure would look something like below. `store` directory has an `index.js` file and various modules as shown below.
 
 ```
-|-src
-|---store
-|------userModule
-|--------state.js
-|--------mutations.js
-|--------sagas.js
-|----index.js
-|---index.js
+-src
+|-store
+| |-index.js
+| |-userModule
+| | |-state.js
+| | |-mutations.js
+| | |-sagas.js
+| | |-index.js
 ```
 
 2. Creating a redux store : 

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {applyMiddleware,combineReducers, compose, createStore as storeCreator} from 'redux';
 import createSagaMiddleware from "redux-saga";
 import {all, takeLatest, takeEvery, put} from 'redux-saga/effects';
-import {assign, createContainer, createSagas} from './helpers';
+import {assign} from './helpers';
 import getReducer from './reducer';
 
 const devTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
@@ -30,7 +30,13 @@ export const createStore = (modules, reducers={}, new_middlewares=[]) => {
 		composeEnhancers( applyMiddleware(...middlewares))
 	)
 	function *rootSaga(){
-		yield all(sagas)
+		try{
+			yield all(sagas)
+		}
+		catch(err){
+			alert('Something went wrong! Please check your connecitivity')
+			process.env.NODE_ENV=='development' && console.log(err)
+		}
 	}
 	sagaMiddleware.run(rootSaga);
 	STORE = store;
@@ -77,6 +83,8 @@ export const createContainer = (module) =>{
 }
 
 
+
+
 export const createSagas = (saga_list) => {
 	let arr = [];
 	var GeneratorFunction = Object.getPrototypeOf(function*(){}).constructor
@@ -84,7 +92,7 @@ export const createSagas = (saga_list) => {
 	saga_keys.forEach( key => {
 		let action = key.split('.')[0];
 		let worker_saga = saga_list[key];
-		let mode = key.split('.')[1];
+		let mode = key.split('.')[1] || 'latest';
 		let watcher = null;
 		if(mode=='latest'){
 			watcher = function* (){

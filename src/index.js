@@ -50,16 +50,23 @@ export const commit= (action_name, data) => {
 	})
 }
 
-export const dispatch = (action_name, data ) =>{
+export const latest = (str) => str +'.latest'
+export const every = (str) => str + '.every'
+
+export const dispatch= (action) => {
+	return STORE.dispatch(dispatch)
+}
+
+export const dispatchPromise = (action) => {
 	return new Promise(function(resolve, reject){
-		STORE.dispatch({
-			type: action_name,
+		STORE.dispatch(Object.assign({}, action,{
 			resolve,
-			reject,
-			data
-		})
+			reject
+		}))
 	})
 }
+
+
 
 export const createContainer = (module) =>{
 	const mapStateToProps = state => state[module.name]
@@ -82,6 +89,29 @@ export const createContainer = (module) =>{
 	)(Container);
 }
 
+export const inject = (modules) {
+	mapStateToProps(state){
+		let finalObj ={};
+		Object.keys(modules).forEach(key => {
+			let module = modules[key];
+			finalObj.key = state[module.name]
+		})
+		return finalObj;
+	}
+	return (WrappedComponent) => {
+		@connect(mapStateToProps,{})
+		class StoreWrapper extends React.Component{
+			render(){
+				<WrappedComponent
+				dispatch={dispatch}
+				commit={commit}
+				{...this.props}
+				>
+				</WrappedComponent>
+			}
+		}
+	}
+}
 
 
 

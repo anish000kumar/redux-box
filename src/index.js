@@ -35,7 +35,7 @@ export const createStore = (modules, reducers={}, new_middlewares=[]) => {
 			yield all(sagas)
 		}
 		catch(err){
-			alert('Something went wrong! Please check your connecitivity')
+			alert('Something went wrong! Please check your connectivity')
 			process.env.NODE_ENV=='development' && console.log(err)
 		}
 	}
@@ -60,10 +60,12 @@ export const dispatch= (action) => {
 
 export const commitAsync = (action_name, data ) =>{
 	return new Promise(function(resolve, reject){
-		STORE.dispatch(Object.assign({}, action,{
+		STORE.dispatch({
+			type : action_name,
+			data,
 			resolve,
 			reject
-		}))
+		})
 	})
 }
 
@@ -92,8 +94,8 @@ export const createContainer = (module) =>{
 		 dispatch ,
 		 commit,
 		 set,
-		 commitAsync,
-		 dispatchPromise
+		 dispatchPromise,
+		 commitAsync
 	}) );
 	return connect(
 		mapStateToProps,{}

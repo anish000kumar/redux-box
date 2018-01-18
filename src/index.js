@@ -89,9 +89,11 @@ export const createContainer = (module) =>{
 		})
 	}
 	const Container = (props) => props.children( Object.assign({}, props, {
-		 dispatch : dispatch,
-		 commit : commit,
-		 set: set
+		 dispatch ,
+		 commit,
+		 set,
+		 commitAsync,
+		 dispatchPromise
 	}) );
 	return connect(
 		mapStateToProps,{}

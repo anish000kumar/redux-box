@@ -54,7 +54,12 @@ export const latest = (str) => str +'.latest'
 export const every = (str) => str + '.every'
 
 export const dispatch= (action) => {
-	return STORE.dispatch(dispatch)
+	if(typeof action=='string')
+		return STORE.dispatch({
+			type : action
+		})
+	else
+		return STORE.dispatch(action)
 }
 
 export const dispatchPromise = (action) => {

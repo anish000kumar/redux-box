@@ -64,6 +64,16 @@ export const commitAsync = (action_name, data ) =>{
 	})
 }
 
+export const dispatchPromise = (action) => {
+	return new Promise(function(resolve, reject){
+		STORE.dispatch( object.assign({}, action,{
+				resolve,
+				reject
+			})
+		)
+	})
+}
+
 export const createContainer = (module) =>{
 	const mapStateToProps = state => state[module.name]
 	const set = function( target, value ){

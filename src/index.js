@@ -43,6 +43,9 @@ export const createStore = (modules, reducers={}, new_middlewares=[]) => {
 	return store;
 }
 
+export const every = (str) => str + '.every'
+export const latest = (str) => str + '.latest'
+
 export const commit= (action_name, data) => {
 	return STORE.dispatch({
 		type : action_name,
@@ -50,7 +53,7 @@ export const commit= (action_name, data) => {
 	})
 }
 
-export const dispatch = (action_name, data ) =>{
+export const commitAsync = (action_name, data ) =>{
 	return new Promise(function(resolve, reject){
 		STORE.dispatch({
 			type: action_name,

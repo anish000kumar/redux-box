@@ -8,7 +8,7 @@ import {all, takeLatest, takeEvery, put} from 'redux-saga/effects';
 import {assign} from './helpers';
 import getReducer from './reducer';
 
-const devTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+const devTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 const composeEnhancers =  devTools || compose;
 
 const sagaMiddleware = createSagaMiddleware();
@@ -55,12 +55,10 @@ export const commit= (action_name, data) => {
 
 export const commitAsync = (action_name, data ) =>{
 	return new Promise(function(resolve, reject){
-		STORE.dispatch({
-			type: action_name,
+		STORE.dispatch(Object.assign({}, action,{
 			resolve,
-			reject,
-			data
-		})
+			reject
+		}))
 	})
 }
 
@@ -96,8 +94,6 @@ export const createContainer = (module) =>{
 }
 
 
-
-
 export const createSagas = (saga_list) => {
 	let arr = [];
 	var GeneratorFunction = Object.getPrototypeOf(function*(){}).constructor
@@ -121,6 +117,7 @@ export const createSagas = (saga_list) => {
 	})
 	return arr;
 }
+
 
 export default {
 	createContainer,

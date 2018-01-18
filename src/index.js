@@ -16,6 +16,7 @@ let middlewares = [sagaMiddleware];
 
 
 export let STORE = null;
+
 export const createStore = (modules, reducers={}, new_middlewares=[]) => {
 	middlewares = middlewares.concat(new_middlewares);
 	let reducerList = Object.assign({}, reducers);
@@ -51,6 +52,10 @@ export const commit= (action_name, data) => {
 		type : action_name,
 		data 
 	})
+}
+
+export const dispatch= (action) => {
+	return STORE.dispatch(action)
 }
 
 export const commitAsync = (action_name, data ) =>{

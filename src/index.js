@@ -94,31 +94,6 @@ export const createContainer = (module) =>{
 	)(Container);
 }
 
-export const inject = (modules) {
-	mapStateToProps(state){
-		let finalObj ={};
-		Object.keys(modules).forEach(key => {
-			let module = modules[key];
-			finalObj.key = state[module.name]
-		})
-		return finalObj;
-	}
-	return (WrappedComponent) => {
-		@connect(mapStateToProps,{})
-		class StoreWrapper extends React.Component{
-			render(){
-				<WrappedComponent
-				dispatch={dispatch}
-				commit={commit}
-				{...this.props}
-				>
-				</WrappedComponent>
-			}
-		}
-	}
-}
-
-
 
 export const createSagas = (saga_list) => {
 	let arr = [];
@@ -143,6 +118,7 @@ export const createSagas = (saga_list) => {
 	})
 	return arr;
 }
+
 
 export default {
 	createContainer,

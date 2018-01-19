@@ -21,7 +21,8 @@
 //                 value : initialValue,
 //                 onChange : (e) => store.set(this.props.bind, e.target.value)
 //             })
-        
+
 //     }
-       
+
 // }
+"use strict";

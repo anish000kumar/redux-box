@@ -1,5 +1,4 @@
 "use strict";
-import React from 'react';
 import produce from 'immer';
 import { connect } from 'react-redux';
 import {applyMiddleware,combineReducers, compose, createStore as storeCreator} from 'redux';
@@ -69,6 +68,9 @@ export const commitAsync = (action_name, data ) =>{
 	})
 }
 
+
+
+
 export const dispatchPromise = (action) => {
 	return new Promise(function(resolve, reject){
 		STORE.dispatch( object.assign({}, action,{
@@ -125,6 +127,27 @@ export const createSagas = (saga_list) => {
 		arr.push(watcher())
 	})
 	return arr;
+}
+
+export const connectStore =  (...modules) =>{
+    const mapStateToProps = state => {
+        let finalState = {};
+        Object.keys(modules).forEach( key => {
+            const module = modules[key];
+            finalState[module.name] = state[module.name];
+        })
+        return finalState;
+    }
+
+    const mergeProps = (state, actions) =>{
+        return Object.assign({}, state, actions, {
+			commit :commit,
+			commitAsync : commitAsync,
+			dispatchPromise : dispatchPromise 
+		});
+	}
+	
+    return connect(mapStateToProps,null,mergeProps);
 }
 
 

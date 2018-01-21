@@ -3,11 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.createSagas = exports.createContainer = exports.dispatchPromise = exports.commitAsync = exports.dispatch = exports.commit = exports.latest = exports.every = exports.createStore = exports.STORE = undefined;
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
+exports.connectStore = exports.createSagas = exports.createContainer = exports.dispatchPromise = exports.commitAsync = exports.dispatch = exports.commit = exports.latest = exports.every = exports.createStore = exports.STORE = undefined;
 
 var _immer = require('immer');
 
@@ -207,6 +203,31 @@ var createSagas = exports.createSagas = function createSagas(saga_list) {
 		arr.push(watcher());
 	});
 	return arr;
+};
+
+var connectStore = exports.connectStore = function connectStore() {
+	for (var _len = arguments.length, modules = Array(_len), _key = 0; _key < _len; _key++) {
+		modules[_key] = arguments[_key];
+	}
+
+	var mapStateToProps = function mapStateToProps(state) {
+		var finalState = {};
+		Object.keys(modules).forEach(function (key) {
+			var module = modules[key];
+			finalState[module.name] = state[module.name];
+		});
+		return finalState;
+	};
+
+	var mergeProps = function mergeProps(state, actions) {
+		return Object.assign({}, state, actions, {
+			commit: commit,
+			commitAsync: commitAsync,
+			dispatchPromise: dispatchPromise
+		});
+	};
+
+	return (0, _reactRedux.connect)(mapStateToProps, null, mergeProps);
 };
 
 exports.default = {

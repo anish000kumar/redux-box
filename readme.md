@@ -156,7 +156,7 @@ class App extends Component {
 		</button>
 
 		<button onClick={()=> {
-			user.dispatch('GET_ORDERS_LIST')
+			user.commitAsync('GET_ORDERS_LIST')
 			.then( res => alert('orders updated') )
 			.catch(err => alert(err.messsage) )
 		}} > 
@@ -180,4 +180,4 @@ The above example illustrate the three major jobs of the module-container.
 	data : //.. data you attach as the second argumento to commit method
 }
 ```
-- Thirdly, if you need to do something after your saga is finished, you would use `store.dispatch` instead of `store.commit`. it will also trigger the mutations and sagas, associated with the underlying action, but additionally it returns a `Promise`. The `store.dispatch` method basically attached `resolve` and `reject` keys to the causing action, which you can yield from you sagas, as you could see in the example saga above.
+- Thirdly, if you need to do something after your saga is finished, you would use `store.commitAsync` instead of `store.commit`. it will also trigger the mutations and sagas, associated with the underlying action, but additionally it returns a `Promise`. The `store.commitAsync` method basically attached `resolve` and `reject` keys to the causing action, which you can yield from you sagas, as you could see in the example saga above.

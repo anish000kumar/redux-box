@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.connectStore = exports.createSagas = exports.createContainer = exports.dispatchPromise = exports.commitAsync = exports.dispatch = exports.commit = exports.latest = exports.every = exports.createStore = exports.STORE = undefined;
 
+var _babelPolyfill = require('babel-polyfill');
+
+var _babelPolyfill2 = _interopRequireDefault(_babelPolyfill);
+
 var _immer = require('immer');
 
 var _immer2 = _interopRequireDefault(_immer);

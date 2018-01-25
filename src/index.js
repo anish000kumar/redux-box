@@ -84,6 +84,12 @@ export const dispatchPromise = (action) => {
 
 export const createContainer = (module) =>{
 	const mapStateToProps = state => state[module.name]
+	const mapDispatchToProps = dispatch => {
+		return Object.keys(module.actions).map( key => {
+			let action = module.actions[key];
+			return dispatch(action());
+		} )
+	}
 	const set = function( target, value ){
 		STORE.dispatch({
 			type :'__SET__'+module.name,
@@ -135,9 +141,25 @@ export const connectStore =  (...modules) =>{
         let finalState = {};
         Object.keys(modules).forEach( key => {
             const module = modules[key];
-            finalState[module.name] = state[module.name];
+            finalState[key] = state[module.name];
         })
         return finalState;
+    }
+
+    const mapDispatchToProps = (dispatch) => {
+    	let finalProps = {};
+        Object.keys(modules).forEach( key => {
+            const module = modules[key];
+            const module_actions = {};
+           	Object.keys(module.actions).forEach(action_key =>{
+           		const action = module.actions[action_key];
+           		module_actions[action_key] = function(){
+           			return dispatch(action())
+           		};
+           	})
+            finalProps[key] = module_actions;
+        })
+        return finalProps;
     }
 
     const mergeProps = (state, actions) =>{
@@ -148,7 +170,7 @@ export const connectStore =  (...modules) =>{
 		});
 	}
 	
-    return connect(mapStateToProps,null,mergeProps);
+    return connect(mapStateToProps,mapDispatchToProps,mergeProps);
 }
 
 

@@ -131,6 +131,12 @@ var createContainer = exports.createContainer = function createContainer(module)
 	var mapStateToProps = function mapStateToProps(state) {
 		return state[module.name];
 	};
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+		return Object.keys(module.actions).map(function (key) {
+			var action = module.actions[key];
+			return dispatch(action());
+		});
+	};
 	var set = function set(target, value) {
 		STORE.dispatch({
 			type: '__SET__' + module.name,
@@ -149,7 +155,7 @@ var createContainer = exports.createContainer = function createContainer(module)
 			commitAsync: commitAsync
 		}));
 	};
-	return (0, _reactRedux.connect)(mapStateToProps, {})(Container);
+	return (0, _reactRedux.connect)(mapStateToProps, module.actions || {})(Container);
 };
 
 var createSagas = exports.createSagas = function createSagas(saga_list) {
@@ -209,29 +215,49 @@ var createSagas = exports.createSagas = function createSagas(saga_list) {
 	return arr;
 };
 
-var connectStore = exports.connectStore = function connectStore() {
-	for (var _len = arguments.length, modules = Array(_len), _key = 0; _key < _len; _key++) {
-		modules[_key] = arguments[_key];
-	}
-
+var connectStore = exports.connectStore = function connectStore(modules) {
 	var mapStateToProps = function mapStateToProps(state) {
 		var finalState = {};
 		Object.keys(modules).forEach(function (key) {
 			var module = modules[key];
-			finalState[module.name] = state[module.name];
+			finalState[key] = state[module.name];
 		});
 		return finalState;
 	};
 
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+		var finalProps = {};
+		Object.keys(modules).forEach(function (key) {
+			var module = modules[key];
+			var module_actions = {};
+			if (module.actions) {
+				Object.keys(module.actions).forEach(function (action_key) {
+					var action = module.actions[action_key];
+					module_actions[action_key] = function () {
+						return dispatch(action.apply(undefined, arguments));
+					};
+				});
+				finalProps[key] = module_actions;
+			}
+		});
+		return finalProps;
+	};
+
 	var mergeProps = function mergeProps(state, actions) {
-		return Object.assign({}, state, actions, {
+		var finalModule = {};
+		Object.keys(state).forEach(function (key) {
+			var module_state = state[key];
+			var module_actions = actions[key];
+			finalModule[key] = Object.assign({}, module_state, module_actions);
+		});
+		return Object.assign({}, finalModule, {
 			commit: commit,
 			commitAsync: commitAsync,
 			dispatchPromise: dispatchPromise
 		});
 	};
 
-	return (0, _reactRedux.connect)(mapStateToProps, null, mergeProps);
+	return (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps, mergeProps);
 };
 
 exports.default = {

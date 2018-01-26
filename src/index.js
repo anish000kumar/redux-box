@@ -107,7 +107,7 @@ export const createContainer = (module) =>{
 		 commitAsync
 	}) );
 	return connect(
-		mapStateToProps,{}
+		mapStateToProps, module.actions || {}
 	)(Container);
 }
 
@@ -136,13 +136,14 @@ export const createSagas = (saga_list) => {
 	return arr;
 }
 
-export const connectStore =  (...modules) =>{
+
+export const connectStore =  (modules) =>{
     const mapStateToProps = state => {
         let finalState = {};
         Object.keys(modules).forEach( key => {
             const module = modules[key];
             finalState[key] = state[module.name];
-        })
+		})
         return finalState;
     }
 
@@ -151,19 +152,27 @@ export const connectStore =  (...modules) =>{
         Object.keys(modules).forEach( key => {
             const module = modules[key];
             const module_actions = {};
-           	Object.keys(module.actions).forEach(action_key =>{
-           		const action = module.actions[action_key];
-           		module_actions[action_key] = function(){
-           			return dispatch(action())
-           		};
-           	})
-            finalProps[key] = module_actions;
+			if(module.actions){
+				Object.keys(module.actions).forEach(action_key =>{
+					const action = module.actions[action_key];
+					module_actions[action_key] = (...args) => {
+						return dispatch( action(...args) )
+					};
+				})
+				finalProps[key] = module_actions
+			}
         })
         return finalProps;
     }
 
     const mergeProps = (state, actions) =>{
-        return Object.assign({}, state, actions, {
+		let finalModule  ={};
+		Object.keys(state).forEach(key => {
+			let module_state = state[key];
+			let module_actions = actions[key];
+			finalModule[key] = Object.assign({}, module_state, module_actions)
+		})
+        return Object.assign({}, finalModule, {
 			commit :commit,
 			commitAsync : commitAsync,
 			dispatchPromise : dispatchPromise 
@@ -172,6 +181,7 @@ export const connectStore =  (...modules) =>{
 	
     return connect(mapStateToProps,mapDispatchToProps,mergeProps);
 }
+
 
 
 export default {

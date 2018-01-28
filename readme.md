@@ -22,13 +22,13 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 2. mutations 
 (this file specifies the function to be run when a specific action is dispatched, it's same as reducer but clutter-free)
 
-3.actions
+3. actions
 (it contains the actionCreators for your store. Each method of this object must return an action object with ket 'type' )
 
-3. sagas 
+4. sagas 
 ( this is where you write all your sagas / async operations)
 
-4. index 
+5. index 
 (this file exports a container which encloses the whole module and can be used with render props)
 
 # Usage

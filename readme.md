@@ -35,7 +35,7 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 ## step 1: create a module
 Make sure you specify a unique name for each module ('user' in this example)
 <p align="center" style="ma"><a href="#" target="_blank">
-	<img style="max-width:700px" src="https://image.ibb.co/gv6ApG/userstore.png" alt="redux_box" border="0">
+	<img style="max-width:700px" src="https://image.ibb.co/k4eY9G/usermodule.png" alt="redux_box" border="0">
 </a></p>
 
 ## step 2 : register the module in redux store

@@ -1,5 +1,5 @@
 <p align="center"><a href="#" target="_blank">
-	<img src="https://image.ibb.co/e4Nce6/redux_box.png" alt="redux_box" border="0">
+	<img style="max-width:700px" src="https://image.ibb.co/e4Nce6/redux_box.png" alt="redux_box" border="0">
 </a></p>
 
 # Redux Box
@@ -33,33 +33,32 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 
 # Usage
 ## step 1: create a module
-import {create}
-<p align="center"><a href="#" target="_blank">
-	<img src="https://image.ibb.co/iSEC1w/user_Store.png" alt="redux_box" border="0">
+<p align="center" style="ma"><a href="#" target="_blank">
+	<img style="max-width:700px" src="https://image.ibb.co/iSEC1w/user_Store.png" alt="redux_box" border="0">
 </a></p>
 
 ## step 2 : register the module in redux store
 
 <p align="center"><a href="#" target="_blank">
-	<img src="https://image.ibb.co/eP2RTb/tie_All_Stores.png" alt="redux_box" border="0">
+	<img style="max-width:700px" src="https://image.ibb.co/eP2RTb/tie_All_Stores.png" alt="redux_box" border="0">
 </a></p>
 
 After thing you would need to wrap your root component around the Provider  tag like so :
 <p align="center"><a href="#" target="_blank">
-	<img src="https://image.ibb.co/doEqob/provider.png" alt="redux_box" border="0">
+	<img style="max-width:700px" src="https://image.ibb.co/doEqob/provider.png" alt="redux_box" border="0">
 </a></p>
 
 ## step 3: Use the module in component
 
 ### through decorator
 <p align="center"><a href="#" target="_blank">
-	<img src="https://image.ibb.co/jB5fob/usage.png" alt="redux_box" border="0">
+	<img style="max-width:700px" src="https://image.ibb.co/jB5fob/usage.png" alt="redux_box" border="0">
 </a></p>
 
 ### or through render props
 
 <p align="center"><a href="#" target="_blank">
-	<img src="https://preview.ibb.co/dCMWuG/use_With_Render_Props.png" alt="redux_box" border="0">
+	<img style="max-width:700px" src="https://preview.ibb.co/dCMWuG/use_With_Render_Props.png" alt="redux_box" border="0">
 </a></p>
 
 

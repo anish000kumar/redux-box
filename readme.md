@@ -35,7 +35,7 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 ## step 1: create a module
 import {create}
 <p align="center"><a href="#" target="_blank">
-	<img src="https://image.ibb.co/i6SPgw/user_Store.png" alt="redux_box" border="0">
+	<img src="https://image.ibb.co/iSEC1w/user_Store.png" alt="redux_box" border="0">
 </a></p>
 
 ## step 2 : register the module in redux store

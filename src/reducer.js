@@ -26,7 +26,7 @@ const assign = (obj, prop, value) => {
 		let method = actionList[action.type];
 		if(method){
 			const nextState = produce(state, draft_state => {
-				 method( draft_state , action);
+				return method( draft_state , action);
 			})
 			return nextState;
 		}

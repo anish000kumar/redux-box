@@ -33,8 +33,9 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 
 # Usage
 ## step 1: create a module
+Make sure you specify a unique name for each module ('user' in this example)
 <p align="center" style="ma"><a href="#" target="_blank">
-	<img style="max-width:700px" src="https://image.ibb.co/iSEC1w/user_Store.png" alt="redux_box" border="0">
+	<img style="max-width:700px" src="https://image.ibb.co/gv6ApG/userstore.png" alt="redux_box" border="0">
 </a></p>
 
 ## step 2 : register the module in redux store
@@ -43,7 +44,7 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 	<img style="max-width:700px" src="https://image.ibb.co/eP2RTb/tie_All_Stores.png" alt="redux_box" border="0">
 </a></p>
 
-After thing you would need to wrap your root component around the Provider  tag like so :
+After this you would need to wrap your root component around the Provider  tag like so :
 <p align="center"><a href="#" target="_blank">
 	<img style="max-width:700px" src="https://image.ibb.co/doEqob/provider.png" alt="redux_box" border="0">
 </a></p>

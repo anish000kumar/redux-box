@@ -175,6 +175,7 @@ export const connectStore =  (modules) =>{
         return Object.assign({}, finalModule, {
 			commit :commit,
 			commitAsync : commitAsync,
+			dispatch : dispatch,
 			dispatchPromise : dispatchPromise 
 		});
 	}

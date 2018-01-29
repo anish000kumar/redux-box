@@ -14,7 +14,7 @@ npm install --save redux-box
 
 # The Basics
 
-Redux box emphasizes on dividing the whole application into multiple modules. Each of these modules manage it's state seperately, with the help of 4 segments:
+Redux box emphasizes on dividing the whole application into multiple modules. Each of these modules manages it's state seperately, with the help of 4 segments:
 
 1. state 
 (this  file specifies the initial state of the module)

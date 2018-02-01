@@ -38,7 +38,7 @@ var getReducer = function getReducer(name, actionList, initialState) {
 		var method = actionList[action.type];
 		if (method) {
 			var nextState = (0, _immer2.default)(state, function (draft_state) {
-				method(draft_state, action);
+				return method(draft_state, action);
 			});
 			return nextState;
 		} else return state;

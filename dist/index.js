@@ -243,7 +243,7 @@ var connectStore = exports.connectStore = function connectStore(modules) {
 		return finalProps;
 	};
 
-	var mergeProps = function mergeProps(state, actions) {
+	var mergeProps = function mergeProps(state, actions, ownProps) {
 		var finalModule = {};
 		Object.keys(state).forEach(function (key) {
 			var module_state = state[key];
@@ -255,7 +255,7 @@ var connectStore = exports.connectStore = function connectStore(modules) {
 			commitAsync: commitAsync,
 			dispatch: dispatch,
 			dispatchPromise: dispatchPromise
-		});
+		}, ownProps);
 	};
 
 	return (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps, mergeProps);

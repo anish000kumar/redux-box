@@ -165,7 +165,7 @@ export const connectStore =  (modules) =>{
         return finalProps;
     }
 
-    const mergeProps = (state, actions) =>{
+    const mergeProps = (state, actions, ownProps) =>{
 		let finalModule  ={};
 		Object.keys(state).forEach(key => {
 			let module_state = state[key];
@@ -177,7 +177,7 @@ export const connectStore =  (modules) =>{
 			commitAsync : commitAsync,
 			dispatch : dispatch,
 			dispatchPromise : dispatchPromise 
-		});
+		},ownProps);
 	}
 	
     return connect(mapStateToProps,mapDispatchToProps,mergeProps);

@@ -78,13 +78,10 @@ export default createContainer(module)
 
 ```javascript
 import {createStore} from 'redux-box'
-//import all your modules here
 import {module as userModule} from './user'
 import {module as postModule} from './post'
 
-const modules = [ userModule, postModule]
-
-export default createStore(modules)
+export default createStore([ userModule, postModule])
 
 /*
 OPTIONAL: if you need to create store with some reducers and middlewares, 

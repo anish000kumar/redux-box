@@ -38,6 +38,7 @@ Here are some examples to let you play around with redux-box
 Make sure you specify a unique name for each module ('user' in this example)
 ```javascript
 import {createSagas, createContainer} from 'redux-box'
+import {call} from 'redux-saga/effects'
 
 // store/user.js
 

@@ -16,10 +16,10 @@ npm install --save redux-box
 Redux box emphasizes on dividing the whole application into multiple modules. Each of these modules manages it's state seperately, with the help of 4 segments:
 
 1. state 
-(this  file specifies the initial state of the module)
+(It specifies the initial state of the module)
 
 2. mutations 
-(this file specifies the function to be run when a specific action is dispatched, it's same as reducer but clutter-free)
+(It specifies the function to be run when a specific action is dispatched, it's same as reducer but clutter-free)
 
 3. actions
 (it contains the actionCreators for your store. Each method of this object must return an action object  )
@@ -116,8 +116,8 @@ export default App
 ### through decorator
 ```javascript
 import React, { Component } from 'react'
-import {module as userModule} from 'store/user';
-import {connectStore} from 'redux-box';
+import {module as userModule} from 'store/user'
+import {connectStore} from 'redux-box'
 
 @connectStore({
     user : userModule //  AppComponent receives 'user' as a prop

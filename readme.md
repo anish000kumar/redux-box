@@ -174,3 +174,4 @@ export default class AppComponent extends Component{
 
 Here are some examples to let you play around with redux-box
 1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js
+2. Example showing redux saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js

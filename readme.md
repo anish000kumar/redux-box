@@ -87,10 +87,10 @@ const modules = [ userModule, postModule]
 export default createStore(modules)
 
 /*
-OPTIONAL: if you need to create store with some reducers and middlewares, the signature of createStore method from redux-box goes like this:
+OPTIONAL: if you need to create store with some reducers and middlewares, 
+the signature of createStore method from redux-box goes like this:
 
 createStore(modules : Array, reducers : Object, middlewares: Array)
-
 */
 
 ```

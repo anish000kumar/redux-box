@@ -173,4 +173,4 @@ export default class AppComponent extends Component{
 # Live Examples
 
 Here are some examples to let you play around with redux-box
-1. Basic example - https://stackblitz.com/edit/react-qmedt4 
+1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js

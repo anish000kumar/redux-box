@@ -37,10 +37,9 @@ Here are some examples to let you play around with redux-box
 ## step 1: create a module
 Make sure you specify a unique name for each module ('user' in this example)
 ```javascript
+// store/user.js
 import {createSagas, createContainer} from 'redux-box'
 import {call} from 'redux-saga/effects'
-
-// store/user.js
 
 const state = {
   name  : 'John',

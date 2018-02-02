@@ -27,7 +27,10 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 4. sagas 
 ( this is where you write all your sagas / async operations)
 
-
+# Live Examples
+Here are some examples to let you play around with redux-box
+1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js
+2. Example showing redux saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js
 
 # Usage
 ## step 1: create a module
@@ -170,8 +173,4 @@ export default class AppComponent extends Component{
 }
  ```
 
-# Live Examples
 
-Here are some examples to let you play around with redux-box
-1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js
-2. Example showing redux saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js

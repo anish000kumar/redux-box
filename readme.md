@@ -14,7 +14,7 @@ Setting up and organizing a redux store in your react/ react-native projects can
 
 If you are concerned about the state getting mutated directly in the snippet above, then you need not be. Because the `state` being passed to a mutation is **NOT** the actual `state object`  of application, instead it's a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) of the state. Redux-box relies on wonderful [immer](https://github.com/mweststrate/immer) library to achieve the expressiveness you see above.
 
-2. Organising actions, actionCreators, actionTypes, mutations, sagas gets tedious and complicated as your application grows. Redux box **splits your gynt state in modules**, and each module encapsulates it's own actions, mutations( = cleaner reducer) and sagas, thus making things much more organised.
+2. Organising actions, actionCreators, actionTypes, mutations, sagas gets tedious and complicated as your application grows. Redux box **splits your gynt state into modules**, and each module encapsulates it's own actions, mutations( = cleaner reducer) and sagas, thus making things much more organised.
 
 3. Setting up redux to do something significant takes time. You would need to install redux-saga, set-up dev tools etc. Redux-box makes it a breeze. You can setup redux, redux-saga, with dev-tools in just a few lines of code.
 

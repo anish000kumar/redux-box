@@ -5,12 +5,20 @@
 # Redux Box
 Setting up and organizing a redux store in your react/ react-native projects can be a tedious and daunting task. Redux-Box aims at extracting the complexity in setting up redux with redux-saga, without loosing the flexibilty or without introducing new bizzare terms.
 
-# What's special about it
+# What's it for:
 
 1. If you prefer keeping your code clean, expressive and minimal , you will feel right at home with redux-box. Have a look at a simple reducer written with and without redux-box:
 <p align="center"><a href="https://image.ibb.co/dwP1UR/comparison.jpg" target="_blank">
 	<img style="max-width:100%" src="https://image.ibb.co/dwP1UR/comparison.jpg" alt="redux_box" border="0">
 </a></p>
+
+2. Organising actions, actionCreators, actionTypes, mutations, sagas gets tedious and complicated to manage as your application grows. Redux box **splits your gynt state in modules**, and each module encapsulate it's own actionCreators, actionTypes, mutations( = cleaner reducer) and sagas.
+
+3. Setting up redux to do something significant takes time. Redux-box makes it a breeze. You can setup redux, redux-saga, with dev-tools in just a few lines of code.
+
+4. It Simiplifies writing and managing your sagas. Typically, you would write two sagas two respond to an action - *watcher* saga and *worker* saga. Redux box let's you leverage all the grand features of redux-saga, but with expressive and organised code.
+
+5. You wouldn't need to write a dedicated HOC to interact with your store. If you need to interact with a particular module, you can simply import and use it. Redux box offers two ways of using a module in your component : using `@connectStore` decorator or using `render props`.
 
 
 # Installation

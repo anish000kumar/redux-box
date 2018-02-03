@@ -5,6 +5,14 @@
 # Redux Box
 Setting up and organizing a redux store in your react/ react-native projects can be a tedious and daunting task. Redux-Box aims at extracting the complexity in setting up redux with redux-saga, without loosing the flexibilty or without introducing new bizzare terms.
 
+# What's special about it
+
+1. If you prefer keeping your code clean, expressive and minimal , you will feel right at home with redux-box. Have a look at a simple reducer written with and without redux-box:
+<p align="center"><a href="#" target="_blank">
+	<img style="max-width:100%" src="https://image.ibb.co/egWRw6/comparison.jpg" alt="redux_box" border="0">
+</a></p>
+
+
 # Installation
 Run this command in your terminal/cmd to install the package:
 ```
@@ -27,11 +35,6 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 4. sagas 
 ( this is where you write all your sagas / async operations)
 
-# Live Examples
-Here are some examples to let you play around with redux-box
-1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js
-2. Example showing redux-saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js
-3. Example with redux-form: https://stackblitz.com/edit/react-w4dqth?file=store%2Findex.js
 
 # Usage
 ## step 1: create a module
@@ -170,5 +173,10 @@ export default class AppComponent extends Component{
  }
 }
  ```
+# Live Examples
+Here are some examples to let you play around with redux-box
+1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js
+2. Example showing redux-saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js
+3. Example with redux-form: https://stackblitz.com/edit/react-w4dqth?file=store%2Findex.js
 
 

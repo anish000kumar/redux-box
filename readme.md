@@ -8,8 +8,8 @@ Setting up and organizing a redux store in your react/ react-native projects can
 # What's special about it
 
 1. If you prefer keeping your code clean, expressive and minimal , you will feel right at home with redux-box. Have a look at a simple reducer written with and without redux-box:
-<p align="center"><a href="#" target="_blank">
-	<img style="max-width:100%" src="https://image.ibb.co/egWRw6/comparison.jpg" alt="redux_box" border="0">
+<p align="center"><a href="https://image.ibb.co/dwP1UR/comparison.jpg" target="_blank">
+	<img style="max-width:100%" src="https://image.ibb.co/dwP1UR/comparison.jpg" alt="redux_box" border="0">
 </a></p>
 
 

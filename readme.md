@@ -5,7 +5,18 @@
 # Redux Box
 Setting up and organizing a redux store in your react/ react-native projects can be a tedious and daunting task. Redux-Box aims at extracting the complexity in setting up redux with redux-saga, without loosing the flexibilty or without introducing new bizzare terms.
 
-# What's it for:
+## Table of contents:
+* [What's it for](#whats-it-for)
+* [Installation](#installation)
+* [The Basics](#the-basics)
+* [Usage](#usage)
+  * [1. Create a module](#create-a-module)
+  * [2. Register the module in redux-store](#register-the-module-in-redux-store)
+  * [3. Use the module in component](#use-the-module-in-component)
+    * [Through `@connectStore` decorator](#through-decorator)
+    * [Throug `render props`](#or-through-render-props)
+
+## What's it for:
 
 1. If you prefer keeping your code clean, expressive and minimal , you will feel right at home with redux-box. Have a look at a simple reducer written with and without redux-box:
 <p align="center"><a href="https://image.ibb.co/dwP1UR/comparison.jpg" target="_blank">
@@ -23,13 +34,13 @@ If you are concerned about the state getting mutated directly in the snippet abo
 5. You wouldn't need to write a dedicated HOC to interact with your store. If you need to interact with a particular store-module, you can simply import it and use it. As simple as that! Redux box offers two ways of using a module in your component : using `@connectStore` decorator or using `render props`. (refer to the usage section for better reference)
 
 
-# Installation
+## Installation
 Run this command in your terminal/cmd to install the package:
 ```
 npm install --save redux-box
 ```
 
-# The Basics
+## The Basics
 
 Redux box emphasizes on dividing the whole application into multiple modules. Each of these modules manages it's state seperately, with the help of 4 segments:
 
@@ -46,8 +57,8 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 ( this is where you write all your sagas / async operations)
 
 
-# Usage
-## step 1: create a module
+## Usage
+### step 1: create a module
 Make sure you specify a unique name for each module ('user' in this example)
 ```javascript
 // store/user.js
@@ -87,7 +98,7 @@ export const module = {
 export default createContainer(module)
 ```
 
-## step 2 : register the module in redux store
+### step 2 : register the module in redux store
 
 ```javascript
 import {createStore} from 'redux-box'
@@ -125,9 +136,9 @@ class App extends React.component{
 
 export default App
 ```
-## step 3: Use the module in component
+### step 3: Use the module in component
 
-### through decorator
+#### through decorator
 ```javascript
 import React, { Component } from 'react'
 import {module as userModule} from 'store/user'
@@ -162,7 +173,7 @@ export default class AppComponent extends Component {
 }
 
 ```
-### or through render props
+#### or through render props
 
 ```javascript
 import React, {Component} from 'react'
@@ -183,7 +194,7 @@ export default class AppComponent extends Component{
  }
 }
  ```
-# Live Examples
+## Live Examples
 Here are some examples to let you play around with redux-box
 1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js
 2. Example showing redux-saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js

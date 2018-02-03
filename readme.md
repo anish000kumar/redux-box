@@ -14,7 +14,7 @@ Setting up and organizing a redux store in your react/ react-native projects can
   * [2. Register the module in redux-store](#step-2-register-the-module-in-redux-store)
   * [3. Use the module in component](#step-3-use-the-module-in-component)
     * [Through `@connectStore` decorator](#through-decorator)
-    * [Throug `render props`](#or-through-render-props)
+    * [Through `render props`](#or-through-render-props)
  * [Live Examples](#live-examples)
 
 ## What's it for:

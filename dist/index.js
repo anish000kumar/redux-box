@@ -54,7 +54,7 @@ var createStore = exports.createStore = function createStore(modules, config) {
 		}
 		reducerList[module.name] = moduleReducer;
 	});
-	config.sagas.forEach(function (saga) {
+	config.sagas && config.sagas.forEach(function (saga) {
 		return sagas.concat(saga);
 	});
 

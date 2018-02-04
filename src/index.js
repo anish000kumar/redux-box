@@ -31,7 +31,7 @@ export const createStore = (modules, config) => {
 		}
 		reducerList[module.name] = moduleReducer		
 	})
-	config.sagas.forEach(saga => sagas.concat(saga) )
+	config.sagas && config.sagas.forEach(saga => sagas.concat(saga) )
 	
 	let combinedReducer = combineReducers(reducerList);
 	if(config.decorateReducer){

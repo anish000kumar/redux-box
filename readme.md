@@ -116,15 +116,11 @@ import {module as postModule} from './post'
 export default createStore([ userModule, postModule])
 
 ```
+OPTIONAL: if you need to create store with some reducers and middlewares, the signature of createStore method from redux-box goes like this:(if you have already included a module in modules array, you need not to register it's sagas or reducers manually by including in config object)
 
 ```javascript
-/*
-OPTIONAL: if you need to create store with some reducers and middlewares, 
-the signature of createStore method from redux-box goes like this:
-(if you have already included a module in modules array, you need not to
-register it's sagas or reducers manually by including in config object
-)
-*/
+import {moduleToReducer} from 'redux-box/helpers'
+
 createStore(modules : Array, config: Object)
 
 //example config object

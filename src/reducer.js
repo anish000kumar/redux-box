@@ -1,26 +1,26 @@
 import produce from 'immer';
  
-const assign = (obj, prop, value) => {
-    if (typeof prop === "string")
-		prop = prop.split(".");
+// const assign = (obj, prop, value) => {
+//     if (typeof prop === "string")
+// 		prop = prop.split(".");
 
-    if (prop.length > 1) {
-        var e = prop.shift();
-        assign(obj[e] , prop, value);
-    } else
-        obj[prop[0]] = value;
-  return obj
-}
+//     if (prop.length > 1) {
+//         var e = prop.shift();
+//         assign(obj[e] , prop, value);
+//     } else
+//         obj[prop[0]] = value;
+//   return obj
+// }
 
- const getReducer = (name, actionList, initialState) => {
-	actionList['__SET__'+name] = function(state, {data}){
-		try{
-			 assign(state, data.target, data.value )
-		}
-		catch(err){
-			console.log('WARNING: the key specified for the setter wasn\'t valid', err)
-		}
-	}
+ const getReducer = (actionList, initialState) => {
+	// actionList['__SET__'+name] = function(state, {data}){
+	// 	try{
+	// 		 assign(state, data.target, data.value )
+	// 	}
+	// 	catch(err){
+	// 		console.log('WARNING: the key specified for the setter wasn\'t valid', err)
+	// 	}
+	// }
 	
 	return  ( state = initialState, action) => {
 		let method = actionList[action.type];

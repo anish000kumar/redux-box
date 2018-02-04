@@ -15,7 +15,7 @@ const mutations = {
 
 const sagas = {}
 
-export const module = {
+export default {
   name : 'user',
   state, 
   actions, 

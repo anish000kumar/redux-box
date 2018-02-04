@@ -7,7 +7,7 @@ import createSagaMiddleware from "redux-saga";
 import {all, takeLatest, takeEvery, put} from 'redux-saga/effects';
 import getReducer from './reducer';
 
-const devTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+const devTools = window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 const composeEnhancers =  devTools || compose;
 
 const sagaMiddleware = createSagaMiddleware();
@@ -16,19 +16,29 @@ let middlewares = [sagaMiddleware];
 
 export let STORE = null;
 
-export const moduleToReducer = (module) => getReducer(module.name, module.mutations, module.state ) 
 
-export const createStore = (modules, reducers={}, new_middlewares=[]) => {
-	middlewares = middlewares.concat(new_middlewares);
-	let reducerList = Object.assign({}, reducers);
+
+//config = {reducers:{}, sagas:[], middlewares}
+export const createStore = (modules, config) => {
+	middlewares = middlewares.concat(config.middlewares);
+	let reducerList = Object.assign({}, config.reducers);
 	let sagas = [];
 	modules.forEach(module => {
 		sagas = sagas.concat(module.sagas);
-		reducerList[module.name] = getReducer(module.name, module.mutations, module.state ) 		
+		let moduleReducer = getReducer( module.mutations, module.state ) 
+		if(module.decorateReducer){
+			moduleReducer = module.decorateReducer(moduleReducer)
+		}
+		reducerList[module.name] = moduleReducer		
 	})
+	config.sagas.forEach(saga => sagas.concat(saga) )
 	
+	let combinedReducer = combineReducers(reducerList);
+	if(config.decorateReducer){
+		combinedReducer = config.decorateReducer(combinedReducer)
+	}
 	let store = storeCreator(
-		combineReducers(reducerList),
+		combinedReducer,
 		composeEnhancers( applyMiddleware(...middlewares))
 	)
 	function *rootSaga(){
@@ -181,7 +191,6 @@ export default {
 	createContainer,
 	createSagas,
 	createStore,
-	connectStore,
-	moduleToReducer
+	connectStore
 }
 

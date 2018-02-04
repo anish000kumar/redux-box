@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.moduleToReducer = exports.STORE = undefined;
+exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.STORE = undefined;
 
 var _babelPolyfill = require('babel-polyfill');
 
@@ -39,26 +39,30 @@ var middlewares = [sagaMiddleware];
 
 var STORE = exports.STORE = null;
 
-var moduleToReducer = exports.moduleToReducer = function moduleToReducer(module) {
-	return (0, _reducer2.default)(module.name, module.mutations, module.state);
-};
-
-var createStore = exports.createStore = function createStore(modules) {
-	var reducers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+//config = {reducers:{}, sagas:[], middlewares}
+var createStore = exports.createStore = function createStore(modules, config) {
 	var _marked = /*#__PURE__*/regeneratorRuntime.mark(rootSaga);
 
-	var new_middlewares = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-
-	middlewares = middlewares.concat(new_middlewares);
-	var reducerList = Object.assign({}, reducers);
+	middlewares = middlewares.concat(config.middlewares);
+	var reducerList = Object.assign({}, config.reducers);
 	var sagas = [];
 	modules.forEach(function (module) {
 		sagas = sagas.concat(module.sagas);
-		reducerList[module.name] = (0, _reducer2.default)(module.name, module.mutations, module.state);
+		var moduleReducer = (0, _reducer2.default)(module.mutations, module.state);
+		if (module.decorateReducer) {
+			moduleReducer = module.decorateReducer(moduleReducer);
+		}
+		reducerList[module.name] = moduleReducer;
+	});
+	config.sagas.forEach(function (saga) {
+		return sagas.concat(saga);
 	});
 
-	var store = (0, _redux.createStore)((0, _redux.combineReducers)(reducerList), composeEnhancers(_redux.applyMiddleware.apply(undefined, _toConsumableArray(middlewares))));
+	var combinedReducer = (0, _redux.combineReducers)(reducerList);
+	if (config.decorateReducer) {
+		combinedReducer = config.decorateReducer(combinedReducer);
+	}
+	var store = (0, _redux.createStore)(combinedReducer, composeEnhancers(_redux.applyMiddleware.apply(undefined, _toConsumableArray(middlewares))));
 	function rootSaga() {
 		return regeneratorRuntime.wrap(function rootSaga$(_context) {
 			while (1) {
@@ -260,6 +264,5 @@ exports.default = {
 	createContainer: createContainer,
 	createSagas: createSagas,
 	createStore: createStore,
-	connectStore: connectStore,
-	moduleToReducer: moduleToReducer
+	connectStore: connectStore
 };

@@ -20,5 +20,6 @@ export default {
   state, 
   actions, 
   mutations, 
-  sagas
+  sagas,
+  decorateReducer : (reducer) => reducer
 }

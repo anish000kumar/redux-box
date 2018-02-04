@@ -27,15 +27,9 @@ If you prefer keeping your code expressive, you will feel right at home with red
 
 If you are concerned about the state getting mutated directly in the snippet above, then you need not be. Because the `state` being passed to a mutation is **NOT** the actual `state object`  of application, instead it's a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) of the state. Redux-box relies on wonderful [immer](https://github.com/mweststrate/immer) library to achieve the expressiveness you see above.
 
-2. **Organise state into modules:**
-Organising actions, actionCreators, actionTypes, mutations, sagas gets tedious and complicated as your application grows. Redux box **splits your gynt state into modules**, and each module encapsulates it's own actions, mutations( = cleaner reducer) and sagas, thus making things much more organised.
-
+2. **Organise your gynt state into modules:**
 3. **Setup redux+redux-saga for our react/react-native app in a trice**:
-Setting up redux to do something significant takes time. You would need to install redux-saga, set-up dev tools etc. Redux-box makes it a breeze. You can setup redux, redux-saga, with dev-tools in just a few lines of code.
-
 4. **Simplified Sagas**:
-It Simiplifies writing and managing your sagas. Typically, you would write two sagas to respond to an action - *watcher* saga and *worker* saga. Redux box let's you leverage all the grand features of redux-saga, but with expressive and organised code.
-
 5. **Just import and use store**:
 You wouldn't need to write a dedicated HOC to interact with your store. If you need to interact with a particular store-module, you can simply import it and use it. As simple as that! Redux box offers two ways of using a module in your component : using `@connectStore` decorator or using `render props`. (refer to the usage section for better reference)
 

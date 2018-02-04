@@ -60,7 +60,7 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 (it contains the actionCreators for your store. Each method of this object must return an action object  )
 
 4. sagas 
-( this is where you write all your sagas / async operations)
+(this is where you write all your sagas / async operations)
 
 
 ## Usage
@@ -115,12 +115,34 @@ import {module as postModule} from './post'
 
 export default createStore([ userModule, postModule])
 
+```
+
+```javascript
 /*
 OPTIONAL: if you need to create store with some reducers and middlewares, 
 the signature of createStore method from redux-box goes like this:
-
-createStore(modules : Array, reducers : Object, middlewares: Array)
+(if you have already included a module in modules array, you need not to
+register it's sagas or reducers manually by including in config object
+)
 */
+createStore(modules : Array, config: Object)
+
+//example config object
+config = {
+  middlewares : [],
+  
+  // sagas to be manually registered
+  sagas : [userModule.sagas, testModule.sagas], 
+  
+  // reducers to be manually registered
+  reducers: {
+    user : moduleToReducer(user)
+  } 
+  decorateReducer: (reducer) => {
+    //do something
+    return newReducer
+  }
+}
 
 ```
 

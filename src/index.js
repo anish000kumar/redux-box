@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import {applyMiddleware,combineReducers, compose, createStore as storeCreator} from 'redux';
 import createSagaMiddleware from "redux-saga";
 import {all, takeLatest, takeEvery, put} from 'redux-saga/effects';
-import {assign} from './helpers';
 import getReducer from './reducer';
 
 const devTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -16,6 +15,8 @@ let middlewares = [sagaMiddleware];
 
 
 export let STORE = null;
+
+export const moduleToReducer = (module) => getReducer(module.name, module.mutations, module.state ) 
 
 export const createStore = (modules, reducers={}, new_middlewares=[]) => {
 	middlewares = middlewares.concat(new_middlewares);
@@ -44,9 +45,6 @@ export const createStore = (modules, reducers={}, new_middlewares=[]) => {
 	return store;
 }
 
-export const every = (str) => str + '.every'
-export const latest = (str) => str + '.latest'
-
 export const commit= (action_name, data) => {
 	return STORE.dispatch({
 		type : action_name,
@@ -54,11 +52,11 @@ export const commit= (action_name, data) => {
 	})
 }
 
-export const dispatch= (action) => {
+const dispatch= (action) => {
 	return STORE.dispatch(action)
 }
 
-export const commitAsync = (action_name, data ) =>{
+const commitAsync = (action_name, data ) =>{
 	return new Promise(function(resolve, reject){
 		STORE.dispatch({
 			type : action_name,
@@ -69,10 +67,7 @@ export const commitAsync = (action_name, data ) =>{
 	})
 }
 
-
-
-
-export const dispatchPromise = (action) => {
+const dispatchPromise = (action) => {
 	return new Promise(function(resolve, reject){
 		STORE.dispatch( object.assign({}, action,{
 				resolve,
@@ -111,7 +106,6 @@ export const createContainer = (module) =>{
 	)(Container);
 }
 
-
 export const createSagas = (saga_list) => {
 	let arr = [];
 	var GeneratorFunction = Object.getPrototypeOf(function*(){}).constructor
@@ -135,7 +129,6 @@ export const createSagas = (saga_list) => {
 	})
 	return arr;
 }
-
 
 export const connectStore =  (modules) =>{
     const mapStateToProps = state => {
@@ -184,12 +177,11 @@ export const connectStore =  (modules) =>{
 }
 
 
-
 export default {
 	createContainer,
 	createSagas,
 	createStore,
-	dispatch,
-	commit
+	connectStore,
+	moduleToReducer
 }
 

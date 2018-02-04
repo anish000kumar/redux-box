@@ -18,7 +18,7 @@ const assign = (obj, prop, value) => {
 			 assign(state, data.target, data.value )
 		}
 		catch(err){
-			console.log('WARNING: the key specified for the setter wasnt valid', err)
+			console.log('WARNING: the key specified for the setter wasn\'t valid', err)
 		}
 	}
 	
@@ -26,7 +26,7 @@ const assign = (obj, prop, value) => {
 		let method = actionList[action.type];
 		if(method){
 			const nextState = produce(state, draft_state => {
-				return method( draft_state , action);
+				method( draft_state , action);
 			})
 			return nextState;
 		}

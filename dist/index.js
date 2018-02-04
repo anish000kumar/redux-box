@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.connectStore = exports.createSagas = exports.createContainer = exports.dispatchPromise = exports.commitAsync = exports.dispatch = exports.commit = exports.latest = exports.every = exports.createStore = exports.STORE = undefined;
+exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.moduleToReducer = exports.STORE = undefined;
 
 var _babelPolyfill = require('babel-polyfill');
 
@@ -23,8 +23,6 @@ var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
 
 var _effects = require('redux-saga/effects');
 
-var _helpers = require('./helpers');
-
 var _reducer = require('./reducer');
 
 var _reducer2 = _interopRequireDefault(_reducer);
@@ -40,6 +38,10 @@ var sagaMiddleware = (0, _reduxSaga2.default)();
 var middlewares = [sagaMiddleware];
 
 var STORE = exports.STORE = null;
+
+var moduleToReducer = exports.moduleToReducer = function moduleToReducer(module) {
+	return (0, _reducer2.default)(module.name, module.mutations, module.state);
+};
 
 var createStore = exports.createStore = function createStore(modules) {
 	var reducers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -89,13 +91,6 @@ var createStore = exports.createStore = function createStore(modules) {
 	return store;
 };
 
-var every = exports.every = function every(str) {
-	return str + '.every';
-};
-var latest = exports.latest = function latest(str) {
-	return str + '.latest';
-};
-
 var commit = exports.commit = function commit(action_name, data) {
 	return STORE.dispatch({
 		type: action_name,
@@ -103,11 +98,11 @@ var commit = exports.commit = function commit(action_name, data) {
 	});
 };
 
-var dispatch = exports.dispatch = function dispatch(action) {
+var dispatch = function dispatch(action) {
 	return STORE.dispatch(action);
 };
 
-var commitAsync = exports.commitAsync = function commitAsync(action_name, data) {
+var commitAsync = function commitAsync(action_name, data) {
 	return new Promise(function (resolve, reject) {
 		STORE.dispatch({
 			type: action_name,
@@ -118,7 +113,7 @@ var commitAsync = exports.commitAsync = function commitAsync(action_name, data) 
 	});
 };
 
-var dispatchPromise = exports.dispatchPromise = function dispatchPromise(action) {
+var dispatchPromise = function dispatchPromise(action) {
 	return new Promise(function (resolve, reject) {
 		STORE.dispatch(object.assign({}, action, {
 			resolve: resolve,
@@ -265,6 +260,6 @@ exports.default = {
 	createContainer: createContainer,
 	createSagas: createSagas,
 	createStore: createStore,
-	dispatch: dispatch,
-	commit: commit
+	connectStore: connectStore,
+	moduleToReducer: moduleToReducer
 };

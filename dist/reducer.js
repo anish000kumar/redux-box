@@ -27,7 +27,7 @@ var getReducer = function getReducer(name, actionList, initialState) {
 		try {
 			assign(state, data.target, data.value);
 		} catch (err) {
-			console.log('WARNING: the key specified for the setter wasnt valid', err);
+			console.log('WARNING: the key specified for the setter wasn\'t valid', err);
 		}
 	};
 
@@ -38,7 +38,7 @@ var getReducer = function getReducer(name, actionList, initialState) {
 		var method = actionList[action.type];
 		if (method) {
 			var nextState = (0, _immer2.default)(state, function (draft_state) {
-				return method(draft_state, action);
+				method(draft_state, action);
 			});
 			return nextState;
 		} else return state;

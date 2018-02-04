@@ -59,9 +59,7 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 
 
 ## Usage
-<p align="center"><a href="https://image.ibb.co/eCJOR6/reduxBox.jpg" target="_blank">
-	<img style="max-width:100%" src="https://image.ibb.co/eCJOR6/reduxBox.jpg" alt="redux_box" border="0">
-</a></p>
+
 
 ### step 1: create a module
 Make sure you specify a unique name for each module ('user' in this example)

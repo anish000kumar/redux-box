@@ -5,13 +5,48 @@
 # Redux Box
 Setting up and organizing a redux store in your react/ react-native projects can be a tedious and daunting task. Redux-Box aims at extracting the complexity in setting up redux with redux-saga, without loosing the flexibilty or without introducing new bizzare terms.
 
-# Installation
+## Table of contents:
+* [What's it for](#whats-it-for)
+* [Installation](#installation)
+* [The Basics](#the-basics)
+* [Usage](#usage)
+  * [1. Create a module](#step-1-create-a-module)
+  * [2. Register the module in redux-store](#step-2-register-the-module-in-redux-store)
+  * [3. Use the module in component](#step-3-use-the-module-in-component)
+    * [Through `@connectStore` decorator](#through-decorator)
+    * [Or through `render props`](#or-through-render-props)
+ * [Live Examples](#live-examples)
+
+## What's it for:
+
+1 .**Clean, expressive and minimal reducers:** 
+If you prefer keeping your code expressive, you will feel right at home with redux-box. Have a look at a simple reducer written with and without redux-box:
+<p align="center"><a href="https://image.ibb.co/dwP1UR/comparison.jpg" target="_blank">
+	<img style="max-width:100%" src="https://image.ibb.co/dwP1UR/comparison.jpg" alt="redux_box" border="0">
+</a></p>
+
+If you are concerned about the state getting mutated directly in the snippet above, then you need not be. Because the `state` being passed to a mutation is **NOT** the actual `state object`  of application, instead it's a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) of the state. Redux-box relies on wonderful [immer](https://github.com/mweststrate/immer) library to achieve the expressiveness you see above.
+
+2. **Organise state into modules:**
+Organising actions, actionCreators, actionTypes, mutations, sagas gets tedious and complicated as your application grows. Redux box **splits your gynt state into modules**, and each module encapsulates it's own actions, mutations( = cleaner reducer) and sagas, thus making things much more organised.
+
+3. **Setup redux+redux-saga for our react/react-native app in a trice**:
+Setting up redux to do something significant takes time. You would need to install redux-saga, set-up dev tools etc. Redux-box makes it a breeze. You can setup redux, redux-saga, with dev-tools in just a few lines of code.
+
+4. **Simplified Sagas**:
+It Simiplifies writing and managing your sagas. Typically, you would write two sagas to respond to an action - *watcher* saga and *worker* saga. Redux box let's you leverage all the grand features of redux-saga, but with expressive and organised code.
+
+5. **Just import and use store**:
+You wouldn't need to write a dedicated HOC to interact with your store. If you need to interact with a particular store-module, you can simply import it and use it. As simple as that! Redux box offers two ways of using a module in your component : using `@connectStore` decorator or using `render props`. (refer to the usage section for better reference)
+
+
+## Installation
 Run this command in your terminal/cmd to install the package:
 ```
 npm install --save redux-box
 ```
 
-# The Basics
+## The Basics
 
 Redux box emphasizes on dividing the whole application into multiple modules. Each of these modules manages it's state seperately, with the help of 4 segments:
 
@@ -27,19 +62,16 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 4. sagas 
 ( this is where you write all your sagas / async operations)
 
-# Live Examples
-Here are some examples to let you play around with redux-box
-1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js
-2. Example showing redux-saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js
-3. Example with redux-form: https://stackblitz.com/edit/react-w4dqth?file=store%2Findex.js
 
-# Usage
-## step 1: create a module
+## Usage
+
+
+### step 1: create a module
 Make sure you specify a unique name for each module ('user' in this example)
 ```javascript
-import {createSagas, createContainer} from 'redux-box'
-
 // store/user.js
+import {createSagas, createContainer} from 'redux-box'
+import {call} from 'redux-saga/effects'
 
 const state = {
   name  : 'John',
@@ -74,23 +106,20 @@ export const module = {
 export default createContainer(module)
 ```
 
-## step 2 : register the module in redux store
+### step 2 : register the module in redux store
 
 ```javascript
 import {createStore} from 'redux-box'
-//import all your modules here
 import {module as userModule} from './user'
 import {module as postModule} from './post'
 
-const modules = [ userModule, postModule]
-
-export default createStore(modules)
+export default createStore([ userModule, postModule])
 
 /*
-OPTIONAL: if you need to create store with some reducers and middlewares, the signature of createStore method from redux-box goes like this:
+OPTIONAL: if you need to create store with some reducers and middlewares, 
+the signature of createStore method from redux-box goes like this:
 
 createStore(modules : Array, reducers : Object, middlewares: Array)
-
 */
 
 ```
@@ -115,9 +144,9 @@ class App extends React.component{
 
 export default App
 ```
-## step 3: Use the module in component
+### step 3: Use the module in component
 
-### through decorator
+#### through decorator
 ```javascript
 import React, { Component } from 'react'
 import {module as userModule} from 'store/user'
@@ -152,7 +181,7 @@ export default class AppComponent extends Component {
 }
 
 ```
-### or through render props
+#### or through render props
 
 ```javascript
 import React, {Component} from 'react'
@@ -173,5 +202,10 @@ export default class AppComponent extends Component{
  }
 }
  ```
+## Live Examples
+Here are some examples to let you play around with redux-box
+1. Basic example - https://stackblitz.com/edit/react-3c8vsn?file=Hello.js
+2. Example showing redux-saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js
+3. Example with redux-form: https://stackblitz.com/edit/react-w4dqth?file=store%2Findex.js
 
 

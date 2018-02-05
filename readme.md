@@ -27,7 +27,7 @@ If you prefer keeping your code expressive, you will feel right at home with red
 
 If you are concerned about the state getting mutated directly in the snippet above, then you need not be. Because the `state` being passed to a mutation is **NOT** the actual `state object`  of application, instead it's a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) of the state. Redux-box relies on wonderful [immer](https://github.com/mweststrate/immer) library to achieve the expressiveness you see above.
 
-2. **Organise your gynt state into modules**
+2. **Organise your giant state into modules**
 3. **Setup redux+redux-saga for our react/react-native app in a trice**
 4. **Simplified Sagas**
 5. **Just import and use store**:

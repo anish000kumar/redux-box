@@ -1,0 +1,5 @@
+{
+  "name": "redux-box/helpers",
+  "private": true,
+  "main": "../dist/helpers.js",
+}

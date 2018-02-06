@@ -43,7 +43,9 @@ var STORE = exports.STORE = null;
 var createStore = exports.createStore = function createStore(modules, config) {
 	var _marked = /*#__PURE__*/regeneratorRuntime.mark(rootSaga);
 
-	middlewares = middlewares.concat(config.middlewares);
+	if (config && config.middlewares && config.middlewares.length > 0) {
+		middlewares = middlewares.concat(config.middlewares);
+	}
 	var reducerList = Object.assign({}, config.reducers);
 	var sagas = [];
 	modules.forEach(function (module) {

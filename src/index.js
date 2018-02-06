@@ -13,14 +13,13 @@ const composeEnhancers =  devTools || compose;
 const sagaMiddleware = createSagaMiddleware();
 let middlewares = [sagaMiddleware];
 
-
 export let STORE = null;
-
-
 
 //config = {reducers:{}, sagas:[], middlewares}
 export const createStore = (modules, config) => {
-	middlewares = middlewares.concat(config.middlewares);
+	if(config && config.middlewares && config.middlewares.length > 0){
+		middlewares = middlewares.concat(config.middlewares);
+	}
 	let reducerList = Object.assign({}, config.reducers);
 	let sagas = [];
 	modules.forEach(module => {

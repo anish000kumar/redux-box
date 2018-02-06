@@ -99,7 +99,7 @@ export const module = {
   sagas
 }
 
-//OPTIONAL: if you want to access this store using render props:
+//OPTIONAL: if you want to access this module using render props in your components:
 export default createContainer(module)
 ```
 

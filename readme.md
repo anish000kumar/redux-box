@@ -16,6 +16,9 @@ Setting up and organizing a redux store in your react/ react-native projects can
     * [Through `@connectStore` decorator](#through-decorator)
     * [Or through `render props`](#or-through-render-props)
  * [Live Examples](#live-examples)
+* [FAQs](#faqs)
+
+
 
 ## What's it for:
 
@@ -221,3 +224,46 @@ Here are some examples to let you play around with redux-box
 3. Example usage with redux-form: https://stackblitz.com/edit/react-w4dqth?file=store%2Findex.js
 4. Example usage with redux-persist : https://stackblitz.com/edit/react-pezrbb?file=store%2Findex.js
 
+## FAQs
+
+1.  **Can I use all the features of redux-box, with `createStore` from redux instead?**
+
+Yes, you can! Here's the script showing how you can use `createStore` from redux, to setup your modules (with reducers, sagas and middlewares):
+
+```javascript
+import {applyMiddleware,combineReducers, compose, createStore} from 'redux';
+import createSagaMiddleware from "redux-saga";
+import {all} from 'redux-saga/effects';
+import {moduleToReducer} from 'redux-box/src/helpers'
+import {module as homeModule} from './home'
+import {module as userModule} from './user'
+
+//hook up your module reducers
+const combinedReducer = combineReducers({
+  home : moduleToReducer(homeModule),
+  user : moduleToReducer(userModule)
+})
+
+// hook up your module sagas
+const sagas = [
+...homeModule.sagas, 
+...userModule.sagas
+]
+
+// hook up your middlewares here
+const sagaMiddleware = createSagaMiddleware();
+const middlewares = [sagaMiddleware];
+
+
+//what follows below if traditional, manual approach of setting up store
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+let enhancer = composeEnhancers(applyMiddleware(...middlewares))
+
+function *rootSaga(){
+  yield all(sagas)
+}
+
+const store = createStore( combinedReducer, enhancer );
+sagaMiddleware.run(rootSaga);
+export default store;
+```

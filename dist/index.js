@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.STORE = undefined;
+exports.moduleToReducer = exports.latest = exports.every = exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.STORE = undefined;
 
 var _babelPolyfill = require('babel-polyfill');
 
@@ -260,6 +260,17 @@ var connectStore = exports.connectStore = function connectStore(modules) {
 	};
 
 	return (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps, mergeProps);
+};
+
+//helpers
+var every = exports.every = function every(str) {
+	return str + '.every';
+};
+var latest = exports.latest = function latest(str) {
+	return str + '.latest';
+};
+var moduleToReducer = exports.moduleToReducer = function moduleToReducer(module) {
+	return (0, _reducer2.default)(module.mutations, module.state);
 };
 
 exports.default = {

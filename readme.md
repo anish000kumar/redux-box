@@ -255,7 +255,7 @@ const sagaMiddleware = createSagaMiddleware();
 const middlewares = [sagaMiddleware];
 
 
-//what follows below if traditional, manual approach of setting up store
+//what follows below is the usual approach of setting up store
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 let enhancer = composeEnhancers(applyMiddleware(...middlewares))
 

@@ -229,12 +229,12 @@ Here are some examples to let you play around with redux-box
 1.  **Can I use all the features of redux-box, with `createStore` from redux instead?**
 
 Yes, you can! Here's the script showing how you can use `createStore` from redux, to setup your modules (with reducers, sagas and middlewares):
-
+(v1.3.9 onwards)
 ```javascript
 import {applyMiddleware,combineReducers, compose, createStore} from 'redux';
 import createSagaMiddleware from "redux-saga";
 import {all} from 'redux-saga/effects';
-import {moduleToReducer} from 'redux-box/src/helpers'
+import {moduleToReducer} from 'redux-box'
 import {module as homeModule} from './home'
 import {module as userModule} from './user'
 

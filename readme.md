@@ -18,6 +18,7 @@ Setting up and organizing a redux store in your react/react-native projects can 
     * [Through `@connectStore` decorator](#through-decorator)
     * [Or through `render props`](#or-through-render-props)
 * [Live Examples](#live-examples)
+* [Upcoming Features](#upcoming-features)
 * [FAQs](#faqs)
 
 ## What's it for:
@@ -238,7 +239,7 @@ Here are some examples to let you play around with redux-box
 
 ## Upcoming Features
 1. `with` helper for `createActions`. Example:
-```
+```javascript
 const actions = createActions({
   updateName: with("name") 
   // returns { type: "UPDATE_NAME", name}

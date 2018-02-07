@@ -221,7 +221,11 @@ var connectStore = exports.connectStore = function connectStore(modules) {
 		var finalState = {};
 		Object.keys(modules).forEach(function (key) {
 			var module = modules[key];
-			finalState[key] = state[module.name];
+			var computed = module.computed && module.computed({
+				state: state,
+				actions: module.actions
+			}) || {};
+			finalState[key] = Object.assign({}, state[module.name], computed);
 		});
 		return finalState;
 	};

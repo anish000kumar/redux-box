@@ -1,5 +1,5 @@
-import {moduleToReducer} from '../src/helpers'
-import {every, latest} from '../src/helpers'
+import {moduleToReducer} from '../src'
+import {every, latest} from '../src'
 import testModule from './testModule'
 
 describe('moduleToReducer', () => {

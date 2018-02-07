@@ -143,9 +143,16 @@ export const connectStore =  (modules) =>{
     const mapStateToProps = state => {
         let finalState = {};
         Object.keys(modules).forEach( key => {
-            const module = modules[key];
-            finalState[key] = state[module.name];
+			const module = modules[key];
+			const computed = (module.computed && module.computed({
+				state, 
+				actions: module.actions
+			})) || {};
+			finalState[key] = Object.assign({}, state[module.name], computed);
 		})
+
+		
+
         return finalState;
     }
 

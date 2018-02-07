@@ -144,11 +144,16 @@ export const connectStore =  (modules) =>{
         let finalState = {};
         Object.keys(modules).forEach( key => {
 			const module = modules[key];
-			const computed = (module.computed && module.computed({
-				state, 
-				actions: module.actions
-			})) || {};
-			finalState[key] = Object.assign({}, state[module.name], computed);
+			const context ={
+				state : state[module.name], 
+				computed: module.computed
+			}
+			const finalComputed = {}
+			Object.keys(module.computed).forEach( computed_function_name => {
+				const computed_function = module.computed[computed_function_name]
+				finalComputed[computed_function_name] = computed_function(context)
+			})
+			finalState[key] = Object.assign({}, state[module.name], finalComputed);
 		})
         return finalState;
     }

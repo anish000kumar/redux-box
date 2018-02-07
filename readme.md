@@ -66,6 +66,7 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 
 4. sagas
    (this is where you write all your sagas / async operations)
+   
 
 ## Usage
 
@@ -234,6 +235,22 @@ Here are some examples to let you play around with redux-box
 2. Example showing redux-saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js
 3. Example usage with redux-form: https://stackblitz.com/edit/react-w4dqth?file=store%2Findex.js
 4. Example usage with redux-persist : https://stackblitz.com/edit/react-pezrbb?file=store%2Findex.js
+
+## Upcoming Features
+1. `with` helper for `createActions`. Example:
+```
+const actions = createActions({
+  updateName: with("name") 
+  // returns { type: "UPDATE_NAME", name}
+  
+  updateProfile: with("name, email") 
+  // returns { type: "UPDATE_NAME", name}
+  
+  updateEmail: (email) => ({ type : "UPDATE_EMAIL", email})  
+  //you can always use the good old function instead of helper
+})
+```
+> *[Suggest a new feature here](https://github.com/anish000kumar/redux-box/labels/feature)*
 
 ## FAQs
 

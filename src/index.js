@@ -150,9 +150,6 @@ export const connectStore =  (modules) =>{
 			})) || {};
 			finalState[key] = Object.assign({}, state[module.name], computed);
 		})
-
-		
-
         return finalState;
     }
 

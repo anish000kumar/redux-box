@@ -149,7 +149,7 @@ export const connectStore =  (modules) =>{
 				computed: module.computed
 			}
 			const finalComputed = {}
-			Object.keys(module.computed).forEach( computed_function_name => {
+			module.computed && Object.keys(module.computed).forEach( computed_function_name => {
 				const computed_function = module.computed[computed_function_name]
 				finalComputed[computed_function_name] = computed_function(context)
 			})

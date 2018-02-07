@@ -226,7 +226,7 @@ var connectStore = exports.connectStore = function connectStore(modules) {
 				computed: module.computed
 			};
 			var finalComputed = {};
-			Object.keys(module.computed).forEach(function (computed_function_name) {
+			module.computed && Object.keys(module.computed).forEach(function (computed_function_name) {
 				var computed_function = module.computed[computed_function_name];
 				finalComputed[computed_function_name] = computed_function(context);
 			});

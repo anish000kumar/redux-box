@@ -143,8 +143,17 @@ export const connectStore =  (modules) =>{
     const mapStateToProps = state => {
         let finalState = {};
         Object.keys(modules).forEach( key => {
-            const module = modules[key];
-            finalState[key] = state[module.name];
+			const module = modules[key];
+			const context ={
+				state : state[module.name], 
+				computed: module.computed
+			}
+			const finalComputed = {}
+			module.computed && Object.keys(module.computed).forEach( computed_function_name => {
+				const computed_function = module.computed[computed_function_name]
+				finalComputed[computed_function_name] = computed_function(context)
+			})
+			finalState[key] = Object.assign({}, state[module.name], finalComputed);
 		})
         return finalState;
     }

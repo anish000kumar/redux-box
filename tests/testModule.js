@@ -12,6 +12,9 @@ const mutations = {
   SET_NAME  : (state, action) => state.name  = action.name,
   SET_EMAIL : (state, action) => state.email = action.email
 }
+const computed = ({state}) => ({
+  name_test : state.name+"11"
+})
 
 const sagas = {}
 
@@ -20,6 +23,7 @@ export default {
   state, 
   actions, 
   mutations, 
+  computed,
   sagas,
   decorateReducer : (reducer) => reducer
 }

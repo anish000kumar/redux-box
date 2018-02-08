@@ -221,16 +221,7 @@ var connectStore = exports.connectStore = function connectStore(modules) {
 		var finalState = {};
 		Object.keys(modules).forEach(function (key) {
 			var module = modules[key];
-			var context = {
-				state: state[module.name],
-				computed: module.computed
-			};
-			var finalComputed = {};
-			module.computed && Object.keys(module.computed).forEach(function (computed_function_name) {
-				var computed_function = module.computed[computed_function_name];
-				finalComputed[computed_function_name] = computed_function(context);
-			});
-			finalState[key] = Object.assign({}, state[module.name], finalComputed);
+			finalState[key] = state[module.name];
 		});
 		return finalState;
 	};

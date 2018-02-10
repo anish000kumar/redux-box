@@ -115,7 +115,7 @@ export default createContainer(module);
 
 **NOTE:** version 1.4.0 onwards, redux-box includes a small helper to easily create actions, like so:
 ```javascript
-import {createActions, using} from 'redux-box
+import {createActions, using} from 'redux-box'
 
 const actions = createActions({
   setName: using("name"),

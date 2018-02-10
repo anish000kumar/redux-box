@@ -113,6 +113,27 @@ export const module = {
 export default createContainer(module);
 ```
 
+**NOTE:** version 1.4.0 onwards, redux-box includes a small helper to easily create actions, like so:
+```javascript
+import {createActions, using} from 'redux-box
+
+const actions = createActions({
+  setName: using("name"),
+  setProfile: using("name, email, password"),
+  setStatus:(status) => ({ type:'SET_STATUS', status }) //you can always use full function instead of 'using' helper
+
+})
+```
+The `actions`object produced by `createActions` is:
+
+```javascript
+const actions = {
+  setName: (name) => ({ type:'SET_NAME', name }),
+  setProfile: (name, email, password) => ({type:'SET_PROFILE', name, email, password}),
+  setStatus:(status) => ({ type:'SET_STATUS', status })
+}
+```
+
 ### step 2 : register the module in redux store
 
 ```javascript
@@ -238,19 +259,7 @@ Here are some examples to let you play around with redux-box
 4. Example usage with redux-persist : https://stackblitz.com/edit/react-pezrbb?file=store%2Findex.js
 
 ## Upcoming Features
-1. `with` helper for `createActions`. Example:
-```javascript
-const actions = createActions({
-  updateName: with("name") 
-  // returns { type: "UPDATE_NAME", name}
-  
-  updateProfile: with("name, email") 
-  // returns { type: "UPDATE_NAME", name}
-  
-  updateEmail: (email) => ({ type : "UPDATE_EMAIL", email})  
-  //you can always use the good old function instead of helper
-})
-```
+*No pending feature requests*
 > *[Suggest a new feature here](https://github.com/anish000kumar/redux-box/labels/feature)*
 
 ## FAQs

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.moduleToReducer = exports.latest = exports.every = exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.STORE = undefined;
+exports.moduleToReducer = exports.latest = exports.every = exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.STORE = exports.using = exports.createActions = undefined;
 
 var _babelPolyfill = require('babel-polyfill');
 
@@ -27,10 +27,17 @@ var _reducer = require('./reducer');
 
 var _reducer2 = _interopRequireDefault(_reducer);
 
+var _helpers = require('./helpers');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+//export helpers
+var createActions = exports.createActions = _helpers.createActions;
+var using = exports.using = _helpers.using;
+
+//main file
 var devTools = window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 var composeEnhancers = devTools || _redux.compose;
 

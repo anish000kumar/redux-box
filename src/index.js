@@ -6,7 +6,13 @@ import {applyMiddleware,combineReducers, compose, createStore as storeCreator} f
 import createSagaMiddleware from "redux-saga";
 import {all, takeLatest, takeEvery, put} from 'redux-saga/effects';
 import getReducer from './reducer';
+import {createActions as actionCreators, using as arrayHelper} from './helpers'
 
+//export helpers
+export  const  createActions =actionCreators
+export const  using = arrayHelper
+
+//main file
 const devTools = window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 const composeEnhancers =  devTools || compose;
 

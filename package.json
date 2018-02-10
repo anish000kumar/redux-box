@@ -1,6 +1,6 @@
 {
   "name": "redux-box",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A redux container to scaffold a redux app as simple as possible while making perfect sense!",
   "main": "dist/index.js",
   "scripts": {
@@ -27,7 +27,6 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "immer": "^0.8.4",
-    "ramda": "^0.25.0",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",

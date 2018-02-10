@@ -1,13 +1,14 @@
-import {pipe, replace, toUpper} from 'ramda';
 
 export const using = (str) => str.split(',').map(item => item.trim())
 const RX_CAPS = /(?!^)([A-Z])/g
 const isArr = (data) => Object.prototype.toString.call(data) == '[object Array]';
 
-const toSnakeCase = pipe(
-  replace(RX_CAPS, '_$1'),
-  toUpper
-)
+const toSnakeCase = function (s){
+    return s.replace(/\.?([A-Z])/g,  (x,y) =>{
+      return "_" + y.toLowerCase()
+    })
+    .replace(/^_/, "").toUpperCase()
+}
                          
 export const createActions = function(list) {
   let finalObj = list

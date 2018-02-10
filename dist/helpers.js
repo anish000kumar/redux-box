@@ -3,10 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createActions = exports.using = undefined;
-
-var _ramda = require('ramda');
-
 var using = exports.using = function using(str) {
   return str.split(',').map(function (item) {
     return item.trim();
@@ -17,7 +13,11 @@ var isArr = function isArr(data) {
   return Object.prototype.toString.call(data) == '[object Array]';
 };
 
-var toSnakeCase = (0, _ramda.pipe)((0, _ramda.replace)(RX_CAPS, '_$1'), _ramda.toUpper);
+var toSnakeCase = function toSnakeCase(s) {
+  return s.replace(/\.?([A-Z])/g, function (x, y) {
+    return "_" + y.toLowerCase();
+  }).replace(/^_/, "").toUpperCase();
+};
 
 var createActions = exports.createActions = function createActions(list) {
   var finalObj = list;

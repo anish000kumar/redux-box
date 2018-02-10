@@ -205,6 +205,11 @@ export default class AppComponent extends Component {
       <div>
         <h1>{user.name}</h1>
         <h2>{user.email}</h2>
+	
+	<button onClick={()=>{ 
+	  user.setName('jane doe')
+	}}> Change Name </button>
+	
       </div>
     );
   }

@@ -77,7 +77,7 @@ Make sure you specify a unique name for each module ('user' in this example)
 
 ```javascript
 // store/user.js
-import { createSagas, createContainer } from "redux-box";
+import { createSagas, createContainer,createActions, using } from "redux-box";
 import { call } from "redux-saga/effects";
 
 const state = {
@@ -85,10 +85,13 @@ const state = {
   email: "john@doe.com"
 };
 
-const actions = {
-  setName: name => ({ type: "SET_NAME", name }),
-  setEmail: email => ({ type: "SET_EMAIL", email })
-};
+const actions = createActions({
+  setName: using('name'),
+  //^ is same as: setName: name => ({ type: "SET_NAME", name }),
+  
+  setEmail: using('name, email'),
+  //^ is same as: setEmail: email => ({ type: "SET_EMAIL", email })
+});
 
 const mutations = {
   SET_NAME: (state, action) => (state.name = action.name),
@@ -113,26 +116,7 @@ export const module = {
 export default createContainer(module);
 ```
 
-**NOTE:** version 1.4.0 onwards, redux-box includes a small helper to easily create actions, like so:
-```javascript
-import {createActions, using} from 'redux-box'
 
-const actions = createActions({
-  setName: using("name"),
-  setProfile: using("name, email, password"),
-  setStatus:(status) => ({ type:'SET_STATUS', status }) //you can always use full function instead of 'using' helper
-
-})
-```
-The `actions`object produced by `createActions` is:
-
-```javascript
-const actions = {
-  setName: (name) => ({ type:'SET_NAME', name }),
-  setProfile: (name, email, password) => ({type:'SET_PROFILE', name, email, password}),
-  setStatus:(status) => ({ type:'SET_STATUS', status })
-}
-```
 
 ### step 2 : register the module in redux store
 
@@ -221,6 +205,11 @@ export default class AppComponent extends Component {
       <div>
         <h1>{user.name}</h1>
         <h2>{user.email}</h2>
+	
+	<button onClick={()=>{ 
+	  user.setName('jane doe')
+	}}> Change Name </button>
+	
       </div>
     );
   }

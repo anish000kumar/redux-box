@@ -1,6 +1,6 @@
 {
   "name": "redux-box",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "A redux container to scaffold a redux app as simple as possible while making perfect sense!",
   "main": "dist/index.js",
   "scripts": {

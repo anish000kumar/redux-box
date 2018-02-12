@@ -22,7 +22,7 @@ let middlewares = [sagaMiddleware];
 export let STORE = null;
 
 //config = {reducers:{}, sagas:[], middlewares}
-export const createStore = (modules, config) => {
+export const createStore = (modules, config={}) => {
 	if(config && config.middlewares && config.middlewares.length > 0){
 		middlewares = middlewares.concat(config.middlewares);
 	}
@@ -84,7 +84,7 @@ const commitAsync = (action_name, data ) =>{
 
 const dispatchPromise = (action) => {
 	return new Promise(function(resolve, reject){
-		STORE.dispatch( object.assign({}, action,{
+		STORE.dispatch( Object.assign({}, action,{
 				resolve,
 				reject
 			})

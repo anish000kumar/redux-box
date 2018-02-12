@@ -47,8 +47,10 @@ var middlewares = [sagaMiddleware];
 var STORE = exports.STORE = null;
 
 //config = {reducers:{}, sagas:[], middlewares}
-var createStore = exports.createStore = function createStore(modules, config) {
+var createStore = exports.createStore = function createStore(modules) {
 	var _marked = /*#__PURE__*/regeneratorRuntime.mark(rootSaga);
+
+	var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 	if (config && config.middlewares && config.middlewares.length > 0) {
 		middlewares = middlewares.concat(config.middlewares);
@@ -128,7 +130,7 @@ var commitAsync = function commitAsync(action_name, data) {
 
 var dispatchPromise = function dispatchPromise(action) {
 	return new Promise(function (resolve, reject) {
-		STORE.dispatch(object.assign({}, action, {
+		STORE.dispatch(Object.assign({}, action, {
 			resolve: resolve,
 			reject: reject
 		}));

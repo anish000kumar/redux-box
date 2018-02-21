@@ -21,6 +21,11 @@ Setting up and organizing a redux store in your react/react-native projects can 
 * [Upcoming Features](#upcoming-features)
 * [FAQs](#faqs)
 
+## Quick tour for visual learners:
+<p align="center"><a href="https://www.youtube.com/watch?v=z3cp6xs2HmE" target="_blank">
+	<img style="max-width:80%" src="https://image.ibb.co/j4dASc/Screen_Shot_2018_02_22_at_1_38_51_AM.png" alt="redux_box" border="0">
+</a></p>
+
 ## What's it for:
 
 1. **Clean, expressive and minimal reducers:**

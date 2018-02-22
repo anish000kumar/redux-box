@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.moduleToReducer = exports.latest = exports.every = exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.STORE = exports.using = exports.createActions = undefined;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _babelPolyfill = require('babel-polyfill');
 
 var _babelPolyfill2 = _interopRequireDefault(_babelPolyfill);
@@ -38,7 +40,7 @@ var createActions = exports.createActions = _helpers.createActions;
 var using = exports.using = _helpers.using;
 
 //main file
-var devTools = typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+var devTools = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 var composeEnhancers = devTools || _redux.compose;
 
 var sagaMiddleware = (0, _reduxSaga2.default)();

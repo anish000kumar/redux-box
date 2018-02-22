@@ -5,6 +5,11 @@
 # Redux Box
 
 Setting up and organizing a redux store in your react/react-native projects can be a tedious and daunting task. Redux-Box aims at extracting the complexity in setting up redux with redux-saga, without loosing the flexibility or without introducing new bizarre terms.
+<p align="center"><a href="#" target="_blank">
+	<img style="max-width:700px" src="https://image.ibb.co/fToGkx/redux_box_1.png" alt="redux_box" border="0">
+	Illustration by [Vikas Raj Yadav](https://dribbble.com/Vraj247)
+</a></p>
+
 
 ## Table of contents:
 * [What's it for](#whats-it-for)
@@ -20,9 +25,7 @@ Setting up and organizing a redux store in your react/react-native projects can 
 * [Upcoming Features](#upcoming-features)
 * [FAQs](#faqs)
 
-<p align="center"><a href="#" target="_blank">
-	<img style="max-width:700px" src="https://image.ibb.co/fToGkx/redux_box_1.png" alt="redux_box" border="0">
-</a></p>
+
 
 ## What's it for:
 

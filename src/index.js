@@ -13,7 +13,7 @@ export  const  createActions =actionCreators
 export const  using = arrayHelper
 
 //main file
-const devTools = window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+const devTools = (typeof window !== 'undefined') && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 const composeEnhancers =  devTools || compose;
 
 const sagaMiddleware = createSagaMiddleware();

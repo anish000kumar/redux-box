@@ -38,7 +38,7 @@ var createActions = exports.createActions = _helpers.createActions;
 var using = exports.using = _helpers.using;
 
 //main file
-var devTools = window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+var devTools = typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 var composeEnhancers = devTools || _redux.compose;
 
 var sagaMiddleware = (0, _reduxSaga2.default)();

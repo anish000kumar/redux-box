@@ -8,7 +8,7 @@ Setting up and organizing a redux store in your react/react-native projects can 
 <p align="center"><a href="#" target="_blank">
 	<img style="max-width:700px" src="https://image.ibb.co/fToGkx/redux_box_1.png" alt="redux_box" border="0">
 </a></p>
-*Illustration by [Vikas](https://dribbble.com/Vraj247)
+*Illustration by [Vikas](https://dribbble.com/Vraj247)*
 
 
 ## Table of contents:

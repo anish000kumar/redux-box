@@ -13,8 +13,8 @@ const config = {
     }
 }
 
-export const store = createStore(modules, config )
-export const store2 = createStore(modules)
+const store = createStore(modules, config )
+const store2 = createStore(modules )
 
 describe('Store', ()=> {
     it('should have dispatch method', ()=>{

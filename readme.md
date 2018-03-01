@@ -58,6 +58,16 @@ OR
 yarn add redux-box
 ```
 
+**NOTE:** In case you receive error for es6 features make sure to install `babel-polyfill` as well:
+
+```
+npm install --save babel-polyfill
+```
+and then import the polyfill in your `App.js`
+```javascript
+import polyfill from 'babel-polyfill'
+```
+
 ## The Basics
 
 Redux box emphasizes on dividing the whole application into multiple modules. Each of these modules manages it's state seperately, with the help of 4 segments:

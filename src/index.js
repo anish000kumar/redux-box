@@ -1,5 +1,4 @@
 "use strict";
-import polyfill from 'babel-polyfill'
 import produce from 'immer';
 import { connect } from 'react-redux';
 import {applyMiddleware,combineReducers, compose, createStore as storeCreator} from 'redux';

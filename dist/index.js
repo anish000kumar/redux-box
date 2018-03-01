@@ -7,10 +7,6 @@ exports.moduleToReducer = exports.latest = exports.every = exports.connectStore 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _babelPolyfill = require('babel-polyfill');
-
-var _babelPolyfill2 = _interopRequireDefault(_babelPolyfill);
-
 var _immer = require('immer');
 
 var _immer2 = _interopRequireDefault(_immer);

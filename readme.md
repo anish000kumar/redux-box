@@ -4,7 +4,7 @@
 
 # Redux Box
 
-Setting up and organizing a redux store in your react/react-native projects can be a tedious and daunting task. Redux-Box aims at abstracting away the complexity in using redux with redux-saga, while letting you manage application state in modular fashion, without loosing the flexibility or without introducing new bizarre terms.
+Setting up and organizing a redux store in your react/react-native projects can be a tedious and daunting task. Redux-Box aims at abstracting away the complexity in using redux with redux-saga, while letting you manage application state in modular fashion, without losing the flexibility or without introducing new bizarre terms.
 <p align="center"><a href="#" target="_blank">
 	<img style="max-width:700px" src="https://image.ibb.co/fToGkx/redux_box_1.png" alt="redux_box" border="0">
 </a></p>

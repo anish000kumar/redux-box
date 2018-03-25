@@ -3,10 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var using = exports.using = function using(str) {
-  return str.split(',').map(function (item) {
+var using = exports.using = function using() {
+  var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+
+  if (str.length > 0) return str.split(',').map(function (item) {
     return item.trim();
-  });
+  });else return [];
 };
 var RX_CAPS = /(?!^)([A-Z])/g;
 var isArr = function isArr(data) {
@@ -30,9 +32,11 @@ var createActions = exports.createActions = function createActions(list) {
         }
 
         var action = { type: toSnakeCase(key) };
-        args.forEach(function (arg, i) {
-          return action[value[i]] = arg;
-        });
+        if (args.length > 0) {
+          args.forEach(function (arg, i) {
+            return action[value[i]] = arg;
+          });
+        }
         return action;
       };
     }

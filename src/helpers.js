@@ -1,5 +1,10 @@
 
-export const using = (str) => str.split(',').map(item => item.trim())
+export const using = (str="") =>{
+   if(str.length>0) 
+      return str.split(',').map(item => item.trim())
+    else
+      return []
+}
 const RX_CAPS = /(?!^)([A-Z])/g
 const isArr = (data) => Object.prototype.toString.call(data) == '[object Array]';
 
@@ -17,7 +22,9 @@ export const createActions = function(list) {
     if(isArr(value)){
         finalObj[key] = (...args) => {
         let action = { type: toSnakeCase(key) }
-        args.forEach((arg, i) => action[value[i]] = arg)
+        if(args.length>0){
+          args.forEach((arg, i) => action[value[i]] = arg)
+        }
         return action
       }
     }

@@ -58,9 +58,9 @@ OR
 yarn add redux-box babel-polyfill
 ```
 
-**NOTE:** In case you your project already uses `babel-polyfill` you may skip  the step below:
+**NOTE:** *In case you your project already uses `babel-polyfill` you may skip the step below*
 
-and then put these two lines as the very top of your `App.js` file:
+and then put these two lines at the very top of your `App.js` file:
 ```javascript
 import React from 'react'
 import polyfill from 'babel-polyfill'
@@ -78,7 +78,7 @@ OR
 yarn add redux-box 
 ```
 
-Also, to support decorators and generator syntax, you would want to use the `.bablerc` file as below:
+Also, to support the latest decorator and generator syntax, you would want to use the `.bablerc` file as below:
 ```
 {
   "presets": [

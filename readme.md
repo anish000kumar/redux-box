@@ -307,7 +307,45 @@ Here are some examples to let you play around with redux-box
 
 ## FAQs
 
-1. **Can I use all the features of redux-box, with `createStore` from redux instead?**
+1. **Decorators aren't working**
+
+Decorators aren't still a part of es6. To use the decorator syntax you should be using a transpiler like bable. Also, in create-react-app projects the `.babelrc` file doesn't really work so you would need to run `npm run eject` to be able to use custome bable-plugins. Following `.babelrc` should suffice:
+```javascript
+{
+  "plugins": ["transform-decorators-legacy", "styled-components"],
+  "presets": [ "react","es2015", "stage-2" ]
+}
+```
+
+In case you wouldn't like to eject, you can still use redux-box without decorators. Like so:
+
+```javascript
+
+@connectStore({
+ ui: uiModule
+})
+class TestComponent extends React.Component{
+  ...
+}
+export default TestComponent
+
+```
+
+Above snippet is equivalent to:
+
+```javascript
+
+class TestComponent extends React.Component{
+  ...
+}
+
+export default connectStore({
+ ui: uiModule
+})(TestComponent)
+
+```
+
+2. **Can I use all the features of redux-box, with `createStore` from redux instead?**
 
 Yes, you can! Here's the script showing how you can use `createStore` from redux, to setup your modules (with reducers, sagas and middlewares):
 (v1.3.9 onwards)

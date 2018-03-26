@@ -46,26 +46,57 @@ If you are concerned about the state getting mutated directly in the snippet abo
 
 ## Installation
 
-Run this command in your terminal/cmd to install the package:
+### Installing for ReactJS(browser):
 
 ```
-npm install --save redux-box
+npm install --save redux-box babel-polyfill
 ```
 
 OR
 
 ```
-yarn add redux-box
+yarn add redux-box babel-polyfill
 ```
 
-**NOTE:** In case you receive error for es6 features make sure to install `babel-polyfill` as well:
+**NOTE:** In case you your project already uses `babel-polyfill` you may skip  the step below:
 
-```
-npm install --save babel-polyfill
-```
-and then import the polyfill in your `App.js`
+and then put these two lines as the very top of your `App.js` file:
 ```javascript
+import React from 'react'
 import polyfill from 'babel-polyfill'
+```
+
+### Installing for React Native:
+
+```
+npm install --save redux-box 
+```
+
+OR
+
+```
+yarn add redux-box 
+```
+
+Also, to support decorators and generator syntax, you would want to use the `.bablerc` file as below:
+```
+{
+  "presets": [
+    "babel-preset-react-native-stage-0/decorator-support"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "transform-react-jsx-source",
+        "transform-es2015-typeof-symbol"
+      ]
+    },
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
+}
+
 ```
 
 ## The Basics

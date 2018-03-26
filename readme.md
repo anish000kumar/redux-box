@@ -58,7 +58,7 @@ OR
 yarn add redux-box babel-polyfill
 ```
 
-**NOTE:** *In case you your project already uses `babel-polyfill` you may skip the step below*
+**NOTE:** *In case your project already uses `babel-polyfill` you may skip the step below*
 
 and then put these two lines at the very top of your `App.js` file:
 ```javascript

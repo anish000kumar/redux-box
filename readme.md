@@ -78,7 +78,7 @@ OR
 yarn add redux-box 
 ```
 
-Also, to support the latest decorator and generator syntax, you would want to use the `.bablerc` file as below:
+Also, to support the latest decorator and generator syntax, you would want to use the `.babelrc` file as below:
 ```
 {
   "presets": [
@@ -309,7 +309,7 @@ Here are some examples to let you play around with redux-box
 
 1. **Decorators aren't working**
 
-Decorators aren't still a part of es6. To use the decorator syntax you should be using a transpiler like bable. Also, in create-react-app projects the `.babelrc` file doesn't really work so you would need to run `npm run eject` to be able to use custome bable-plugins. Following `.babelrc` should suffice:
+Decorators aren't still a part of es6. To use the decorator syntax you should be using a transpiler like babel. Also, in create-react-app projects the `.babelrc` file doesn't really work so you would need to run `npm run eject` to be able to use custom babel-plugins. Following `.babelrc` should suffice:
 ```javascript
 {
   "plugins": ["transform-decorators-legacy", "styled-components"],

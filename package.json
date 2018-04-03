@@ -1,6 +1,6 @@
 {
   "name": "redux-box",
-  "version": "1.4.5",
+  "version": "1.4.7",
   "description": "A redux container to scaffold a redux app as simple as possible while making perfect sense!",
   "main": "dist/index.js",
   "scripts": {
@@ -29,7 +29,8 @@
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.16.0",
+    "reselect": "^3.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -41,8 +41,10 @@ export const createStore = (modules, config={}) => {
 	if(config.decorateReducer){
 		combinedReducer = config.decorateReducer(combinedReducer)
 	}
+	let preloadedState = config.preloadedState || {};
 	let store = storeCreator(
 		combinedReducer,
+		preloadedState,
 		composeEnhancers( applyMiddleware(...middlewares))
 	)
 	function *rootSaga(){

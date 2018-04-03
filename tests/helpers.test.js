@@ -30,6 +30,6 @@ describe('using', ()=>{
 		expect(using('test, test2')).toEqual(['test', 'test2'])
 		expect(using()).toEqual([]),
 		expect(createActions({ test:using() }).test() ).toEqual({type:'TEST'})
-		expect(createActions({ testOnly:using('name') }).testOnly() ).toEqual({type:'TESTjj_ONLY'})
+		expect(createActions({ testOnly:using('name') }).testOnly() ).toEqual({type:'TEST_ONLY'})
 	})
 })

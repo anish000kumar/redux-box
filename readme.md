@@ -300,6 +300,7 @@ Here are some examples to let you play around with redux-box
 2. Example showing redux-saga usage: - https://stackblitz.com/edit/react-qmedt4?file=Hello.js
 3. Example usage with redux-form: https://stackblitz.com/edit/react-w4dqth?file=store%2Findex.js
 4. Example usage with redux-persist : https://stackblitz.com/edit/react-pezrbb?file=store%2Findex.js
+5. Example showing usage of preloaded state for SSR:  https://stackblitz.com/edit/react-qcasn4?file=store/index.js
 
 ## Upcoming Features
 *No pending feature requests*

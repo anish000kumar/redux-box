@@ -185,7 +185,12 @@ createStore((modules: Array), (config: Object));
 
 //example config object
 config = {
+
+  //define redux middlewares
   middlewares: [],
+  
+   //define the default state for your store
+  preloadedState: {},
 
   // sagas to be manually registered
   sagas: [userModule.sagas, testModule.sagas],

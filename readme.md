@@ -46,26 +46,57 @@ If you are concerned about the state getting mutated directly in the snippet abo
 
 ## Installation
 
-Run this command in your terminal/cmd to install the package:
+### Installing for ReactJS(browser):
 
 ```
-npm install --save redux-box
+npm install --save redux-box babel-polyfill
 ```
 
 OR
 
 ```
-yarn add redux-box
+yarn add redux-box babel-polyfill
 ```
 
-**NOTE:** In case you receive error for es6 features make sure to install `babel-polyfill` as well:
+**NOTE:** *In case your project already uses `babel-polyfill` you may skip the step below*
 
-```
-npm install --save babel-polyfill
-```
-and then import the polyfill in your `App.js`
+and then put these two lines at the very top of your `App.js` file:
 ```javascript
+import React from 'react'
 import polyfill from 'babel-polyfill'
+```
+
+### Installing for React Native:
+
+```
+npm install --save redux-box 
+```
+
+OR
+
+```
+yarn add redux-box 
+```
+
+Also, to support the latest decorator and generator syntax, you would want to use the `.babelrc` file as below:
+```
+{
+  "presets": [
+    "babel-preset-react-native-stage-0/decorator-support"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "transform-react-jsx-source",
+        "transform-es2015-typeof-symbol"
+      ]
+    },
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
+}
+
 ```
 
 ## The Basics
@@ -276,7 +307,45 @@ Here are some examples to let you play around with redux-box
 
 ## FAQs
 
-1. **Can I use all the features of redux-box, with `createStore` from redux instead?**
+1. **Decorators aren't working**
+
+Decorators aren't still a part of es6. To use the decorator syntax you should be using a transpiler like babel. Also, in create-react-app projects the `.babelrc` file doesn't really work so you would need to run `npm run eject` to be able to use custom babel-plugins. Following `.babelrc` should suffice:
+```javascript
+{
+  "plugins": ["transform-decorators-legacy", "styled-components"],
+  "presets": [ "react","es2015", "stage-2" ]
+}
+```
+
+In case you wouldn't like to eject, you can still use redux-box without decorators. Like so:
+
+```javascript
+
+@connectStore({
+ ui: uiModule
+})
+class TestComponent extends React.Component{
+  ...
+}
+export default TestComponent
+
+```
+
+Above snippet is equivalent to:
+
+```javascript
+
+class TestComponent extends React.Component{
+  ...
+}
+
+export default connectStore({
+ ui: uiModule
+})(TestComponent)
+
+```
+
+2. **Can I use all the features of redux-box, with `createStore` from redux instead?**
 
 Yes, you can! Here's the script showing how you can use `createStore` from redux, to setup your modules (with reducers, sagas and middlewares):
 (v1.3.9 onwards)

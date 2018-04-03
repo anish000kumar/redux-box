@@ -57,7 +57,7 @@ yarn add redux-box
 ```
 
 
-### Note for React Native:
+#### Note for React Native:
 If you receive error for es6 syntax, you should import from `redux-box/dist` instead of just `redux-box`. Example:
 ```javascript
 import {createStore, createContainer, createSagas, connectStore} from "redux-box/dist"
@@ -83,8 +83,15 @@ Also, to support the latest decorator and generator syntax, you would want to us
     }
   }
 }
-
 ```
+#### Note for `Regenerator not defined` error:
+It would most likey appear when you try to use `redux-box/dist`(es5 version), in the browser. To get around this issue, you should install `babel-polyfill` and place it at the very top of `App.js` file (or the root file of your react app), like so:
+```javascript
+import React from "react"
+import polyfill from "babel-polyfill"
+...
+```
+
 
 ## The Basics
 

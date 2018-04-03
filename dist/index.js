@@ -71,7 +71,8 @@ var createStore = exports.createStore = function createStore(modules) {
 	if (config.decorateReducer) {
 		combinedReducer = config.decorateReducer(combinedReducer);
 	}
-	var store = (0, _redux.createStore)(combinedReducer, composeEnhancers(_redux.applyMiddleware.apply(undefined, _toConsumableArray(middlewares))));
+	var preloadedState = config.preloadedState || {};
+	var store = (0, _redux.createStore)(combinedReducer, preloadedState, composeEnhancers(_redux.applyMiddleware.apply(undefined, _toConsumableArray(middlewares))));
 	function rootSaga() {
 		return regeneratorRuntime.wrap(function rootSaga$(_context) {
 			while (1) {

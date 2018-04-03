@@ -1,0 +1,6 @@
+example/
+tests/
+.babelrc
+.expo/
+.vscode/
+.gitignore

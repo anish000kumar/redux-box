@@ -13,12 +13,18 @@ export const  using = arrayHelper
 
 //main file
 const devTools = (typeof window === 'object') && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-const composeEnhancers =  devTools || compose;
+let devMode = true;
+if(typeof __DEV__ === 'object'){
+	devMode = __DEV__
+}
+	
+const composeEnhancers =  devMode ? (devTools || compose) : compose;
 
 const sagaMiddleware = createSagaMiddleware();
 let middlewares = [sagaMiddleware];
 
 export let STORE = null;
+
 
 //config = {reducers:{}, sagas:[], middlewares}
 export const createStore = (modules, config={}) => {
@@ -29,7 +35,7 @@ export const createStore = (modules, config={}) => {
 	let sagas = [];
 	modules.forEach(module => {
 		sagas = sagas.concat(module.sagas);
-		let moduleReducer = getReducer( module.mutations, module.state ) 
+		let moduleReducer = getReducer( module.mutations, module.state, module.name ) 
 		if(module.decorateReducer){
 			moduleReducer = module.decorateReducer(moduleReducer)
 		}
@@ -47,18 +53,42 @@ export const createStore = (modules, config={}) => {
 		preloadedState,
 		composeEnhancers( applyMiddleware(...middlewares))
 	)
+
+	const sagaCofig = Object.assign({}, {
+		retryDelay: 2000,
+		onError: (err) => {}
+	},config.sagaCofig)
+
 	function *rootSaga(){
-		try{
-			yield all(sagas)
+		while(true) {
+			try {
+			  yield all(sagas);
+			} 
+			catch(err) {
+				sagaCofig.onError(err);
+				yield call(delay, sagaConfig.retryDelay);
+			}
 		}
-		catch(err){
-			alert('Something went wrong! Please check your connectivity')
-			process.env.NODE_ENV=='development' && console.log(err)
-		}
+		// try{
+		// 	yield all(sagas)
+		// }
+		// catch(err){
+		// 	alert('Something went wrong! Please check your connectivity')
+		// 	process.env.NODE_ENV=='development' && console.log(err)
+		// }
 	}
 	sagaMiddleware.run(rootSaga);
 	STORE = store;
 	return store;
+}
+
+export const resetModules = (modules=[], dispatch=(STORE && STORE.dispatch)) => {
+	for(let i=0; i<modules.length; i++){
+		let module = modules[i];
+		dispatch({
+			type: module.name+"__RESET__"
+		})
+	}
 }
 
 export const commit= (action_name, data) => {

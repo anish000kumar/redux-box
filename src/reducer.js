@@ -12,7 +12,7 @@ import produce from 'immer';
 //   return obj
 // }
 
- const getReducer = (actionList, initialState) => {
+ const getReducer = (actionList, initialState, name) => {
 	// actionList['__SET__'+name] = function(state, {data}){
 	// 	try{
 	// 		 assign(state, data.target, data.value )
@@ -21,6 +21,14 @@ import produce from 'immer';
 	// 		console.log('WARNING: the key specified for the setter wasn\'t valid', err)
 	// 	}
 	// }
+	actionList[name+'__RESET__'] = function(state, action){
+		try{
+			state = initialState;
+		}
+		catch(err){
+			console.log(`WARNING: __RESET__ action failed for module ${name}`,err)
+		}
+	}
 	
 	return  ( state = initialState, action) => {
 		let method = actionList[action.type];

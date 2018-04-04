@@ -22,7 +22,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //   return obj
 // }
 
-var getReducer = function getReducer(actionList, initialState) {
+var getReducer = function getReducer(actionList, initialState, name) {
 	// actionList['__SET__'+name] = function(state, {data}){
 	// 	try{
 	// 		 assign(state, data.target, data.value )
@@ -31,6 +31,13 @@ var getReducer = function getReducer(actionList, initialState) {
 	// 		console.log('WARNING: the key specified for the setter wasn\'t valid', err)
 	// 	}
 	// }
+	actionList[name + '__RESET__'] = function (state, action) {
+		try {
+			state = initialState;
+		} catch (err) {
+			console.log('WARNING: __RESET__ action failed for module ' + name, err);
+		}
+	};
 
 	return function () {
 		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;

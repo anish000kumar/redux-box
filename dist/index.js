@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.moduleToReducer = exports.latest = exports.every = exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.createStore = exports.STORE = exports.using = exports.createActions = undefined;
+exports.moduleToReducer = exports.latest = exports.every = exports.connectStore = exports.createSagas = exports.createContainer = exports.commit = exports.resetModules = exports.createStore = exports.STORE = exports.using = exports.createActions = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -37,7 +37,12 @@ var using = exports.using = _helpers.using;
 
 //main file
 var devTools = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-var composeEnhancers = devTools || _redux.compose;
+var devMode = true;
+if ((typeof __DEV__ === 'undefined' ? 'undefined' : _typeof(__DEV__)) === 'object') {
+	devMode = __DEV__;
+}
+
+var composeEnhancers = devMode ? devTools || _redux.compose : _redux.compose;
 
 var sagaMiddleware = (0, _reduxSaga2.default)();
 var middlewares = [sagaMiddleware];
@@ -57,7 +62,7 @@ var createStore = exports.createStore = function createStore(modules) {
 	var sagas = [];
 	modules.forEach(function (module) {
 		sagas = sagas.concat(module.sagas);
-		var moduleReducer = (0, _reducer2.default)(module.mutations, module.state);
+		var moduleReducer = (0, _reducer2.default)(module.mutations, module.state, module.name);
 		if (module.decorateReducer) {
 			moduleReducer = module.decorateReducer(moduleReducer);
 		}
@@ -73,36 +78,64 @@ var createStore = exports.createStore = function createStore(modules) {
 	}
 	var preloadedState = config.preloadedState || {};
 	var store = (0, _redux.createStore)(combinedReducer, preloadedState, composeEnhancers(_redux.applyMiddleware.apply(undefined, _toConsumableArray(middlewares))));
+
+	var sagaCofig = Object.assign({}, {
+		retryDelay: 2000,
+		onError: function onError(err) {}
+	}, config.sagaCofig);
+
 	function rootSaga() {
 		return regeneratorRuntime.wrap(function rootSaga$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
-						_context.prev = 0;
-						_context.next = 3;
+						if (!true) {
+							_context.next = 13;
+							break;
+						}
+
+						_context.prev = 1;
+						_context.next = 4;
 						return (0, _effects.all)(sagas);
 
-					case 3:
-						_context.next = 9;
+					case 4:
+						_context.next = 11;
 						break;
 
-					case 5:
-						_context.prev = 5;
-						_context.t0 = _context['catch'](0);
+					case 6:
+						_context.prev = 6;
+						_context.t0 = _context['catch'](1);
 
-						alert('Something went wrong! Please check your connectivity');
-						process.env.NODE_ENV == 'development' && console.log(_context.t0);
+						sagaCofig.onError(_context.t0);
+						_context.next = 11;
+						return call(delay, sagaConfig.retryDelay);
 
-					case 9:
+					case 11:
+						_context.next = 0;
+						break;
+
+					case 13:
 					case 'end':
 						return _context.stop();
 				}
 			}
-		}, _marked, this, [[0, 5]]);
+		}, _marked, this, [[1, 6]]);
 	}
 	sagaMiddleware.run(rootSaga);
 	exports.STORE = STORE = store;
 	return store;
+};
+
+var resetModules = exports.resetModules = function resetModules() {
+	var modules = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	var dispatch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : STORE && STORE.dispatch;
+
+	for (var i = 0; i < modules.length; i++) {
+		var module = modules[i];
+		dispatch({
+			type: module.name + "__RESET__"
+		});
+	}
 };
 
 var commit = exports.commit = function commit(action_name, data) {

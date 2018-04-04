@@ -46,28 +46,6 @@ If you are concerned about the state getting mutated directly in the snippet abo
 
 ## Installation
 
-### Installing for ReactJS(browser):
-
-```
-npm install --save redux-box babel-polyfill
-```
-
-OR
-
-```
-yarn add redux-box babel-polyfill
-```
-
-**NOTE:** *In case your project already uses `babel-polyfill` you may skip the step below*
-
-and then put these two lines at the very top of your `App.js` file:
-```javascript
-import React from 'react'
-import polyfill from 'babel-polyfill'
-```
-
-### Installing for React Native:
-
 ```
 npm install --save redux-box 
 ```
@@ -77,6 +55,15 @@ OR
 ```
 yarn add redux-box 
 ```
+
+
+#### Note for React Native:
+If you receive error for es6 syntax, you should import from `redux-box/dist` instead of just `redux-box`. Example:
+```javascript
+import {createStore, createContainer, createSagas, connectStore} from "redux-box/dist"
+
+```
+
 
 Also, to support the latest decorator and generator syntax, you would want to use the `.babelrc` file as below:
 ```
@@ -96,8 +83,15 @@ Also, to support the latest decorator and generator syntax, you would want to us
     }
   }
 }
-
 ```
+#### Note for `Regenerator not defined` error:
+It would most likey appear when you try to use `redux-box/dist`(es5 version), in the browser. To get around this issue, you should install `babel-polyfill` and place it at the very top of `App.js` file (or the root file of your react app), like so:
+```javascript
+import React from "react"
+import polyfill from "babel-polyfill"
+...
+```
+
 
 ## The Basics
 
@@ -191,7 +185,12 @@ createStore((modules: Array), (config: Object));
 
 //example config object
 config = {
+
+  //define redux middlewares
   middlewares: [],
+  
+   //define the default state for your store
+  preloadedState: {},
 
   // sagas to be manually registered
   sagas: [userModule.sagas, testModule.sagas],

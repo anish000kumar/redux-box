@@ -22,3 +22,10 @@
 //         debugger
 //     })
 // })
+describe('dummy test', () => {
+
+    it('should do nothing',() => {
+        expect([1,2,3]).toEqual([1,2,3])
+    })
+
+})

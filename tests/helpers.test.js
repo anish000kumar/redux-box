@@ -1,7 +1,6 @@
 import {moduleToReducer} from '../src'
-import {every, latest} from '../src'
 import testModule from './testModule'
-import {createActions, using} from '../src/helpers'
+import {createActions, using, pluck} from '../src/helpers'
 
 describe('moduleToReducer', () => {
   it('should return reducer', () => {
@@ -18,12 +17,6 @@ describe('moduleToReducer', () => {
   })
 })
 
-describe('every and latest', ()=>{
-	it('should return string', ()=>{
-		expect(every('test')).toBe('test.every')
-		expect(latest('test')).toBe('test.latest')
-	})
-})
 
 describe('using', ()=>{
 	it('should return array', ()=>{
@@ -31,5 +24,19 @@ describe('using', ()=>{
 		expect(using()).toEqual([]),
 		expect(createActions({ test:using() }).test() ).toEqual({type:'TEST'})
 		expect(createActions({ testOnly:using('name') }).testOnly() ).toEqual({type:'TEST_ONLY'})
+	})
+})
+
+describe('pluck', () => {
+	it('should pluck correct keys', ()=>{
+		let testObj ={
+			name: 'abc',
+			email: 'abc',
+			city: 'delhi'
+		}
+		expect( pluck(testObj, ['name', 'city']) ).toEqual({
+			name: 'abc',
+			city: 'delhi'
+		})
 	})
 })

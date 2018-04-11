@@ -5,16 +5,18 @@ import {
   applyMiddleware,
   combineReducers,
   compose,
-  createStore as storeCreator
+  createStore as storeCreator,
 } from "redux";
 import createSagaMiddleware, { delay } from "redux-saga";
 import { all, takeLatest, takeEvery, put,call } from "redux-saga/effects";
 import getReducer from "./reducer";
+import "regenerator-runtime/runtime"
 import {
   createActions as actionCreators,
   using as arrayHelper,
   pluck,
-  areSame
+  areSame,
+  resetModules as resetModulesHelper
 } from "./helpers";
 
 /*
@@ -205,6 +207,7 @@ export const moduleToReducer = module =>
   getReducer(module.mutations, module.state);
 export const createActions = actionCreators;
 export const using = arrayHelper;
+export const resetModules = resetModulesHelper
 
 // default exports
 export default {

@@ -1,8 +1,8 @@
 {
   "name": "redux-box",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "A redux container to scaffold a redux app as simple as possible while making perfect sense!",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "test-debug": "./node_modules/.bin/node-debug ./node_modules/.bin/jest -i --watch",
@@ -30,6 +30,7 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
+    "regenerator-runtime": "^0.11.1",
     "reselect": "^3.0.1"
   },
   "devDependencies": {

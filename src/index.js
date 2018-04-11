@@ -7,8 +7,8 @@ import {
   compose,
   createStore as storeCreator
 } from "redux";
-import createSagaMiddleware from "redux-saga";
-import { all, takeLatest, takeEvery, put } from "redux-saga/effects";
+import createSagaMiddleware, { delay } from "redux-saga";
+import { all, takeLatest, takeEvery, put,call } from "redux-saga/effects";
 import getReducer from "./reducer";
 import {
   createActions as actionCreators,
@@ -43,7 +43,7 @@ let middlewares = [sagaMiddleware];
 In this method, we iterate through each module and keep stacking
 our reducers and sagas in their respective arrays. Finally 
 we use these arrays to initialize the store using 
-'ccreateStore' from redux.
+'createStore' from redux.
 */
 export const createStore = (modules, config = {}) => {
   //push the provided middlewares in config object, to the middleware array

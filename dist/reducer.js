@@ -31,20 +31,25 @@ var getReducer = function getReducer(actionList, initialState, name) {
 	// 		console.log('WARNING: the key specified for the setter wasn\'t valid', err)
 	// 	}
 	// }
-	actionList[name + '__RESET__'] = function (state, action) {
-		try {
-			state = initialState;
-		} catch (err) {
-			console.log('WARNING: __RESET__ action failed for module ' + name, err);
-		}
-	};
+
+	// actionList[name+'__RESET__'] = function(state, action){
+	// 	try{
+	// 		state = initialState;
+	// 		return initialState
+	// 	}
+	// 	catch(err){
+	// 		console.log(`WARNING: __RESET__ action failed for module ${name}`,err)
+	// 	}
+	// }
 
 	return function () {
 		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 		var action = arguments[1];
 
 		var method = actionList[action.type];
-		if (method) {
+		if (action.type == name + '__RESET__') {
+			return initialState;
+		} else if (method) {
 			var nextState = (0, _immer2.default)(state, function (draft_state) {
 				method(draft_state, action);
 			});

@@ -89,7 +89,7 @@ var createStore = exports.createStore = function createStore(modules) {
 
   // default sagConfig, overwrite it with any provided
   // values and initialize the rootsaga
-  var sagaCofig = Object.assign({}, {
+  var sagaConfig = Object.assign({}, {
     retryDelay: 2000,
     onError: function onError(err) {}
   }, config.sagaCofig);

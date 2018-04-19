@@ -86,7 +86,7 @@ export const createStore = (modules, config = {}) => {
       retryDelay: 2000,
       onError: err => {}
     },
-    config.sagaCofig
+    config.sagaConfig
   );
 
   function* rootSaga() {
@@ -94,7 +94,7 @@ export const createStore = (modules, config = {}) => {
       try {
         yield all(sagas);
       } catch (err) {
-        sagaCofig.onError(err);
+        sagaConfig.onError(err);
         yield call(delay, sagaConfig.retryDelay);
       }
     }

@@ -51,12 +51,18 @@ const Shallowdiffers = (a, b) => {
 }
 
  const doubleDiffers  = (a, b) => {
-  for (let i in a) if (!(i in b)) return true
+  for (let i in a) if (!(i in b)){
+    return true
+  }
   for (let i in b) {
     if(typeof a[i]=='object' && typeof b[i]=='object'){
-      if (Shallowdiffers(a[i], b[i]))   return true
+      if (Shallowdiffers(a[i], b[i])) {
+        return true
+      }
     }
-    else if (a[i] !== b[i]) return true
+    else if (a[i] !== b[i]) {
+      return true
+    }
   }
   return false
 }
@@ -66,17 +72,3 @@ export const areSame = (a, b) => {
   return !x;
 }
 
-
-
-/*
-	utility to reset the state of any module 
-	(to it's default  state)
- */
-export const resetModules = (dispatch) => (modules = []) => {
-  for (let i = 0; i < modules.length; i++) {
-    let module = modules[i];
-    dispatch({
-      type: module.name + "__RESET__"
-    });
-  }
-};

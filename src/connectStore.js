@@ -1,12 +1,32 @@
 import { connect } from "react-redux";
 import {areSame, pluck} from './helpers'
 
+
+const attachModuleSelectors = (moduleInstance, stateObj, state, props) => {
+  let module = null;
+  if(moduleInstance.module && moduleInstance.get){
+    module = moduleInstance.module;
+  }
+  else{
+    module = moduleInstance;
+  }
+ 
+  if(typeof module.selectors == 'object'){
+    Object.keys(module.selectors).forEach( selector_name => {
+      let selector = module.selectors[selector_name];
+      stateObj[selector_name] = selector(state[module.name], state)
+    })
+  }
+
+  return stateObj;
+}
+
 /*
 	Connect a component to any module
 	TODO: namespacing
 */
 export default function connectStore(modules){
-    const mapStateToProps = state => {
+    const mapStateToProps = (state, props) => {
       let finalState = {};
       Object.keys(modules).forEach(key => {
         const moduleInstance = modules[key];
@@ -16,6 +36,7 @@ export default function connectStore(modules){
           let filter_array = moduleInstance.get.split(",");
           stateObj = pluck(stateObj, filter_array);
         }
+        stateObj  = attachModuleSelectors(moduleInstance, stateObj, state, props)
         finalState[key] = stateObj;
       });
       return finalState;

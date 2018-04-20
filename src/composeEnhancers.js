@@ -25,8 +25,8 @@ export default function composeEnhancers(config) {
       devMode = true;
     }
 
-    if (config && config.enableDevtools) {
-      return config.enableDevtools(devMode);
+    if (config && config.enableDevTools) {
+      return config.enableDevTools(devMode);
     }
     return devMode;
   };

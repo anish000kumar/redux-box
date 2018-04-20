@@ -70,11 +70,17 @@ var Shallowdiffers = function Shallowdiffers(a, b) {
 
 var doubleDiffers = function doubleDiffers(a, b) {
   for (var i in a) {
-    if (!(i in b)) return true;
+    if (!(i in b)) {
+      return true;
+    }
   }for (var _i2 in b) {
     if (_typeof(a[_i2]) == 'object' && _typeof(b[_i2]) == 'object') {
-      if (Shallowdiffers(a[_i2], b[_i2])) return true;
-    } else if (a[_i2] !== b[_i2]) return true;
+      if (Shallowdiffers(a[_i2], b[_i2])) {
+        return true;
+      }
+    } else if (a[_i2] !== b[_i2]) {
+      return true;
+    }
   }
   return false;
 };
@@ -82,21 +88,4 @@ var doubleDiffers = function doubleDiffers(a, b) {
 var areSame = exports.areSame = function areSame(a, b) {
   var x = doubleDiffers(a, b);
   return !x;
-};
-
-/*
-	utility to reset the state of any module 
-	(to it's default  state)
- */
-var resetModules = exports.resetModules = function resetModules(dispatch) {
-  return function () {
-    var modules = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-    for (var i = 0; i < modules.length; i++) {
-      var module = modules[i];
-      dispatch({
-        type: module.name + "__RESET__"
-      });
-    }
-  };
 };

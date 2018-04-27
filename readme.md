@@ -58,14 +58,7 @@ yarn add redux-box
 
 
 #### Note for React Native:
-If you receive error for es6 syntax, you should import from `redux-box/dist` instead of just `redux-box`. Example:
-```javascript
-import {createStore, createContainer, createSagas, connectStore} from "redux-box/dist"
-
-```
-
-
-Also, to support the latest decorator and generator syntax, you would want to use the `.babelrc` file as below:
+To support the latest decorator and generator syntax, you would want to use the `.babelrc` file as below:
 ```
 {
   "presets": [
@@ -84,18 +77,12 @@ Also, to support the latest decorator and generator syntax, you would want to us
   }
 }
 ```
-#### Note for `Regenerator not defined` error:
-It would most likey appear when you try to use `redux-box/dist`(es5 version), in the browser. To get around this issue, you should install `babel-polyfill` and place it at the very top of `App.js` file (or the root file of your react app), like so:
-```javascript
-import React from "react"
-import polyfill from "babel-polyfill"
-...
-```
+
 
 
 ## The Basics
 
-Redux box emphasizes on dividing the whole application into multiple modules. Each of these modules manages it's state seperately, with the help of 4 segments:
+Redux box emphasizes on dividing the whole application into multiple modules. Each of these modules manages it's state seperately, with the help of 5 segments (You can skip the segments you don't need in your project):
 
 1. state
    (It specifies the initial state of the module)
@@ -108,7 +95,9 @@ Redux box emphasizes on dividing the whole application into multiple modules. Ea
 
 4. sagas
    (this is where you write all your sagas / async operations)
-   
+
+5. selectors
+   ( selectors can be thought of as getters or computed properties from your state)
 
 ## Usage
 
@@ -123,7 +112,8 @@ import { call } from "redux-saga/effects";
 
 const state = {
   name: "John",
-  email: "john@doe.com"
+  email: "john@doe.com",
+  todos: [{ name: "First", type: 1 }, { name: "Second", type: 0 }]
 };
 
 const actions = {
@@ -142,12 +132,26 @@ const sagas = createSagas({
   }
 });
 
+//selectors
+const getTodos = (state) => state.todos
+
+const getCompletedTodos = createSelector( getTodos, (todos) => {
+    return  todos.filter(todo => todo.type==1)
+})
+
+// include the ones you would like to access in your components here
+const selectors = {
+    getTodos,
+    getCompletedTodos
+};
+
 export const module = {
   name: "user",
   state,
   actions,
   mutations,
-  sagas
+  sagas,
+  selectors
 };
 
 //OPTIONAL: if you want to access this module using render props in your components:
@@ -202,7 +206,16 @@ config = {
   decorateReducer: reducer => {
     //do something
     return newReducer;
-  }
+  },
+  
+  //overrite the compose function
+  composeRedux: (composer) => {
+    // do something
+    // return modified compose function
+  },
+  
+  // Dynamically decide when to enable or disable dev-tools 
+  enableDevTools: () => true
 };
 ```
 
@@ -243,13 +256,15 @@ export default class AppComponent extends Component {
   componentDidMount() {
     console.log(this.props.user);
     /*
-                                {
-                                    name : 'John',
-                                    email : 'john@doe.com',
-                                    setName : fn(arg),
-                                    setEmail : fn(arg)
-                                }
-                            */
+	{
+	    name : 'John',
+	    email : 'john@doe.com',
+	    getTodos: [{ name: "First", type: 1 }, { name: "Second", type: 0 }],
+	    getCompletedTodos: [{ name: "First", type: 1 }],
+	    setName : fn(arg),
+	    setEmail : fn(arg)
+	}
+    */
   }
 
   render() {

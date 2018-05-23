@@ -315,6 +315,7 @@ Here are some examples to let you play around with redux-box
 3. Example usage with redux-form: https://stackblitz.com/edit/react-w4dqth?file=store%2Findex.js
 4. Example usage with redux-persist : https://stackblitz.com/edit/react-pezrbb?file=store%2Findex.js
 5. Example showing usage of preloaded state for SSR:  https://stackblitz.com/edit/react-qcasn4?file=store/index.js
+6. Using redux-observable: https://stackblitz.com/edit/react-zu8qjn?file=store%2Fuser%2Fepics.js
 
 ## Upcoming Features
 *No pending feature requests*

@@ -55,9 +55,7 @@ function createStore(modules) {
     if (module.decorateReducer) moduleReducer = module.decorateReducer(moduleReducer);
     reducerList[module.name] = moduleReducer;
   });
-  config.sagas && config.sagas.forEach(function (saga) {
-    return sagas.concat(saga);
-  });
+  sagas = config.sagas ? sagas.concat(config.sagas) : sagas;
 
   var combinedReducer = (0, _redux.combineReducers)(reducerList);
   if (config.decorateReducer) {

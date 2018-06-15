@@ -36,7 +36,7 @@ export default function createStore(modules, config = {}){
         moduleReducer = module.decorateReducer(moduleReducer);
       reducerList[module.name] = moduleReducer;
     });
-    config.sagas && config.sagas.forEach(saga => sagas.concat(saga));
+    sagas = config.sagas ? sagas.concat(config.sagas) : sagas;
     
     let combinedReducer = combineReducers(reducerList);
     if (config.decorateReducer) {

@@ -316,6 +316,7 @@ Here are some examples to let you play around with redux-box
 4. Example usage with redux-persist : https://stackblitz.com/edit/react-pezrbb?file=store%2Findex.js
 5. Example showing usage of preloaded state for SSR:  https://stackblitz.com/edit/react-qcasn4?file=store/index.js
 6. Using redux-observable: https://stackblitz.com/edit/react-zu8qjn?file=store%2Fuser%2Fepics.js
+7. Example usage with GraphQL: https://stackblitz.com/edit/react-qpgw86
 
 ## Upcoming Features
 *No pending feature requests*

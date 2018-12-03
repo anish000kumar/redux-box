@@ -78,6 +78,25 @@ To support the latest decorator and generator syntax, you would want to use the 
 }
 ```
 
+#### RN > 0.56
+```
+{
+  "presets": ["module:metro-react-native-babel-preset"],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }]
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "@babel/plugin-transform-typeof-symbol"
+      ]
+    },
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
+}
+```
 
 
 ## The Basics

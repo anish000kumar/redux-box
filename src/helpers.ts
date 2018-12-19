@@ -1,4 +1,4 @@
-export const using = (str = "") => {
+export const using = (str: string = "") => {
   if (str.length > 0) return str.split(",").map(item => item.trim());
   else return [];
 };

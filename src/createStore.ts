@@ -2,7 +2,7 @@ import composeEnhancers from "./composeEnhancers";
 import createSagaMiddleware, { delay } from "redux-saga";
 import { all, call } from "redux-saga/effects";
 import getReducer from "./reducer";
-import { IModule } from "./index";
+import { ReduxBox as types } from "./types";
 import {
   applyMiddleware,
   combineReducers,
@@ -15,7 +15,10 @@ and sagas in their respective arrays. Finally
 we use these arrays to initialize the store using 
 'createStore' from redux.
 */
-export default function createStore(modules: Array<IModule>, config: any = {}) {
+export default function createStore(
+  modules: Array<types.IModule>,
+  config: types.IStoreConfig
+) {
   //Initialize middleware array
   const sagaMiddleware = createSagaMiddleware();
   let middlewares = [sagaMiddleware];

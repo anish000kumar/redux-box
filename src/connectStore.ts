@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { areSame, pluck } from "./helpers";
+import { IModules } from "./types";
 
 const attachModuleSelectors = (moduleInstance, stateObj, state, props) => {
   let module: any = null;
@@ -23,7 +24,8 @@ const attachModuleSelectors = (moduleInstance, stateObj, state, props) => {
 	Connect a component to any module
 	TODO: namespacing
 */
-export default function connectStore(modules) {
+
+export default function connectStore(modules: IModules) {
   const mapStateToProps = (state, props) => {
     let finalState = {};
     Object.keys(modules).forEach(key => {

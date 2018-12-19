@@ -1,4 +1,5 @@
 import { compose } from "redux";
+import { ReduxBox as types } from "./types";
 
 declare let window: any;
 declare let __DEV__: boolean;
@@ -8,7 +9,7 @@ declare let process: {
   };
 };
 
-export default function composeEnhancers(config: any) {
+export default function composeEnhancers(config: types.IStoreConfig) {
   /*
     detect the environment to decide whether or not to plug in dev tools. 
     In react process.env.NODE_ENV refelcts the environment

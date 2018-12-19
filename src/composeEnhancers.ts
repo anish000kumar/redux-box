@@ -1,6 +1,14 @@
 import { compose } from "redux";
 
-export default function composeEnhancers(config) {
+declare let window: any;
+declare let __DEV__: boolean;
+declare let process: {
+  env: {
+    NODE_ENV: string;
+  };
+};
+
+export default function composeEnhancers(config: any) {
   /*
     detect the environment to decide whether or not to plug in dev tools. 
     In react process.env.NODE_ENV refelcts the environment

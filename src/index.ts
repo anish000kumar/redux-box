@@ -8,6 +8,15 @@ export { default as createSagas } from "./createSagas";
 export { default as createStore } from "./createStore";
 export { resetModules } from "./resetModules";
 
-export const moduleToReducer = module =>
-  getReducer(module.mutations, module.state);
+export interface IModule {
+  name: string;
+  state: object;
+  mutations?: object;
+  actions?: object;
+  selectors?: any[];
+  sagas?: object;
+  decorateReducer?: Function;
+}
 
+export const moduleToReducer = (module: IModule) =>
+  getReducer(module.mutations, module.state);

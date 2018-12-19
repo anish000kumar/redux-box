@@ -1,91 +1,79 @@
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var using = exports.using = function using() {
-  var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-
-  if (str.length > 0) return str.split(",").map(function (item) {
-    return item.trim();
-  });else return [];
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.using = function (str) {
+    if (str === void 0) { str = ""; }
+    if (str.length > 0)
+        return str.split(",").map(function (item) { return item.trim(); });
+    else
+        return [];
 };
-
 var RX_CAPS = /(?!^)([A-Z])/g;
-var isArr = function isArr(data) {
-  return Object.prototype.toString.call(data) == "[object Array]";
+var toSnakeCase = function (s) {
+    return s
+        .replace(/\.?([A-Z])/g, function (x, y) {
+        return "_" + y.toLowerCase();
+    })
+        .replace(/^_/, "")
+        .toUpperCase();
 };
-var toSnakeCase = function toSnakeCase(s) {
-  return s.replace(/\.?([A-Z])/g, function (x, y) {
-    return "_" + y.toLowerCase();
-  }).replace(/^_/, "").toUpperCase();
-};
-
-var createActions = exports.createActions = function createActions(list) {
-  var finalObj = list;
-  Object.keys(list).forEach(function (key) {
-    var value = list[key];
-    if (isArr(value)) {
-      finalObj[key] = function () {
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
+exports.createActions = function (list) {
+    var finalObj = list;
+    Object.keys(list).forEach(function (key) {
+        var value = list[key];
+        if (Array.isArray(value)) {
+            finalObj[key] = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                var action = { type: toSnakeCase(key) };
+                if (args.length > 0) {
+                    args.forEach(function (arg, i) { return (action[value[i]] = arg); });
+                }
+                return action;
+            };
         }
-
-        var action = { type: toSnakeCase(key) };
-        if (args.length > 0) {
-          args.forEach(function (arg, i) {
-            return action[value[i]] = arg;
-          });
+    });
+    return finalObj;
+};
+exports.pluck = function (obj, keys) {
+    var finalObj = {};
+    keys = keys.map(function (key) { return key.trim(); });
+    Object.keys(obj).forEach(function (key) {
+        key = key.trim();
+        if (keys.includes(key))
+            finalObj[key] = obj[key];
+    });
+    return finalObj;
+};
+var Shallowdiffers = function (a, b) {
+    for (var i in a)
+        if (!(i in b))
+            return true;
+    for (var i in b)
+        if (a[i] !== b[i])
+            return true;
+    return false;
+};
+var doubleDiffers = function (a, b) {
+    for (var i in a)
+        if (!(i in b)) {
+            return true;
         }
-        return action;
-      };
+    for (var i in b) {
+        if (typeof a[i] == "object" && typeof b[i] == "object") {
+            if (Shallowdiffers(a[i], b[i])) {
+                return true;
+            }
+        }
+        else if (a[i] !== b[i]) {
+            return true;
+        }
     }
-  });
-
-  return finalObj;
+    return false;
 };
-
-var pluck = exports.pluck = function pluck(obj, keys) {
-  var finalObj = {};
-  keys = keys.map(function (key) {
-    return key.trim();
-  });
-  Object.keys(obj).forEach(function (key) {
-    key = key.trim();
-    if (keys.includes(key)) finalObj[key] = obj[key];
-  });
-  return finalObj;
+exports.areSame = function (a, b) {
+    var x = doubleDiffers(a, b);
+    return !x;
 };
-
-var Shallowdiffers = function Shallowdiffers(a, b) {
-  for (var i in a) {
-    if (!(i in b)) return true;
-  }for (var _i in b) {
-    if (a[_i] !== b[_i]) return true;
-  }return false;
-};
-
-var doubleDiffers = function doubleDiffers(a, b) {
-  for (var i in a) {
-    if (!(i in b)) {
-      return true;
-    }
-  }for (var _i2 in b) {
-    if (_typeof(a[_i2]) == 'object' && _typeof(b[_i2]) == 'object') {
-      if (Shallowdiffers(a[_i2], b[_i2])) {
-        return true;
-      }
-    } else if (a[_i2] !== b[_i2]) {
-      return true;
-    }
-  }
-  return false;
-};
-
-var areSame = exports.areSame = function areSame(a, b) {
-  var x = doubleDiffers(a, b);
-  return !x;
-};
+//# sourceMappingURL=helpers.js.map

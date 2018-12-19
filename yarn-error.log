@@ -1,0 +1,83 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn install
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/anishkumar/.npm-global/bin:/usr/local/sbin
+
+Yarn version: 
+  1.9.4
+
+Node version: 
+  8.11.4
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/immer: ETIMEDOUT
+      at Timeout._onTimeout (/usr/local/lib/node_modules/yarn/lib/cli.js:138128:19)
+      at ontimeout (timers.js:498:11)
+      at tryOnTimeout (timers.js:323:5)
+      at Timer.listOnTimeout (timers.js:290:5)
+
+npm manifest: 
+  {
+    "name": "redux-box",
+    "version": "1.6.0",
+    "description": "A redux container to scaffold a redux app as simple as possible while making perfect sense!",
+    "main": "dist/index.js",
+    "scripts": {
+      "webpack": "./node_modules/bin/webpack",
+      "test": "jest",
+      "build": "node_modules/.bin/webpack --config webpack.config.js",
+      "test-debug": "./node_modules/.bin/node-debug ./node_modules/.bin/jest -i --watch",
+      "js": "babel src --out-dir dist"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/anish000kumar/redux-box.git"
+    },
+    "keywords": [
+      "redux",
+      "react",
+      "javascript",
+      "react-native",
+      "vue"
+    ],
+    "author": "Anish Kumar",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/anish000kumar/redux-box/issues"
+    },
+    "dependencies": {
+      "immer": "^0.8.4",
+      "react": "^16.2.0",
+      "react-redux": "^5.0.6",
+      "redux": "^3.7.2",
+      "redux-saga": "^0.16.0",
+      "regenerator-runtime": "^0.11.1",
+      "reselect": "^3.0.1"
+    },
+    "devDependencies": {
+      "babel-cli": "^6.26.0",
+      "babel-jest": "^18.0.0",
+      "babel-plugin-transform-decorators-legacy": "^1.3.4",
+      "babel-plugin-transform-regenerator": "^6.26.0",
+      "babel-polyfill": "^6.26.0",
+      "babel-preset-es2015": "^6.24.1",
+      "babel-preset-react": "^6.24.1",
+      "babel-preset-stage-0": "^6.24.1",
+      "enzyme": "^2.7.0",
+      "jest": "^18.1.0",
+      "react-addons-test-utils": "15.2.0",
+      "react-test-renderer": "^15.4.1",
+      "redux-mock-store": "^1.5.1"
+    },
+    "homepage": "https://github.com/anish000kumar/redux-box#readme"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

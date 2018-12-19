@@ -1,28 +1,19 @@
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = createContainer;
-
-var _reactRedux = require("react-redux");
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_redux_1 = require("react-redux");
 /*
-	utility to access the store using render function
+    utility to access the store using render function
 */
 function createContainer(module) {
-  var mapStateToProps = function mapStateToProps(state) {
-    return state[module.name];
-  };
-  var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-    return Object.keys(module.actions).map(function (key) {
-      var action = module.actions[key];
-      return dispatch(action());
-    });
-  };
-
-  var Container = function Container(props) {
-    return props.children(props);
-  };
-  return (0, _reactRedux.connect)(mapStateToProps, module.actions || {})(Container);
-};
+    var mapStateToProps = function (state) { return state[module.name]; };
+    // const mapDispatchToProps = (dispatch: Dispatch) => {
+    //   return Object.keys(module.actions).map(key => {
+    //     let action: any = module.actions[key];
+    //     return dispatch(action());
+    //   });
+    // };
+    var Container = function (props) { return props.children(props); };
+    return react_redux_1.connect(mapStateToProps, module.actions || {})(Container);
+}
+exports.default = createContainer;
+//# sourceMappingURL=createContainer.js.map

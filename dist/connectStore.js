@@ -27,8 +27,9 @@ function connectStore(modules) {
         var finalState = {};
         Object.keys(modules).forEach(function (key) {
             var moduleInstance = modules[key];
-            var module_name = (moduleInstance.module && moduleInstance.module.name) ||
-                moduleInstance.name;
+            var module_name = moduleInstance.module
+                ? moduleInstance.module.name
+                : moduleInstance.name;
             var stateObj = state[module_name];
             if (moduleInstance.get) {
                 var filter_array = moduleInstance.get.split(",");
@@ -44,7 +45,8 @@ function connectStore(modules) {
         Object.keys(modules).forEach(function (key) {
             var moduleInstance = modules[key];
             var actions_obj = {};
-            var module_actions = (moduleInstance.module && moduleInstance.module.actions) ||
+            var module_actions = (moduleInstance.module &&
+                moduleInstance.module.actions) ||
                 moduleInstance.actions;
             if (module_actions) {
                 Object.keys(module_actions).forEach(function (action_key) {

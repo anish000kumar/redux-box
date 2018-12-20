@@ -39,7 +39,6 @@ we use these arrays to initialize the store using
 'createStore' from redux.
 */
 function createStore(modules, config) {
-    if (config === void 0) { config = {}; }
     //Initialize middleware array
     var sagaMiddleware = redux_saga_1.default();
     var middlewares = [sagaMiddleware];
@@ -47,7 +46,7 @@ function createStore(modules, config) {
     if (config && config.middlewares && config.middlewares.length > 0) {
         middlewares = middlewares.concat(config.middlewares);
     }
-    var reducerList = Object.assign({}, config.reducers);
+    var reducerList = Object.assign({}, config && config.reducers);
     var sagas = [];
     //iterate through each module and push the sagas and reducers of each module in thier respective array
     modules.forEach(function (module) {
@@ -57,12 +56,12 @@ function createStore(modules, config) {
             moduleReducer = module.decorateReducer(moduleReducer);
         reducerList[module.name] = moduleReducer;
     });
-    sagas = config.sagas ? sagas.concat(config.sagas) : sagas;
+    sagas = config && config.sagas ? sagas.concat(config.sagas) : sagas;
     var combinedReducer = redux_1.combineReducers(reducerList);
-    if (config.decorateReducer) {
+    if (config && config.decorateReducer) {
         combinedReducer = config.decorateReducer(combinedReducer);
     }
-    var preloadedState = config.preloadedState || {};
+    var preloadedState = config && config.preloadedState ? config.preloadedState : {};
     var composeRedux = composeEnhancers_1.default(config);
     //initialize the store using preloaded state, reducers and middlewares
     var store = redux_1.createStore(combinedReducer, preloadedState, composeRedux(redux_1.applyMiddleware.apply(void 0, middlewares)));
@@ -70,7 +69,7 @@ function createStore(modules, config) {
     var sagaConfig = Object.assign({}, {
         retryDelay: 2000,
         onError: function (err) { }
-    }, config.sagaConfig);
+    }, config && config.sagaConfig);
     function rootSaga() {
         var err_1;
         return __generator(this, function (_a) {

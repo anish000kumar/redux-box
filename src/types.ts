@@ -1,7 +1,7 @@
 import { Middleware, Reducer, StoreEnhancer } from "redux";
 
 export declare namespace ReduxBox {
-  type DecorateReducer = (reducer: Reducer) => Reducer;
+  type DecorateReducer = (reducer: Reducer<any>) => Reducer<any>;
   type EnableDevTools = (isDevelopmentMode: boolean) => boolean;
 
   interface IModule {
@@ -11,20 +11,34 @@ export declare namespace ReduxBox {
     actions?: object;
     selectors?: any[];
     sagas?: object;
-    decorateReducer?: Function;
+    decorateReducer?: DecorateReducer;
   }
 
   interface IStoreConfig {
     middlewares?: Middleware[];
     preloadedState?: object;
     sagas?: object[];
-    reducers?: { [key: string]: Reducer };
+    reducers?: { [key: string]: Reducer<any> };
     decorateReducer?: DecorateReducer;
-    composeRedux?: StoreEnhancer;
+    composeRedux?: StoreEnhancer<any>;
     enableDevTools?: EnableDevTools;
+    sagaConfig?: {
+      onError?: Function;
+      retryDelay?: number;
+    };
   }
 
-  interface IModules {
+  interface IModuleWithKeys {
+    module: IModule;
+    get: string;
+  }
+
+  interface IModuleSelectKeys {
+    [key: string]: IModuleWithKeys;
+  }
+
+  interface IModuleAllKeys {
     [key: string]: IModule;
   }
+  type IModules = IModuleAllKeys | IModuleSelectKeys;
 }

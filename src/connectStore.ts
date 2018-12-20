@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { areSame, pluck } from "./helpers";
-import { IModules } from "./types";
+import { ReduxBox as types } from "./types";
+import { Action as IAction } from "redux";
 
 const attachModuleSelectors = (moduleInstance, stateObj, state, props) => {
   let module: any = null;
@@ -25,17 +26,19 @@ const attachModuleSelectors = (moduleInstance, stateObj, state, props) => {
 	TODO: namespacing
 */
 
-export default function connectStore(modules: IModules) {
+export default function connectStore(modules: types.IModules) {
   const mapStateToProps = (state, props) => {
     let finalState = {};
     Object.keys(modules).forEach(key => {
       const moduleInstance = modules[key];
-      let module_name =
-        (moduleInstance.module && moduleInstance.module.name) ||
-        moduleInstance.name;
+      let module_name = (moduleInstance as types.IModuleWithKeys).module
+        ? (moduleInstance as types.IModuleWithKeys).module.name
+        : (moduleInstance as types.IModule).name;
       let stateObj = state[module_name];
-      if (moduleInstance.get) {
-        let filter_array = moduleInstance.get.split(",");
+      if ((moduleInstance as types.IModuleWithKeys).get) {
+        let filter_array = (moduleInstance as types.IModuleWithKeys).get.split(
+          ","
+        );
         stateObj = pluck(stateObj, filter_array);
       }
       stateObj = attachModuleSelectors(moduleInstance, stateObj, state, props);
@@ -50,8 +53,9 @@ export default function connectStore(modules: IModules) {
       const moduleInstance = modules[key];
       const actions_obj = {};
       let module_actions =
-        (moduleInstance.module && moduleInstance.module.actions) ||
-        moduleInstance.actions;
+        ((moduleInstance as types.IModuleWithKeys).module &&
+          (moduleInstance as types.IModuleWithKeys).module.actions) ||
+        (moduleInstance as types.IModule).actions;
       if (module_actions) {
         Object.keys(module_actions).forEach(action_key => {
           const action = module_actions[action_key];

@@ -6,7 +6,8 @@ import { ReduxBox as types } from "./types";
 import {
   applyMiddleware,
   combineReducers,
-  createStore as storeCreator
+  createStore as storeCreator,
+  Middleware
 } from "redux";
 
 /*
@@ -21,13 +22,13 @@ export default function createStore(
 ) {
   //Initialize middleware array
   const sagaMiddleware = createSagaMiddleware();
-  let middlewares = [sagaMiddleware];
+  let middlewares: Middleware[] = [sagaMiddleware];
 
   //push the provided middlewares in config object, to the middleware array
   if (config && config.middlewares && config.middlewares.length > 0) {
     middlewares = middlewares.concat(config.middlewares);
   }
-  let reducerList = Object.assign({}, config.reducers);
+  let reducerList = Object.assign({}, config && config.reducers);
   let sagas: any = [];
 
   //iterate through each module and push the sagas and reducers of each module in thier respective array
@@ -38,13 +39,15 @@ export default function createStore(
       moduleReducer = module.decorateReducer(moduleReducer);
     reducerList[module.name] = moduleReducer;
   });
-  sagas = config.sagas ? sagas.concat(config.sagas) : sagas;
+  sagas = config && config.sagas ? sagas.concat(config.sagas) : sagas;
 
   let combinedReducer = combineReducers(reducerList);
-  if (config.decorateReducer) {
+  if (config && config.decorateReducer) {
     combinedReducer = config.decorateReducer(combinedReducer);
   }
-  let preloadedState = config.preloadedState || {};
+
+  let preloadedState =
+    config && config.preloadedState ? config.preloadedState : {};
   let composeRedux = composeEnhancers(config);
   //initialize the store using preloaded state, reducers and middlewares
   let store = storeCreator(
@@ -60,7 +63,7 @@ export default function createStore(
       retryDelay: 2000,
       onError: err => {}
     },
-    config.sagaConfig
+    config && config.sagaConfig
   );
 
   function* rootSaga() {

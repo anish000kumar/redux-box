@@ -322,7 +322,9 @@ Here are some examples to let you play around with redux-box
 > *[Suggest a new feature here](https://github.com/anish000kumar/redux-box/labels/feature)*
 
 ## FAQs
-
+1. **Error: ** `Either wrap the root component in a <Provider>, or explicitly pass “store” as a prop to "Connect(MyComponent)`
+  This error occurs because of mismatch among some of dependencies of redux-box, most likely `react-redux`. You can run this  	command to fix this issue for now:
+  ``` yarn add react-redux@5.0 ```
 1. **Decorators aren't working**
 
 Decorators aren't still a part of es6. To use the decorator syntax you should be using a transpiler like babel. Also, in create-react-app projects the `.babelrc` file doesn't really work so you would need to run `npm run eject` to be able to use custom babel-plugins. Following `.babelrc` should suffice:

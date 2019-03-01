@@ -1,7 +1,7 @@
 {
   "name": "redux-box",
-  "version": "1.6.0",
-  "description": "A redux container to scaffold a redux app as simple as possible while making perfect sense!",
+  "version": "1.6.1",
+  "description": "A redux container to scaffold redux based applications in simplest possible way.",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
@@ -29,8 +29,8 @@
     "react": "^16.2.0",
     "react-redux": "5.0.6",
     "redux": "^3.7.2",
-    "redux-saga": "^0.16.0",
-    "regenerator-runtime": "^0.11.1",
+    "redux-saga": "0.16.0",
+    "regenerator-runtime": "0.11.1",
     "reselect": "^3.0.1"
   },
   "devDependencies": {

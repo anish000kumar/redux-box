@@ -322,11 +322,11 @@ Here are some examples to let you play around with redux-box
 > *[Suggest a new feature here](https://github.com/anish000kumar/redux-box/labels/feature)*
 
 ## FAQs
-1. **Error: ** 
+1. **Error:** 
 ```
 Either wrap the root component in a <Provider>, or explicitly pass “store” as a prop to "Connect(MyComponent)
 ```
-  This error occurs because of mismatch among some of dependencies of redux-box, most likely `react-redux`. You can run this  	command to fix this issue for now:
+  This error occurs because of mismatch among versions of dependencies of redux-box, most likely `react-redux`. You can run this  	command to fix this issue for now:
 ```  
   yarn add react-redux@5.0 
 ```

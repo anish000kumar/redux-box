@@ -1,5 +1,8 @@
 .DS_STORE
 node_modules/
+coverage/
+build/
 example/node_modules/
 .vscode/
+coverage/
 .babelrc

@@ -1,0 +1,8 @@
+language: node_js
+cache: npm
+node_js:
+  - '8'
+  - '7'
+after_success:
+  - npm install -g travis-deploy-once
+  - travis-deploy-once "npm run semantic-release"

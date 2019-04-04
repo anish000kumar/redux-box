@@ -1,28 +1,48 @@
-import { takeLatest, takeEvery } from "redux-saga/effects";
+import { takeLatest, takeEvery } from 'redux-saga/effects';
 
-/*
-	Syntactic sugar for easily accessing sagas
-*/
-export default function createSagas(saga_list){
-    let arr = [];
-    var GeneratorFunction = Object.getPrototypeOf(function*() {}).constructor;
-    let saga_keys = Object.keys(saga_list);
-    saga_keys.forEach(key => {
-      let action = key.split(".")[0];
-      let worker_saga = saga_list[key];
-      let mode = key.split(".")[1] || "latest";
-      let watcher = null;
-      if (mode == "latest") {
-        watcher = function*() {
-          yield takeLatest(action, worker_saga);
-        };
-      } else if (mode == "every") {
-        watcher = function*() {
-          yield takeEvery(action, worker_saga);
-        };
-      }
-      arr.push(watcher());
-    });
-    return arr;
-  };
-  
+/**
+ * @typedef {Object} SagaObject - Object containing watcher and worker sagas
+ * @property {Generator=} watcher - watcher saga
+ * @property {Generator=} worker - worker saga
+ * @property {('every'| 'latest')=} watchFor - Accepts
+ */
+
+/**
+ * Function to create watcher and worker sagas for redux store
+ * @example
+ * createSagas({
+ *  FETCH_USERS: function* fetchUser(){
+ *    const users = yield call(api.fetchUsers);
+ *   }
+ * })
+ * @param {Object<ActionName, Generator|SagaObject>} sagasObject
+ * Object containing module's sagas.
+ * The key is name of  the action that triggers the saga and value is generator or SagaObject
+ * @returns {Generator[]}  array of watcher sagas
+ *
+ */
+function createSagas(sagasObject) {
+  const arr = [];
+  const delimiter = '__@';
+  const sagaKeys = Object.keys(sagasObject);
+  sagaKeys.forEach(key => {
+    const action = key.split(delimiter)[0];
+    const workerSaga = sagasObject[key];
+    const mode = key.split(delimiter)[1] || 'latest';
+
+    let watcher = function*() {
+      yield takeLatest(action, workerSaga);
+    };
+
+    if (mode === 'every') {
+      watcher = function*() {
+        yield takeEvery(action, workerSaga);
+      };
+    }
+
+    arr.push(watcher());
+  });
+  return arr;
+}
+
+export default createSagas;

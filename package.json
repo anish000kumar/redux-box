@@ -1,16 +1,18 @@
 {
   "name": "redux-box",
-  "version": "1.6.1",
+  "version": "2.0.0-beta.1",
   "description": "A redux container to scaffold redux based applications in simplest possible way.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest",
-    "test-debug": "./node_modules/.bin/node-debug ./node_modules/.bin/jest -i --watch",
-    "js": "babel src --out-dir dist"
+    "test": "jest  --coverage --collectCoverageFrom=src/**/*.js",
+    "build": "babel src --out-dir build",
+    "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude ./src/getReducer.js,./src/composeEnhancers.js ",
+    "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anish000kumar/redux-box.git"
+    "url": "https://github.com/anish000kumar/redux-box.git"
   },
   "keywords": [
     "redux",
@@ -20,33 +22,53 @@
     "vue"
   ],
   "author": "Anish Kumar",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/anish000kumar/redux-box/issues"
   },
   "dependencies": {
-    "immer": "^0.8.4",
-    "react": "^16.2.0",
-    "react-redux": "5.0.6",
-    "redux": "^3.7.2",
-    "redux-saga": "0.16.0",
-    "regenerator-runtime": "0.11.1",
-    "reselect": "^3.0.1"
+    "immer": "^3.2.0",
+    "react": "^16.9.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "redux-saga": "^1.0.5",
+    "regenerator-runtime": "^0.13.3",
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-jest": "^18.0.0",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-regenerator": "^6.26.0",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-decorators": "^7.4.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
+    "@babel/plugin-transform-react-display-name": "^7.2.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-jest": "^24.9.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "enzyme": "^2.7.0",
-    "jest": "^18.1.0",
+    "create-react-class": "^15.6.3",
+    "husky": "^1.3.1",
+    "jest": "^24.7.1",
+    "jest-dom": "^3.1.3",
+    "jsdoc": "^3.5.5",
+    "jsdoc-template": "^1.2.0",
+    "jsdoc-to-markdown": "^4.0.1",
+    "prop-types": "^15.7.2",
     "react-addons-test-utils": "15.2.0",
+    "react-dom": "^16.8.6",
     "react-test-renderer": "^15.4.1",
-    "redux-mock-store": "^1.5.1"
+    "react-testing-library": "^6.1.2",
+    "semantic-release": "^15.13.3",
+    "vuepress": "^0.14.10",
+    "vuepress-jsdoc": "^1.7.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && npm run build",
+      "pre-push": "npm test",
+      "pre-release": "npm test && npm run build"
+    }
   },
   "homepage": "https://github.com/anish000kumar/redux-box#readme"
 }

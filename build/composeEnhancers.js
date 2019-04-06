@@ -1,5 +1,17 @@
-import { compose } from 'redux';
-import get from './utils/get';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+});
+exports.default = void 0;
+
+var _redux = require('redux');
+
+var _get = _interopRequireDefault(require('./utils/get'));
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 /**
  * compose function for redux.
@@ -13,46 +25,38 @@ import get from './utils/get';
  */
 function composeEnhancers(config) {
   const devCompose =
-    typeof window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-
+    typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
   /* if devtools should be enabled, use devTools if available, else use default compose function */
-  let composer = shouldEnableDevTools(config) ? devCompose || compose : compose;
 
+  let composer =
+    shouldEnableDevTools(config) && devCompose ? devCompose : _redux.compose;
   /* if use wants to override above composer function, use that */
-  if (!!config && !!config.composeRedux) {
-    const finalComposer = config.composeRedux(composer);
-    if (typeof finalComposer === 'function') {
-      return finalComposer;
-    }
-    console.warn(
-      `composeRedux() should return function (compose), provided: ${
-        config.composeRedux
-      }`
-    );
-  }
 
+  if (config && config.composeRedux) return config.composeRedux(composer);
   return composer;
 }
 
 function shouldEnableDevTools(config) {
-  const enableToolsFn = get(config, 'enableDevTools');
   /* if user provides enableDevTools function use that */
-  if (enableToolsFn && typeof enableToolsFn !== 'function') {
+  if (!!config.enableDevTools && typeof config.enableDevTools !== 'function') {
     console.warn(
-      `config.enableDevTools should be a function returning true or false you 
-       have provided ${typeof enableToolsFn}: ${enableToolsFn}`
+      'config.enableDevTools should be a function returning true or false you \n       have provided '
+        .concat(typeof config.enableDevTools, ': ')
+        .concat(config.enableDevTools)
     );
-  } else if (enableToolsFn) return enableToolsFn();
-
+  } else if (config && config.enableDevTools)
+    return config.enableDevTools(devMode);
   /* else, check for the development environment to enable dev tools */
+
   if (
     typeof process == 'object' &&
-    get(process, 'env.NODE_ENV') === 'development'
+    (0, _get.default)(process, 'env.NODE_ENV') === 'development'
   )
     return true;
-
   /* else, return false */
+
   return false;
 }
 
-export default composeEnhancers;
+var _default = composeEnhancers;
+exports.default = _default;

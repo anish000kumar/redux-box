@@ -1,6 +1,6 @@
-import composeEnhancers from './composeEnhancers';
 import createSagaMiddleware from 'redux-saga';
-import createSagas from './createSagas';
+import composeEnhancers from './composeEnhancers';
+import moduleRegistry from './moduleRegistry';
 import { all } from 'redux-saga/effects';
 import getReducer from './getReducer';
 import {
@@ -11,31 +11,39 @@ import {
 import get from './utils/get';
 
 /**
- * Creates redux store
- *
- * @typedef {Function} Selector - Selector function
- * @typedef {String} ModuleName - Name of redux-box module
  * @typedef {Object} Module - Object representing module
- * @typedef {Object={}} Module.state - Initial state for the module
- * @typedef {Object<String, Function>={}} Module.dispatchers - Action dispatchers for the module
- * @typedef {Object<String, Generator>={}} Module.sagas - Sagas for the module
- * @typedef {Object<String, Function>={}} Module.mutations - Mutations for the module
- * @typedef {Object<String, Selector>={}} Module.selectors - Selector for the module
- * @typedef {Function} Reducer - Reducer function
- * @param {Object<ModuleName, Module>} modulesObj - Object containing all modules to be attached to store
- * @param {Object={}} config - Contains additional configuration for store
- * @param {Function[]=[]} config.middlewares - Array of middlewares to be used in store
- * @param {Object<String, Reducer>={}} config.reducers - Object containing reducers to be used in store
- * @param {Generator[]=[]} config.sagas - Array of watcher sagas to be used in store
- * @param {Object=} config.preloadedState - Preloaded state for store
- * @param {Function=} config.decorateReducer - decorator function for reducer formed by redux-box, has formed reducer as first argument
+ * @property {Object=} state - Initial state for the module
+ * @property {Object<String, Function>=} dispatchers - Action dispatchers for the module
+ * @property {Object<String, Generator>=} sagas - Sagas for the module
+ * @property {Object<String, Function>=} mutations - Mutations for the module
+ * @property {Object<String, Function>=} selectors - Selector for the module
+ */
+
+/**
+ * Creates redux store
+ * @example
+ * import { createStore } from "redux-box";
+ * import userModule from "./modules/user";
+ * import marketplaceModule from "./modules/marketplace";
+ *
+ * createStore([userModule, marketplaceModule],{
+ *  enableDevTools() => true
+ * })
+ *
+ * @param {Object<String, Module>} modules - Object containing all modules to be attached to store
+ * @param {Object} config -  Contains configuration for store
+ * @param {Function[]} config.middlewares - Array of middlewares to be used in store
+ * @param {Object<String, Function>=} config.reducers - (Optional) Object containing reducers to be used in store
+ * @param {Generator[]} config.sagas - Array of watcher sagas to be used in store
+ * @param {Object=} config.preloadedState - (Optional) Preloaded state for store
+ * @param {Function=} config.decorateReducer - (Optional) decorator function for reducer formed by redux-box, has formed reducer as first argument
  * @returns {Object} store
  */
-export default function createStore(modulesObj, config = {}) {
+function createStore(modules, config = {}) {
   //  Array containing names of all registered modules
-  const moduleNames = Object.keys(modulesObj);
-  // Initialize the middleware array
+  const moduleNames = Object.keys(modules);
 
+  // Initialize the middleware array
   const sagaMiddleware = createSagaMiddleware();
   let middlewares = [sagaMiddleware];
 
@@ -50,8 +58,9 @@ export default function createStore(modulesObj, config = {}) {
 
   // iterate through each module and push the sagas and reducers of each module in thier respective array
   moduleNames.forEach(moduleName => {
-    const module = modulesObj[moduleName];
-    sagas = sagas.concat(createSagas(module.sagas));
+    const module = modules[moduleName];
+    moduleRegistry.register(moduleName, module);
+    sagas = sagas.concat(module.sagas);
     let moduleReducer = getReducer(module.mutations, module.state);
 
     if (module.decorateReducer)
@@ -88,3 +97,5 @@ export default function createStore(modulesObj, config = {}) {
   sagaMiddleware.run(rootSaga);
   return store;
 }
+
+export default createStore;

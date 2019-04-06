@@ -1,67 +1,48 @@
 import { takeLatest, takeEvery } from 'redux-saga/effects';
 
 /**
- * Function to create watcher and worker sagas for redux store
- *
- * @typedef {Generator} Saga - a javascript generator, representing worker saga
  * @typedef {Object} SagaObject - Object containing watcher and worker sagas
- * @typedef {Generator=} SagaObject.watcher - watcher saga
- * @typedef {Generator=} SagaObject.worker - worker saga
- * @typedef {('every'| 'latest')=} SagaObject.watchFor - Accepts
- * @param {Object<String, Saga|SagaObject>} saga_list - Object contains all the sagas
- * @returns {Saga[]} - array of watcher sagas
+ * @property {Generator=} watcher - watcher saga
+ * @property {Generator=} worker - worker saga
+ * @property {('every'| 'latest')=} watchFor - Accepts
  */
 
-export default function createSagas(saga_list) {
-  let watcherSagaArray = [];
+/**
+ * Function to create watcher and worker sagas for redux store
+ * @example
+ * createSagas({
+ *  FETCH_USERS: function* fetchUser(){
+ *    const users = yield call(api.fetchUsers);
+ *   }
+ * })
+ * @param {Object<ActionName, Generator|SagaObject>} sagasObject
+ * Object containing module's sagas.
+ * The key is name of  the action that triggers the saga and value is generator or SagaObject
+ * @returns {Generator[]}  array of watcher sagas
+ *
+ */
+function createSagas(sagasObject) {
+  let arr = [];
+  const delimiter = '__@';
+  let saga_keys = Object.keys(sagasObject);
+  saga_keys.forEach(key => {
+    let action = key.split(delimiter)[0];
+    let worker_saga = sagasObject[key];
+    let mode = key.split(delimiter)[1] || 'latest';
 
-  Object.entries(saga_list).forEach(([triggeringAction, sagaValue]) => {
-    const watcher = null;
-    if (typeof sagaValue === 'object') {
-      const watchFor = sagaValue.watchFor || 'latest';
+    let watcher = function*() {
+      yield takeLatest(action, worker_saga);
+    };
 
-      // if watcher and worker sagas have been provided, push and return
-      if (sagaValue.worker && sagaValue.watcher) {
-        watcherSagaArray.push(sagaValue.watcher(sagaValue.worker));
-        return;
-      }
-
-      // else use watchFor
-      switch (watchFor) {
-        case 'latest': {
-          watcher = function*() {
-            yield takeLatest(triggeringAction, sagaValue.worker);
-          };
-          break;
-        }
-        case 'every': {
-          watcher = function*() {
-            yield takeEvery(triggeringAction, sagaValue.worker);
-          };
-          break;
-        }
-      }
-    } else {
+    if (mode === 'every') {
       watcher = function*() {
-        yield takeLatest(triggeringAction, sagaValue);
+        yield takeEvery(action, worker_saga);
       };
     }
 
-    if (isGenerator(watcher)) {
-      watcherSagaArray.push(watcher());
-    } else {
-      console.warn(
-        `The watcher provided for ${triggeringAction} is not valid:  ${watcher}`
-      );
-    }
+    arr.push(watcher());
   });
-
-  return watcherSagaArray;
+  return arr;
 }
 
-function isGenerator(fn) {
-  return (
-    typeof watcher === 'function' &&
-    watcher.constructor.name === 'GeneratorFunction'
-  );
-}
+export default createSagas;

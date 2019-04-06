@@ -1,0 +1,3 @@
+- Module name should be decided at registration time
+- use mapState, mapSelectors, mapActions
+- easy testing

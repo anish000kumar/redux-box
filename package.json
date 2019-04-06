@@ -6,7 +6,15 @@
   "scripts": {
     "test": "jest",
     "test-debug": "./node_modules/.bin/node-debug ./node_modules/.bin/jest -i --watch",
-    "js": "babel src --out-dir dist"
+    "build": "babel src --out-dir build",
+    "clean": "rimraf lib dist es coverage",
+    "format": "prettier --write \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
+    "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
+    "lint": "eslint src test",
+    "pretest": "npm run build",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "npm test -- --coverage",
+    "prepare": "npm run clean && npm run format:check && npm run lint && npm test"
   },
   "repository": {
     "type": "git",

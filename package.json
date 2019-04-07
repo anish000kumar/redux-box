@@ -1,6 +1,6 @@
 {
-  "name": "redux-box",
-  "version": "2.0.0-semantically-released",
+  "name": "redux-box-kjfjgd",
+  "version": "2.0.0-beta.0",
   "description": "A redux container to scaffold redux based applications in simplest possible way.",
   "main": "dist/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude ./src/getReducer.js,./src/composeEnhancers.js ",
     "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "release": "semantic-release"
+    "srelease": "semantic-release"
   },
   "repository": {
     "type": "git",

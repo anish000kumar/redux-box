@@ -1,5 +1,5 @@
 {
-  "name": "redux-box-kjfjgd",
+  "name": "redux-box",
   "version": "2.0.0-beta.0",
   "description": "A redux container to scaffold redux based applications in simplest possible way.",
   "main": "dist/index.js",

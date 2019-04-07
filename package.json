@@ -1,6 +1,6 @@
 {
   "name": "redux-box",
-  "version": "0.0.0-development",
+  "version": "2.0.0-semantically-released",
   "description": "A redux container to scaffold redux based applications in simplest possible way.",
   "main": "dist/index.js",
   "scripts": {
@@ -67,7 +67,8 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm test && npm run build",
-      "pre-push": "npm test"
+      "pre-push": "npm test",
+      "pre-release": "npm test && npm run build"
     }
   },
   "homepage": "https://github.com/anish000kumar/redux-box#readme"

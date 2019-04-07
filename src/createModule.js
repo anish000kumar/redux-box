@@ -1,4 +1,5 @@
 import moduleRegistry from './moduleRegistry';
+import { createSelector } from 'reselect';
 
 export function randomStr() {
   return Math.random()
@@ -13,17 +14,28 @@ export function randomStr() {
  */
 export default function createModule(moduleObj) {
   const id = `${randomStr()}${randomStr()}`;
-  return {
+  const finalObj = {
     ...moduleObj,
     id,
     getName() {
       return moduleRegistry.getName(id);
     },
     getSelector() {
-      const moduleName = moduleRegistry.getName(id);
       return function(state) {
-        return moduleName ? state[moduleName] : null;
+        if (!finalObj.__name) {
+          finalObj.__name = moduleRegistry.getName(id);
+        }
+        return finalObj.__name ? state[finalObj.__name] : null;
       };
     },
+    select(cb) {
+      const getModuleState = finalObj.getSelector();
+      return createSelector(
+        getModuleState,
+        cb
+      );
+    },
   };
+
+  return finalObj;
 }

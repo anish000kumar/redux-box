@@ -1,6 +1,6 @@
 {
   "name": "redux-box",
-  "version": "1.6.2",
+  "version": "0.0.0-development",
   "description": "A redux container to scaffold redux based applications in simplest possible way.",
   "main": "dist/index.js",
   "scripts": {
@@ -8,11 +8,12 @@
     "build": "babel src --out-dir build",
     "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude ./src/getReducer.js,./src/composeEnhancers.js ",
     "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anish000kumar/redux-box.git"
+    "url": "https://github.com/anish000kumar/redux-box.git"
   },
   "keywords": [
     "redux",
@@ -48,6 +49,7 @@
     "babel-jest": "24.7.1",
     "babel-polyfill": "^6.26.0",
     "create-react-class": "^15.6.3",
+    "husky": "^1.3.1",
     "jest": "^24.7.1",
     "jest-dom": "^3.1.3",
     "jsdoc": "^3.5.5",
@@ -58,8 +60,15 @@
     "react-dom": "^16.8.6",
     "react-test-renderer": "^15.4.1",
     "react-testing-library": "^6.1.2",
+    "semantic-release": "^15.13.3",
     "vuepress": "^0.14.10",
     "vuepress-jsdoc": "^1.7.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && npm run build",
+      "pre-push": "npm test"
+    }
   },
   "homepage": "https://github.com/anish000kumar/redux-box#readme"
 }

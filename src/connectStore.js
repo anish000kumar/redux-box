@@ -26,8 +26,8 @@ function connectStore(connectContext = {}) {
     mapState = state => state,
     mapDispatchers = {},
     mapSelectors = {},
-    mergeProps = () => {},
-    options = {},
+    mergeProps = undefined,
+    options = undefined,
   } = connectContext;
 
   /* Map state and selectors to component-props */

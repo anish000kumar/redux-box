@@ -1,11 +1,11 @@
-function initialState() {
+export default function initialState() {
   return {
     id: null,
-    firstname: '',
-    lastname: '',
+    firstname: 'a',
+    lastname: 'b',
     address: {
       city: '',
-      country: '',
+      country: 'USA',
       pin: null,
     },
   };

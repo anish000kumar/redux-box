@@ -85,12 +85,10 @@ function createStore(modules, config = {}) {
 
   // rootsaga
   function* rootSaga() {
-    while (true) {
-      try {
-        yield all(sagas);
-      } catch (err) {
-        console.error('[ERROR] Something went wrong in rootSaga: ', err);
-      }
+    try {
+      yield all(sagas);
+    } catch (err) {
+      console.error('[ERROR] Something went wrong in rootSaga: ', err);
     }
   }
 

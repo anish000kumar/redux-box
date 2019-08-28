@@ -175,7 +175,7 @@ OPTIONAL: if you need to create store with some reducers and middlewares, the si
 ```javascript
 import { moduleToReducer } from "redux-box";
 
-createStore((modules: Array), (config: Object));
+createStore((modules: Object), (config: Object));
 
 //example config object
 config = {

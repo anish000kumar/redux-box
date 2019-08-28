@@ -22,21 +22,21 @@ import { takeLatest, takeEvery } from 'redux-saga/effects';
  *
  */
 function createSagas(sagasObject) {
-  let arr = [];
+  const arr = [];
   const delimiter = '__@';
-  let saga_keys = Object.keys(sagasObject);
-  saga_keys.forEach(key => {
-    let action = key.split(delimiter)[0];
-    let worker_saga = sagasObject[key];
-    let mode = key.split(delimiter)[1] || 'latest';
+  const sagaKeys = Object.keys(sagasObject);
+  sagaKeys.forEach(key => {
+    const action = key.split(delimiter)[0];
+    const workerSaga = sagasObject[key];
+    const mode = key.split(delimiter)[1] || 'latest';
 
     let watcher = function*() {
-      yield takeLatest(action, worker_saga);
+      yield takeLatest(action, workerSaga);
     };
 
     if (mode === 'every') {
       watcher = function*() {
-        yield takeEvery(action, worker_saga);
+        yield takeEvery(action, workerSaga);
       };
     }
 

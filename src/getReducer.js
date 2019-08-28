@@ -9,11 +9,11 @@ import produce from 'immer';
  */
 function getReducer(mutations, initialState) {
   return function _reducer(state = initialState, action) {
-    let mutation_method = mutations[action.type];
+    const mutationMethod = mutations[action.type];
 
-    if (mutation_method) {
-      const nextState = produce(state, draft_state => {
-        mutation_method(draft_state, action);
+    if (mutationMethod) {
+      const nextState = produce(state, draftState => {
+        mutationMethod(draftState, action);
       });
       return nextState;
     }

@@ -8,33 +8,35 @@ import { connect } from 'react-redux';
  *
  * connectStore({
  *  mapState: state => ({ name: state.user.name }),
- *  mapSelectors: { userProfile : selectors.getProfile },
- *  mapDispatchers: { getProfile: dispatchers.fetchProfile }
+ *  mapSelectors: { userProfile : getProfile },
+ *  mapDispatchers: { getProfile: fetchProfile }
  * })
  *
- * @param {Object} connectContext - context object for connecting store to component
- * @param {Function} connectContext.mapState - maps store-state to component-props
- * @param {Object | Function} connectContext.mapDispatchers - maps module-dispatchers to component-props
- * @param {Object} connectContext.mapSelectors - maps module-selectors to component-props
- * @param {Function} connectContext.mergeProps - merges returned values from mapState, mapSelectors and mapDispatchers to return final component-props
- * @param {Object} connectContext.options - optional object passed to react-redux's connect function as fourth argument
+ * @param {Object} connectParams - context object for connecting store to component
+ * @param {Function} connectParams.mapState - maps store-state to component-props
+ * @param {Object | Function} connectParams.mapDispatchers - maps module-dispatchers to component-props
+ * @param {Object} connectParams.mapSelectors - maps module-selectors to component-props
+ * @param {Function} connectParams.mergeProps - merges returned values from mapState, mapSelectors and mapDispatchers to return final component-props
+ * @param {Object} connectParams.options - optional object passed to react-redux's connect function as fourth argument
  * @returns {Function} - return the output of connect() from react-redux
  */
 
-function connectStore(connectContext = {}) {
+function connectStore(connectParams = {}) {
   const {
-    mapState = state => state,
+    mapState = undefined,
     mapDispatchers = {},
     mapSelectors = {},
     mergeProps = undefined,
     options = undefined,
-  } = connectContext;
+  } = connectParams;
 
   /* Map state and selectors to component-props */
   function mapStateToProps(state, props) {
-    const finalProps = {
-      ...mapState(state, props),
-    };
+    let finalProps = {};
+
+    if (mapState && typeof mapState === 'function') {
+      finalProps = { ...mapState(state, props) };
+    }
 
     /* Call all selectors with  */
     Object.entries(mapSelectors).forEach(([propName, selector]) => {
@@ -44,7 +46,7 @@ function connectStore(connectContext = {}) {
     return finalProps;
   }
 
-  //connect
+  // connect
   return connect(
     mapStateToProps,
     mapDispatchers,

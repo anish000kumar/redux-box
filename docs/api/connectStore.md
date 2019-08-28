@@ -6,7 +6,7 @@ title: connectStore
 
 <a name="connectStore"></a>
 
-## connectStore(connectContext) ⇒ <code>function</code>
+## connectStore(connectParams) ⇒ <code>function</code>
 Connects the state, selectors and dispatchers to components.
 
 **Kind**: global function  
@@ -14,12 +14,12 @@ Connects the state, selectors and dispatchers to components.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| connectContext | <code>Object</code> | context object for connecting store to component |
-| connectContext.mapState | <code>function</code> | maps store-state to component-props |
-| connectContext.mapDispatchers | <code>Object</code> \| <code>function</code> | maps module-dispatchers to component-props |
-| connectContext.mapSelectors | <code>Object</code> | maps module-selectors to component-props |
-| connectContext.mergeProps | <code>function</code> | merges returned values from mapState, mapSelectors and mapDispatchers to return final component-props |
-| connectContext.options | <code>Object</code> | optional object passed to react-redux's connect function as fourth argument |
+| connectParams | <code>Object</code> | context object for connecting store to component |
+| connectParams.mapState | <code>function</code> | maps store-state to component-props |
+| connectParams.mapDispatchers | <code>Object</code> \| <code>function</code> | maps module-dispatchers to component-props |
+| connectParams.mapSelectors | <code>Object</code> | maps module-selectors to component-props |
+| connectParams.mergeProps | <code>function</code> | merges returned values from mapState, mapSelectors and mapDispatchers to return final component-props |
+| connectParams.options | <code>Object</code> | optional object passed to react-redux's connect function as fourth argument |
 
 **Example**  
 ```js
@@ -28,7 +28,7 @@ import { selectors, dispatchers } from "./store/userModule";
 
 connectStore({
  mapState: state => ({ name: state.user.name }),
- mapSelectors: { userProfile : selectors.getProfile },
- mapDispatchers: { getProfile: dispatchers.fetchProfile }
+ mapSelectors: { userProfile : getProfile },
+ mapDispatchers: { getProfile: fetchProfile }
 })
 ```

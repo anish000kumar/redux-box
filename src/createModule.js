@@ -1,10 +1,13 @@
-import moduleRegistry from './moduleRegistry';
 import { createSelector } from 'reselect';
+import moduleRegistry from './moduleRegistry';
 
-export function randomStr() {
-  return Math.random()
-    .toString(36)
-    .substr(2, 9);
+export function generateId() {
+  const RFC4122_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+  return RFC4122_TEMPLATE.replace(/[xy]/g, function(c) {
+    var r = (Math.random() * 16) | 0,
+      v = c == 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 
 /**
@@ -13,7 +16,7 @@ export function randomStr() {
  * @returns {Object}
  */
 export default function createModule(moduleObj) {
-  const id = `${randomStr()}${randomStr()}`;
+  const id = `${generateId()}`;
   const finalObj = {
     ...moduleObj,
     id,

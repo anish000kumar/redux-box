@@ -27,8 +27,9 @@ describe('composeEnhancers', () => {
 
   it('should return devTools composer', () => {
     // mock env
+    const mockDevToolReturn = {};
     global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ = function mockCompose() {
-      return 1;
+      return mockDevToolReturn;
     };
     global.process = {
       env: {
@@ -37,16 +38,17 @@ describe('composeEnhancers', () => {
     };
 
     const composer = composeEnhancers();
-    expect(composer).toBe(global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__);
+    expect(composer).toBe(mockDevToolReturn);
   });
 
   it('should return devTools composer', () => {
     // mock env
+    const mockDevToolReturn = {};
     global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ = function mockCompose() {
-      return 1;
+      return mockDevToolReturn;
     };
 
     const composer = composeEnhancers({ enableDevTools: () => true });
-    expect(composer).toBe(global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__);
+    expect(composer).toBe(mockDevToolReturn);
   });
 });

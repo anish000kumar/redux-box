@@ -1,14 +1,14 @@
 import createSagaMiddleware from 'redux-saga';
-import composeEnhancers from './composeEnhancers';
-import moduleRegistry from './moduleRegistry';
 import { all } from 'redux-saga/effects';
-import getReducer from './getReducer';
 import {
   applyMiddleware,
   combineReducers,
   createStore as storeCreator,
 } from 'redux';
 import get from './utils/get';
+import composeEnhancers from './composeEnhancers';
+import moduleRegistry from './moduleRegistry';
+import getReducer from './getReducer';
 
 /**
  * @typedef {Object} Module - Object representing module
@@ -26,16 +26,19 @@ import get from './utils/get';
  * import userModule from "./modules/user";
  * import marketplaceModule from "./modules/marketplace";
  *
- * createStore([userModule, marketplaceModule],{
- *  enableDevTools() => true
+ * createStore({userModule, marketplaceModule},{
+ *  enableDevTools: () => true,
+ *  devToolOptions: {}
  * })
  *
  * @param {Object<String, Module>} modules - Object containing all modules to be attached to store
+ * @param {Function=} config.enableDevTools - (Optional)enable devtool conditionally
  * @param {Object} config -  Contains configuration for store
  * @param {Function[]} config.middlewares - Array of middlewares to be used in store
  * @param {Object<String, Function>=} config.reducers - (Optional) Object containing reducers to be used in store
  * @param {Generator[]} config.sagas - Array of watcher sagas to be used in store
  * @param {Object=} config.preloadedState - (Optional) Preloaded state for store
+ * @param {Object=} config.devToolOptions - (Optional) options for redux dev tool
  * @param {Function=} config.decorateReducer - (Optional) decorator function for reducer formed by redux-box, has formed reducer as first argument
  * @returns {Object} store
  */
@@ -53,7 +56,7 @@ function createStore(modules, config = {}) {
   }
 
   // an object containing reducers for all modules, to  be fed to combineReducer
-  let reducerList = Object.assign({}, config.reducers);
+  const reducerList = Object.assign({}, config.reducers);
   let sagas = [];
 
   // iterate through each module and push the sagas and reducers of each module in thier respective array
@@ -74,10 +77,10 @@ function createStore(modules, config = {}) {
   if (config.decorateReducer) {
     combinedReducer = config.decorateReducer(combinedReducer);
   }
-  let preloadedState = config.preloadedState || {};
-  let composer = composeEnhancers(config);
-  //initialize the store using preloaded state, reducers and middlewares
-  let store = storeCreator(
+  const preloadedState = config.preloadedState || {};
+  const composer = composeEnhancers(config);
+  // initialize the store using preloaded state, reducers and middlewares
+  const store = storeCreator(
     combinedReducer,
     preloadedState,
     composer(applyMiddleware(...middlewares))

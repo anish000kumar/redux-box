@@ -7,7 +7,7 @@ title: createStore
 ## Functions
 
 <dl>
-<dt><a href="#createStore">createStore(config)</a> ⇒ <code>Object</code></dt>
+<dt><a href="#createStore">createStore(modules, config)</a> ⇒ <code>Object</code></dt>
 <dd><p>Creates redux store</p>
 </dd>
 </dl>
@@ -22,7 +22,7 @@ title: createStore
 
 <a name="createStore"></a>
 
-## createStore(config) ⇒ <code>Object</code>
+## createStore(modules, config) ⇒ <code>Object</code>
 Creates redux store
 
 **Kind**: global function  
@@ -30,12 +30,14 @@ Creates redux store
 
 | Param | Type | Description |
 | --- | --- | --- |
+| modules | <code>Object.&lt;String, Module&gt;</code> | Object containing all modules to be attached to store |
+| [config.enableDevTools] | <code>function</code> | (Optional)enable devtool conditionally |
 | config | <code>Object</code> | Contains configuration for store |
-| config.modules | <code>Object.&lt;String, Module&gt;</code> | Object containing all modules to be attached to store |
 | config.middlewares | <code>Array.&lt;function()&gt;</code> | Array of middlewares to be used in store |
 | [config.reducers] | <code>Object.&lt;String, function()&gt;</code> | (Optional) Object containing reducers to be used in store |
 | config.sagas | <code>Array.&lt;Generator&gt;</code> | Array of watcher sagas to be used in store |
 | [config.preloadedState] | <code>Object</code> | (Optional) Preloaded state for store |
+| [config.devToolOptions] | <code>Object</code> | (Optional) options for redux dev tool |
 | [config.decorateReducer] | <code>function</code> | (Optional) decorator function for reducer formed by redux-box, has formed reducer as first argument |
 
 **Example**  
@@ -44,8 +46,9 @@ import { createStore } from "redux-box";
 import userModule from "./modules/user";
 import marketplaceModule from "./modules/marketplace";
 
-createStore([userModule, marketplaceModule],{
- enableDevTools() => true
+createStore({userModule, marketplaceModule},{
+ enableDevTools: () => true,
+ devToolOptions: {}
 })
 ```
 <a name="Module"></a>

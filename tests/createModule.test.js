@@ -1,4 +1,4 @@
-import createModule, { randomStr } from '../src/createModule';
+import createModule, { generateId } from '../src/createModule';
 import createStore from '../src/createStore';
 import testModule from './testModule';
 
@@ -24,8 +24,8 @@ describe('createModule', () => {
     expect(selector({ userModule: { hi: 1 } })).toEqual({ hi: 1 });
   });
 
-  it('should return random Str', () => {
-    expect(typeof randomStr()).toBe('string');
-    expect(randomStr()).not.toBe(randomStr());
+  it('should return random and unique id', () => {
+    expect(typeof generateId()).toBe('string');
+    expect(generateId()).not.toBe(generateId());
   });
 });

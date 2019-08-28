@@ -8,8 +8,7 @@
     "build": "babel src --out-dir build",
     "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude ./src/getReducer.js,./src/composeEnhancers.js ",
     "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "srelease": "semantic-release"
+    "docs:build": "vuepress build docs"
   },
   "repository": {
     "type": "git",
@@ -28,17 +27,17 @@
     "url": "https://github.com/anish000kumar/redux-box/issues"
   },
   "dependencies": {
-    "immer": "^0.8.4",
+    "immer": "^3.1.1",
     "react": "^16.2.0",
-    "react-redux": "5.0.6",
-    "redux": "^3.7.2",
-    "redux-saga": "0.16.0",
-    "regenerator-runtime": "0.11.1",
-    "reselect": "^3.0.1"
+    "react-redux": "^7.0.2",
+    "redux": "^4.0.1",
+    "redux-saga": "^1.0.2",
+    "regenerator-runtime": "^0.13.2",
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.3",
+    "@babel/core": "^7.4.4",
     "@babel/plugin-proposal-decorators": "^7.4.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
     "@babel/plugin-transform-react-display-name": "^7.2.0",
@@ -46,7 +45,7 @@
     "@babel/plugin-transform-runtime": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
-    "babel-jest": "24.7.1",
+    "babel-jest": "^24.7.1",
     "babel-polyfill": "^6.26.0",
     "create-react-class": "^15.6.3",
     "husky": "^1.3.1",

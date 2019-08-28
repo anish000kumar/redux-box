@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 export default function get(object, keys, defaultVal = undefined) {
   if (typeof object !== 'object') {
     return defaultVal;

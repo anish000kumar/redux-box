@@ -11,13 +11,16 @@ import get from './utils/get';
  * @param {Function} config.composeRedux -  Use a custom compose function for redux, it has existing compose function as the argument
  * @returns {Function} composer - compose function fed to redux
  */
-function composeEnhancers(config) {
+function composeEnhancers(config = {}) {
   const devCompose =
-    typeof window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+    typeof window === 'object' &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(config.devToolOptions || {});
 
   /* if devtools should be enabled, use devTools if available, else use default compose function */
-  let composer = shouldEnableDevTools(config) ? devCompose || compose : compose;
-
+  const composer = shouldEnableDevTools(config)
+    ? devCompose || compose
+    : compose;
   /* if use wants to override above composer function, use that */
   if (!!config && !!config.composeRedux) {
     const finalComposer = config.composeRedux(composer);
@@ -25,9 +28,7 @@ function composeEnhancers(config) {
       return finalComposer;
     }
     console.warn(
-      `composeRedux() should return function (compose), provided: ${
-        config.composeRedux
-      }`
+      `composeRedux() should return function (compose), provided: ${config.composeRedux}`
     );
   }
 
@@ -43,13 +44,13 @@ function shouldEnableDevTools(config) {
        have provided ${typeof enableToolsFn}: ${enableToolsFn}`
     );
   } else if (enableToolsFn) return enableToolsFn();
-
   /* else, check for the development environment to enable dev tools */
   if (
-    typeof process == 'object' &&
-    get(process, 'env.NODE_ENV') === 'development'
-  )
+    typeof process === 'object' &&
+    get(process, 'env.NODE_ENV') !== 'production'
+  ) {
     return true;
+  }
 
   /* else, return false */
   return false;

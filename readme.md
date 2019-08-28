@@ -3,7 +3,8 @@
 </a></p>
 
 # Redux Box 2
-** Note: If migrating from version 1.x.x to 2, you would find breaking changes.*8
+**Note: If migrating from version 1.x.x to 2, you would find breaking changes.**
+
  Redux-Box aims at abstracting away the complexity in using redux with redux-saga, while letting you manage application state in modular fashion, without losing the flexibility or without introducing new bizarre terms.
  It organizes your store as collection of **independent** modules which can be used across different  stores/applications/platforms.
 
@@ -174,7 +175,7 @@ OPTIONAL: if you need to create store with some reducers and middlewares, the si
 ```javascript
 import { moduleToReducer } from "redux-box";
 
-createStore((modules: Array), (config: Object));
+createStore((modules: Object), (config: Object));
 
 //example config object
 config = {

@@ -178,8 +178,6 @@ export default createStore({
 OPTIONAL: if you need to create store with some reducers and middlewares, the signature of createStore method from redux-box goes like this:(if you have already included a module in modules array, you need **NOT** to register it's sagas or reducers manually by including in config object)
 
 ```javascript
-import { moduleToReducer } from "redux-box";
-
 createStore((modules: Object), (config: Object));
 
 //example config object
@@ -196,7 +194,7 @@ config = {
 
   // reducers to be manually registered
   reducers: {
-    user: moduleToReducer(user)
+    user: yourCustomReducer
   },
   decorateReducer: reducer => {
     //do something

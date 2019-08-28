@@ -7,6 +7,7 @@
 ![Coveralls github](https://img.shields.io/coveralls/github/anish000kumar/redux-box)
 ![GitHub](https://img.shields.io/github/license/anish000kumar/redux-box)
 ![GitHub last commit](https://img.shields.io/github/last-commit/anish000kumar/redux-box)
+
 **Note: If migrating from version 1.x.x to 2, you would find breaking changes.**
 
  Redux-Box aims at abstracting away the complexity in using redux with redux-saga, while letting you manage application state in modular fashion, without losing the flexibility or without introducing new bizarre terms.

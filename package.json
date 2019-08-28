@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest  --coverage --collectCoverageFrom=src/**/*.js",
-    "build": "babel src --out-dir build",
+    "build": "babel src --out-dir dist",
     "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude ./src/getReducer.js,./src/composeEnhancers.js ",
     "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
     "docs:build": "vuepress build docs"

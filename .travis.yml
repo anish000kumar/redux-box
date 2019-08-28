@@ -2,6 +2,9 @@ language: node_js
 cache: npm
 node_js:
   - "8"
+script:
+  - npm run test:coveralls
+
 branches:
   only:
     - master

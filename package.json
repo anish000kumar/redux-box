@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest  --coverage --collectCoverageFrom=src/**/*.js",
+    "test:coveralls": "jest  --coverage --collectCoverageFrom=src/**/*.js --coverageReporters=text-lcov | coveralls",
     "build": "babel src --out-dir dist",
     "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude ./src/getReducer.js,./src/composeEnhancers.js ",
     "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
@@ -47,6 +48,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-jest": "^24.9.0",
     "babel-polyfill": "^6.26.0",
+    "coveralls": "^3.0.6",
     "create-react-class": "^15.6.3",
     "husky": "^1.3.1",
     "jest": "^24.7.1",

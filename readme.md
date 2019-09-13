@@ -157,10 +157,8 @@ const selectors = {
 
 export default createModule({
   state,
-  dispatchers,
   mutations,
   sagas,
-  selectors
 });
 ```
 
@@ -240,7 +238,6 @@ export default App;
 
 ```javascript
 import React, { Component } from "react";
-import { module as userModule } from "store/user";
 import { connectStore } from "redux-box";
 import { getTodos, getCompletedTodos, dispatchers } from "./user";
 

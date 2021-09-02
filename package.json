@@ -28,7 +28,7 @@
     "url": "https://github.com/anish000kumar/redux-box/issues"
   },
   "dependencies": {
-    "immer": "^8.0.1",
+    "immer": "^9.0.6",
     "react": "^16.9.0",
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",

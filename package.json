@@ -61,7 +61,7 @@
     "react-dom": "^16.8.6",
     "react-test-renderer": "^15.4.1",
     "react-testing-library": "^6.1.2",
-    "semantic-release": "^17.2.3",
+    "semantic-release": "^19.0.3",
     "vuepress": "^0.14.10",
     "vuepress-jsdoc": "^1.7.0"
   },

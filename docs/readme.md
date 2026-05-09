@@ -1,14 +1,16 @@
 ---
 home: true
 heroImage: https://image.ibb.co/e4Nce6/redux_box.png
-heroImageDark: https://image.ibb.co/e4Nce6/redux_box.png
 heroText: Redux Box
 tagline: A modular, batteries-included container for Redux + Redux-Saga applications.
 actions:
   - text: Get Started →
     link: /getting-started.html
     type: primary
-  - text: View on GitHub
+  - text: Core Concepts
+    link: /core-concepts.html
+    type: secondary
+  - text: GitHub
     link: https://github.com/anish000kumar/redux-box
     type: secondary
 features:

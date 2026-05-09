@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import type { ConnectParams, SelectorFn } from './types';
 
 /**
  * Connects the state, selectors and dispatchers to components.
@@ -21,7 +22,7 @@ import { connect } from 'react-redux';
  * @returns {Function} - return the output of connect() from react-redux
  */
 
-function connectStore(connectParams = {}) {
+function connectStore(connectParams: ConnectParams = {}) {
   const {
     mapState = undefined,
     mapDispatchers = {},
@@ -31,8 +32,8 @@ function connectStore(connectParams = {}) {
   } = connectParams;
 
   /* Map state and selectors to component-props */
-  function mapStateToProps(state, props) {
-    let finalProps = {};
+  function mapStateToProps(state: any, props: any) {
+    let finalProps: Record<string, any> = {};
 
     if (mapState && typeof mapState === 'function') {
       finalProps = { ...mapState(state, props) };
@@ -40,7 +41,11 @@ function connectStore(connectParams = {}) {
 
     /* Call all selectors with  */
     Object.entries(mapSelectors).forEach(([propName, selector]) => {
-      finalProps[propName] = selector.call(undefined, state, props);
+      finalProps[propName] = (selector as SelectorFn).call(
+        undefined,
+        state,
+        props
+      );
     });
 
     return finalProps;

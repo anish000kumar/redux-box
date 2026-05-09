@@ -1,5 +1,5 @@
 module.exports = {
-  moduleFileExtensions: ['js', 'jsx', 'json'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   testEnvironment: 'jsdom',
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
   coverageThreshold: {

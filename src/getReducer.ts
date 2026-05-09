@@ -1,4 +1,7 @@
 import { produce } from 'immer';
+import type { Action } from 'redux';
+
+type Mutations = Record<string, (state: any, action: any) => void>;
 
 /**
  * Returns reducer for the module, given the module's mutations and initialState
@@ -7,12 +10,12 @@ import { produce } from 'immer';
  * @param {Object} initialState - initialState for the module
  * @returns {Function} reducer
  */
-function getReducer(mutations, initialState) {
-  return function _reducer(state = initialState, action) {
-    const mutationMethod = mutations[action.type];
+function getReducer(mutations: Mutations, initialState: any) {
+  return function _reducer(state: any = initialState, action: Action) {
+    const mutationMethod = mutations[action.type as string];
 
     if (mutationMethod) {
-      const nextState = produce(state, draftState => {
+      const nextState = produce(state, (draftState: any) => {
         mutationMethod(draftState, action);
       });
       return nextState;

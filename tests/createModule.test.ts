@@ -12,14 +12,14 @@ describe('createModule', () => {
 
   it('should return correct module name', () => {
     const module = createModule(testModule);
-    const store = createStore({ userModule: module });
+    createStore({ userModule: module });
     expect(module.id).toBeTruthy();
     expect(module.getName()).toBe('userModule');
   });
 
   it('should return correct module selector', () => {
     const module = createModule(testModule);
-    const store = createStore({ userModule: module });
+    createStore({ userModule: module });
     const selector = module.getSelector();
     expect(selector({ userModule: { hi: 1 } })).toEqual({ hi: 1 });
   });

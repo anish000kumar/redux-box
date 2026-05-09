@@ -7,6 +7,7 @@ const { sidebarTree } = require('../api/config.js');
 
 export default {
   bundler: webpackBundler(),
+  base: process.env.DOCS_BASE || '/',
   title: 'Redux Box',
   description: 'Container for redux applications',
   theme: defaultTheme({

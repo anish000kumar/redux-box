@@ -8,11 +8,15 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions: 
+      # Permissions for the publish workflow
       contents: write
       issues: write
       pull-requests: write
+      # Required for OIDC
       id-token: write
-      
+
+    # Only publish on master branch
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -24,6 +28,9 @@ jobs:
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Upgrade npm (required for OIDC trusted publishing)
+        run: npm install -g npm@latest
 
       - name: Install Dependencies 
         run: yarn

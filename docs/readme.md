@@ -48,3 +48,20 @@ export default createStore([userModule, postModule]);
 ```
 
 Head over to the [Getting Started guide](/getting-started.html) for a full walkthrough.
+
+## See it in real apps
+
+Two end-to-end TypeScript apps that ship as part of this repo and deploy on
+every release:
+
+- **[CRUD over REST](https://anish000kumar.github.io/redux-box/examples/crud-rest/)** —
+  posts CRUD against JSONPlaceholder with optimistic updates, normalised
+  state, and React Testing Library coverage.
+  [Source](https://github.com/anish000kumar/redux-box/tree/master/examples/crud-rest)
+- **[Trello board over GraphQL](https://anish000kumar.github.io/redux-box/examples/trello-graphql/)** —
+  drag-and-drop kanban backed by GraphQL Zero, with optimistic mutations
+  and a mocked GraphQL transport in tests.
+  [Source](https://github.com/anish000kumar/redux-box/tree/master/examples/trello-graphql)
+
+The [Production-shaped apps](/example-apps.html) page walks through what each
+one demonstrates and how the folder structure is laid out.

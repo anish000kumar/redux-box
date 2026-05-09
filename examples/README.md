@@ -6,7 +6,8 @@ project — its own `package.json`, build, and test suite — so you can copy th
 folder into a new repo and start hacking.
 
 > **Live demos** — every push to `master` rebuilds and deploys both apps via the
-> [`Deploy Examples`](../.github/workflows/deploy-examples.yml) GitHub Action:
+> [`Deploy Site`](../.github/workflows/deploy-site.yml) GitHub Action (which
+> ships the docs and both example apps as a single GitHub Pages artefact):
 >
 > - https://anish000kumar.github.io/redux-box/examples/ — landing page
 > - https://anish000kumar.github.io/redux-box/examples/crud-rest/

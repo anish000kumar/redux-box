@@ -1,0 +1,128 @@
+name: Deploy Site
+
+# Builds and publishes the entire GitHub Pages site as a single artefact:
+#
+#   /redux-box/                              ← VuePress docs (root)
+#   /redux-box/examples/                     ← landing page for the example apps
+#   /redux-box/examples/crud-rest/           ← CRUD example
+#   /redux-box/examples/trello-graphql/      ← Trello-style GraphQL example
+#
+# This used to live in two workflows (`deploy-docs.yml` + `deploy-examples.yml`)
+# that both targeted the `github-pages` environment. Pages only keeps one
+# deployment per environment, so each workflow silently overwrote the other —
+# and the examples workflow uploaded its assets at the artefact root (i.e.
+# `/redux-box/crud-rest/`) which didn't match the `/redux-box/examples/...`
+# `VITE_BASE_PATH` the apps were built against. Combining them here makes the
+# docs and the live demos coexist at the URLs the docs link to.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Pages allows a single in-flight deploy per environment. Don't cancel a
+# running deploy mid-upload — let it finish so the next push picks up from a
+# known-good state.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  # Public path the GitHub Pages site is served under. Override at
+  # workflow_dispatch time if your fork lives somewhere else.
+  SITE_BASE: /redux-box
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: yarn
+
+      # ----- 1. Root deps + redux-box library + docs -----------------
+      # The examples link redux-box via `file:../..`, so we need a fresh
+      # `dist/` *before* the example installs run. yarn + frozen-lockfile
+      # pins the esbuild version that the VuePress config is calibrated
+      # against, matching what the old `deploy-docs.yml` used.
+      - name: Install root deps
+        run: yarn install --frozen-lockfile --ignore-engines --ignore-scripts
+
+      - name: Build redux-box library
+        run: yarn build
+
+      - name: Generate API docs
+        run: yarn docs:jsdoc
+
+      - name: Build docs site
+        env:
+          DOCS_BASE: ${{ env.SITE_BASE }}/
+        run: yarn docs:build
+
+      # ----- 2. CRUD REST example ------------------------------------
+      - name: Install crud-rest deps
+        working-directory: examples/crud-rest
+        run: npm install --ignore-scripts
+      - name: Build crud-rest
+        working-directory: examples/crud-rest
+        env:
+          VITE_BASE_PATH: ${{ env.SITE_BASE }}/examples/crud-rest/
+        run: npm run build
+
+      # ----- 3. Trello GraphQL example -------------------------------
+      - name: Install trello-graphql deps
+        working-directory: examples/trello-graphql
+        run: npm install --ignore-scripts
+      - name: Build trello-graphql
+        working-directory: examples/trello-graphql
+        env:
+          VITE_BASE_PATH: ${{ env.SITE_BASE }}/examples/trello-graphql/
+        run: npm run build
+
+      # ----- 4. Stage the combined site ------------------------------
+      # Drop the example builds underneath the docs dist so a single
+      # upload covers everything. The asset paths inside each app's
+      # `index.html` already point at `/redux-box/examples/<name>/...`
+      # because of `VITE_BASE_PATH` above, so the apps load correctly
+      # at the URLs the docs link to.
+      - name: Stage combined site
+        run: |
+          set -euo pipefail
+          dist=docs/.vuepress/dist
+          mkdir -p "$dist/examples/crud-rest" "$dist/examples/trello-graphql"
+          cp -R examples/crud-rest/dist/.       "$dist/examples/crud-rest/"
+          cp -R examples/trello-graphql/dist/.  "$dist/examples/trello-graphql/"
+          cp examples/_landing.html             "$dist/examples/index.html"
+          # Pages runs Jekyll by default, which strips files/folders that
+          # start with an underscore. Vite emits underscore-prefixed
+          # chunks, so opt out of Jekyll for the whole site.
+          touch "$dist/.nojekyll"
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.vuepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

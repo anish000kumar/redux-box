@@ -51,6 +51,7 @@ export default {
           children: [
             { text: 'A simple counter', link: '/simple-example.html' },
             { text: 'Async data fetching', link: '/advanced-example.html' },
+            { text: 'Full fledged apps', link: '/example-apps.html' },
           ],
         },
         {
@@ -81,6 +82,14 @@ export default {
           { text: 'Async data fetching', link: '/advanced-example.html' },
           { text: 'GraphQL: Apollo', link: '/graphql-apollo.html' },
           { text: 'GraphQL: React Query', link: '/graphql-react-query.html' },
+          { text: 'Production-shaped apps', link: '/example-apps.html' },
+        ],
+      },
+      {
+        text: 'Live demos',
+        children: [
+          { text: 'CRUD over REST', link: 'https://anish000kumar.github.io/redux-box/examples/crud-rest/' },
+          { text: 'Trello board over GraphQL', link: 'https://anish000kumar.github.io/redux-box/examples/trello-graphql/' },
         ],
       },
       { text: 'API', link: '/api/' },

@@ -1,10 +1,10 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 exports.__esModule = true;
 exports["default"] = void 0;
 var _redux = require("redux");
 var _get = _interopRequireDefault(require("./utils/get"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 /**
  * compose function for redux.
  * Detects the environment using config.enableDevtools,

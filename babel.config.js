@@ -12,7 +12,16 @@ module.exports = api => {
     ],
     plugins: [
       ['@babel/plugin-proposal-decorators', { legacy: true }],
-      ['@babel/plugin-transform-runtime', { useESModules: false }],
+      // NB: deliberately *not* using `@babel/plugin-transform-runtime` here.
+      // That plugin replaces helpers with `require('@babel/runtime/...')`
+      // calls, which forces every consumer (including the example apps that
+      // link to redux-box via `file:../..`) to resolve `@babel/runtime` from
+      // the dist's physical location. With the example using a symlink,
+      // Node resolves from the link target (the repo root) which has no
+      // `node_modules/` in the CI artefact-only flow — so the require
+      // fails. Letting Babel inline the tiny helpers (a few hundred bytes
+      // total) sidesteps the whole resolution dance and removes
+      // `@babel/runtime` from the package's runtime dependency surface.
     ],
   };
 };

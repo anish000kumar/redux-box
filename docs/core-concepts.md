@@ -184,7 +184,10 @@ export const getPublishedItems = createSelector(getItems, items =>
 );
 ```
 
-Pass them to a component via `mapSelectors`:
+### Eager selectors — `mapSelectors`
+
+Eager selectors are evaluated on every store update; their result is passed
+to the component as a regular prop. Use them for values you render directly:
 
 ```js
 connectStore({
@@ -195,6 +198,67 @@ connectStore({
   },
 })(PostsList);
 ```
+
+Inside the component: `props.postCount`, `props.publishedPosts`, etc.
+
+### Parameterized selectors — `mapLazySelectors`
+
+Some reads need an argument — "give me the post with id `X`", "compute total
+for currency `Y`". Eager selectors can't easily express that because they're
+called once per render with `(state, ownProps)` only.
+
+For these cases, write a normal selector that takes extra arguments and pass
+it via `mapLazySelectors`:
+
+```js
+export const getPostById = (state, id) =>
+  state.posts.items.find(p => p.id === id);
+
+connectStore({
+  mapLazySelectors: { getPostById },
+})(PostDetail);
+```
+
+Inside the component the selector arrives as a callable:
+
+```js
+function PostDetail({ getPostById, postId }) {
+  const post = getPostById(postId);
+  return <article>{post.title}</article>;
+}
+```
+
+A few things worth knowing:
+
+- The callable's reference is **stable** across renders — it won't churn
+  `React.memo` children or `useEffect` dependencies.
+- Because the reference is stable, a lazy selector by itself does **not**
+  cause the connected component to re-render when state changes. If you
+  need the component to re-render on those updates, also expose an eager
+  selector for whatever data it depends on. See
+  [Parameterized (lazy) selectors](/recipes.html#parameterized-lazy-selectors)
+  in Recipes for the full pattern.
+- If you'd rather not hard-code `state.posts` inside the selector, use
+  `module.lazySelect(cb)` — the mirror of `module.select(cb)` for
+  parameterized reads. The callback receives the module's slice plus your
+  extra arguments:
+
+  ```js
+  // store/posts/selectors.js
+  import postsModule from './index';
+
+  export const getPostById = postsModule.lazySelect(
+    (slice, id) => slice.items.find(p => p.id === id),
+  );
+  ```
+
+  The returned selector has the `(state, ...args) => result` shape that
+  `mapLazySelectors` expects, and renaming the slice in `createStore({ ... })`
+  won't break it. Like `select`, it's slice-keyed memoized: same
+  `(slice, ...args)` ⇒ same result by reference, so unrelated dispatches
+  that don't touch this module's slice are cache hits. See
+  [Memoization (when you use `module.lazySelect`)](/recipes.html#memoization-when-you-use-module-lazyselect)
+  for the memory-shape caveat around primitive args.
 
 ::: tip Decoupling selectors from the slice key
 If you'd rather not hard-code `state.posts.items`, the module exposes
@@ -216,11 +280,13 @@ This means renaming the slice in `createStore({ ... })` won't break selectors.
 
 ```js
 connectStore({
-  mapState,        // (state, ownProps) => stateProps
-  mapSelectors,    // { propName: selector }
-  mapDispatchers,  // { propName: actionCreator } — auto-wrapped in dispatch
-  mergeProps,      // (stateProps, dispatchProps, ownProps) => finalProps
-  options,         // forwarded to react-redux's connect
+  mapState,         // (state, ownProps) => stateProps
+  mapSelectors,     // { propName: (state, ownProps) => value }      — eager
+  mapLazySelectors, // { propName: (state, ...args) => value }       — exposed
+                    //   to the component as (...args) => value with a stable ref
+  mapDispatchers,   // { propName: actionCreator } — auto-wrapped in dispatch
+  mergeProps,       // (stateProps, dispatchProps, ownProps) => finalProps
+  options,          // forwarded to react-redux's connect
 })(Component);
 ```
 

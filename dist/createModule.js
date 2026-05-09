@@ -52,12 +52,21 @@ function generateId() {
  * // that is independent of the key the module was mounted under.
  * const getUserName = userModule.select(user => user.name);
  *
+ * @example
+ * // Using the `lazySelect` helper to build a parameterized selector
+ * // that is intended for use with `connectStore`'s `mapLazySelectors`.
+ * const getUserById = userModule.lazySelect(
+ *   (userSlice, id) => userSlice.byId[id],
+ * );
+ *
  * @param {Module} moduleObj - Plain module definition (see {@link Module}).
  * @returns {Object} The decorated module. In addition to the original keys it exposes:
  *   - `id` {String} - unique id assigned to this module.
  *   - `getName()` {Function} - returns the key the module was registered under in the store.
  *   - `getSelector()` {Function} - returns a `(state) => moduleState` selector.
  *   - `select(fn)` {Function} - builds a memoized reselect selector over the module state.
+ *   - `lazySelect(fn)` {Function} - builds a parameterized `(state, ...args) => result`
+ *     selector over the module state, intended for `connectStore`'s `mapLazySelectors`.
  */
 function createModule(moduleObj) {
   var id = "" + generateId();
@@ -77,6 +86,48 @@ function createModule(moduleObj) {
     select: function select(cb) {
       var getModuleState = finalObj.getSelector();
       return (0, _reselect.createSelector)(getModuleState, cb);
+    },
+    /**
+     * Builds a parameterized selector over the module state. Mirrors `select`
+     * for the `mapLazySelectors` use case: the callback receives the module's
+     * slice plus any additional arguments, and the returned selector has the
+     * shape `(state, ...args) => result` expected by `mapLazySelectors`.
+     *
+     * Memoized via reselect's `weakMapMemoize`, keyed on the
+     * **`(slice, ...args)` tuple** rather than on `state`. This matches the
+     * behaviour of `select`: dispatches that don't touch this module's slice
+     * leave the cache intact, so repeat calls return the previously
+     * computed result by reference.
+     *
+     * Memory shape worth knowing: argument identity is the cache key. Object
+     * arguments (the slice itself, objects you pass in) are weakly
+     * referenced and GC-friendly. Primitive arguments (numbers, strings)
+     * live in a regular `Map` and are retained for the lifetime of the
+     * selector. If you call this with an unbounded set of distinct
+     * primitive args (e.g. thousands of user ids), use a bounded memoizer
+     * instead - either pass `{ memoize: lruMemoize }` (with reselect's
+     * `lruMemoize` and a `maxSize` of your choice via a custom factory) or
+     * reach for `re-reselect`.
+     *
+     * @param cb - callback invoked as `cb(slice, ...args)`.
+     * @param opts.memoize - optional memoizer to use instead of
+     *   `weakMapMemoize`. Must have the signature
+     *   `<F extends (...a: any[]) => any>(fn: F) => F`.
+     */
+    lazySelect: function lazySelect(cb, opts) {
+      var _opts$memoize;
+      if (opts === void 0) {
+        opts = {};
+      }
+      var getModuleState = finalObj.getSelector();
+      var memoize = (_opts$memoize = opts.memoize) != null ? _opts$memoize : _reselect.weakMapMemoize;
+      var memoCb = memoize(cb);
+      return function (state) {
+        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+        return memoCb.apply(void 0, [getModuleState(state)].concat(args));
+      };
     }
   });
   return finalObj;

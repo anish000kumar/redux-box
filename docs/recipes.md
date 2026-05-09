@@ -190,8 +190,207 @@ selector against the slice:
 export const getItemCount = module.select(slice => slice.items.length);
 ```
 
+For **parameterized** reads, the mirror helper is `module.lazySelect(cb)`.
+The callback receives the slice plus any extra arguments, and the returned
+selector has the `(state, ...args) => result` shape expected by
+`mapLazySelectors`:
+
+```js
+export const getItemById = module.lazySelect(
+  (slice, id) => slice.items.find(item => item.id === id),
+);
+```
+
+Like `select`, `lazySelect` is **slice-keyed memoized**: the cache key is
+`(slice, ...args)`, not `(state, ...args)`. Calling the selector with the
+same slice reference and the same args returns the previously computed
+result by reference, including across dispatches that don't touch this
+module's slice. Varying any argument produces a fresh computation, with the
+prior cache entries still retained. See the
+[Parameterized (lazy) selectors](#parameterized-lazy-selectors) recipe below
+for the memory-shape caveat (primitive args grow an unbounded `Map` and
+should be bounded if you call across thousands of distinct values).
+
 Renaming the slice (`createStore({ posts: ... })` → `createStore({ feed: ... })`)
-won't break selectors written this way.
+won't break selectors written either way.
+
+## Parameterized (lazy) selectors
+
+Eager selectors (`mapSelectors`) are evaluated once per render with `(state,
+ownProps)`. That works great for "give me the visible posts" but fits awkwardly
+when the read needs an argument the component decides at call time — e.g.
+"give me the user with id `X`" inside a click handler, or "format `amount`
+in `currency`".
+
+`mapLazySelectors` lets you write the selector naturally, with extra
+arguments, and exposes it to the component as a callable:
+
+```js
+// store/users/selectors.js
+export const selectAllUsers = state => state.users.items;
+export const selectUserById = (state, id) =>
+  state.users.items.find(u => u.id === id);
+export const selectUsersByRole = (state, role) =>
+  state.users.items.filter(u => u.role === role);
+```
+
+::: tip Prefer `module.lazySelect(cb)` for slice-decoupled lazy selectors
+The same selectors written with the module helper:
+
+```js
+// store/users/selectors.js
+import usersModule from './index';
+
+export const selectAllUsers = usersModule.select(slice => slice.items);
+export const selectUserById = usersModule.lazySelect(
+  (slice, id) => slice.items.find(u => u.id === id),
+);
+export const selectUsersByRole = usersModule.lazySelect(
+  (slice, role) => slice.items.filter(u => u.role === role),
+);
+```
+
+`module.select` / `module.lazySelect` close over `module.getSelector()`, so
+your selectors stay decoupled from the slice key chosen in
+`createStore({ users: ... })`.
+:::
+
+```jsx
+// UserDirectory.jsx
+import { connectStore } from 'redux-box';
+import {
+  selectAllUsers,
+  selectUserById,
+  selectUsersByRole,
+} from './store/users/selectors';
+
+function UserDirectory({ users, getUserById, getUsersByRole }) {
+  return (
+    <div>
+      <h2>All users ({users.length})</h2>
+      {users.map(u => (
+        <UserRow key={u.id} user={u} />
+      ))}
+
+      <h2>Admins</h2>
+      {getUsersByRole('admin').map(u => (
+        <UserRow key={u.id} user={u} />
+      ))}
+
+      <button onClick={() => console.log(getUserById(42))}>
+        Log user 42
+      </button>
+    </div>
+  );
+}
+
+export default connectStore({
+  mapSelectors:     { users: selectAllUsers },
+  mapLazySelectors: {
+    getUserById:    selectUserById,
+    getUsersByRole: selectUsersByRole,
+  },
+})(UserDirectory);
+```
+
+How it works:
+
+- Each `mapLazySelectors` entry is wrapped into `(...args) => value`. The
+  wrapper closes over a ref to the latest store state, so calling it always
+  returns fresh data — even from inside an event handler.
+- The wrapper's function reference is **stable across renders**. Passing it
+  to `React.memo` children or listing it in a `useEffect`/`useCallback`
+  dependency array won't cause unnecessary work.
+
+### Stable references mean: lazy selectors don't trigger re-renders by themselves
+
+Because the wrapper reference never changes, a component connected only via
+`mapLazySelectors` will **not** re-render when state updates — there's
+nothing in `mapStateToProps` whose value changed.
+
+If you need the component to re-render when the underlying data changes,
+also subscribe to that data via `mapState` or an eager `mapSelectors` entry.
+The example above does both: `users` (eager) drives re-renders, and
+`getUserById` / `getUsersByRole` (lazy) are convenience callables on top of
+the latest state.
+
+A useful mental model: lazy selectors are like `useStore().getState()` — a
+fresh read at the call site, independent of subscription. Eager selectors
+are like `useSelector()` — a subscription that drives re-renders.
+
+### Memoization (when you use `module.lazySelect`)
+
+Selectors built with `module.lazySelect(cb)` are memoized via reselect 5's
+`weakMapMemoize`, keyed on the **`(slice, ...args)` tuple** — *not* on the
+root `state`. Concretely:
+
+- Calling the selector with the **same slice reference and same args**
+  returns the same result by reference — including the same array/object
+  reference if `cb` produces one. Useful when the result feeds into
+  `useMemo` / `useEffect` dependencies or another selector chain.
+- Unrelated dispatches (anything that doesn't touch this module's slice)
+  leave the cache intact: the root `state` ref changes, but
+  `module.getSelector()` returns the same slice ref, so the cache key is
+  unchanged and the call is a hit. This matches what `module.select`
+  already does for non-parameterized reads.
+- Varying any argument produces a fresh computation. Prior cache entries
+  are retained, so repeatedly alternating `getUserById(state, 1)` /
+  `getUserById(state, 2)` hits the cache for both after the first miss.
+- A dispatch that *does* touch the slice produces a new slice ref, which
+  recomputes; the old slice's cache entries become unreachable and
+  GC-eligible (slice is held weakly).
+
+Plain `(state, ...args) => result` functions passed to `mapLazySelectors`
+**are not memoized** — only the wrapper around them is reference-stable.
+Use `module.lazySelect` (or hand-roll with `weakMapMemoize` /
+`createSelector` / `re-reselect`) when you need result-level memoization.
+
+::: warning Memory shape: primitive arg axes
+`weakMapMemoize` keys object arguments through a `WeakMap` (GC-friendly) but
+keys primitive arguments — numbers, strings — through a regular `Map` that
+grows for the lifetime of the selector.
+
+If you call `getUserById(state, id)` across an unbounded set of `id`s — e.g.
+an admin tool that paginates through 50,000 users — that's 50,000 retained
+`Map` entries. For those cases, pass a bounded memoizer to `lazySelect`:
+
+```js
+import { lruMemoize } from 'reselect';
+
+export const getUserById = usersModule.lazySelect(
+  (slice, id) => slice.byId[id],
+  { memoize: lruMemoize },
+);
+```
+
+`lruMemoize` defaults to `maxSize: 1`, so for a non-trivial cache you'll
+typically want to wrap it (or use a custom factory) to set the size you
+need. Or reach for [`re-reselect`](https://github.com/toomuchdesign/re-reselect)
+for an explicit keyed cache. The same caveat applies to any selector you
+hand-roll — `module.lazySelect` doesn't introduce it, just makes it
+visible.
+:::
+
+### When to reach for which
+
+| You want…                                                  | Use                       |
+| ---------------------------------------------------------- | ------------------------- |
+| A value the component renders                              | `mapSelectors`            |
+| A value derived from `ownProps` you can compute up front   | `mapSelectors` (it gets `ownProps`) |
+| A read with arguments the component decides at call time   | `mapLazySelectors`        |
+| A read inside an event handler / effect, not in JSX        | `mapLazySelectors`        |
+| Stable function refs for `React.memo` / `useEffect` deps   | `mapLazySelectors`        |
+
+::: tip Avoid the `(state) => () => ...` pattern
+A common workaround for parameterized reads is to define the selector as
+`selectUsers: state => () => realSelectUsers(state)`. It works, but every
+dispatch causes `mapStateToProps` to run, which produces a *new* function
+reference, which makes react-redux re-render the component on every action —
+even ones unrelated to that data.
+
+`mapLazySelectors` keeps the same ergonomics and gives you a stable
+reference, so you don't pay that cost.
+:::
 
 ## Using a module's reducer directly
 

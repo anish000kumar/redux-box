@@ -47,10 +47,24 @@ export interface StoreConfig {
 
 export type SelectorFn = (state: any, props?: any) => any;
 
+/**
+ * Lazy selectors are written as plain `(state, ...args) => result` functions.
+ * `connectStore` wraps each one into a `(...args) => result` callable that
+ * closes over the latest state, and exposes that callable as a prop.
+ *
+ * The wrapped function reference is stable across renders, so adding a lazy
+ * selector does not, by itself, cause the connected component to re-render
+ * on unrelated dispatches. If you need the component to re-render when the
+ * underlying state changes, also expose a regular eager selector (or a slice
+ * of `mapState`) that subscribes to that data.
+ */
+export type LazySelectorFn = (state: any, ...args: any[]) => any;
+
 export interface ConnectParams {
   mapState?: (state: any, props?: any) => Record<string, any>;
   mapDispatchers?: any;
   mapSelectors?: Record<string, SelectorFn>;
+  mapLazySelectors?: Record<string, LazySelectorFn>;
   mergeProps?: any;
   options?: any;
 }

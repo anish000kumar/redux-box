@@ -1,0 +1,18 @@
+name: PR Tests
+on:
+  pull_request:
+    branches: [ "master" ] # Runs when a PR is opened against 'main'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4   # Pulls your code into the runner
+      - name: Set up environment
+        uses: actions/setup-node@v4 # Or setup-python, setup-java, etc.
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test

@@ -1,21 +1,13 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("regenerator-runtime/runtime");
-var reducer_1 = require("./reducer");
-var helpers_1 = require("./helpers");
-exports.createActions = helpers_1.createActions;
-exports.using = helpers_1.using;
-var connectStore_1 = require("./connectStore");
-exports.connectStore = connectStore_1.default;
-var createContainer_1 = require("./createContainer");
-exports.createContainer = createContainer_1.default;
-var createSagas_1 = require("./createSagas");
-exports.createSagas = createSagas_1.default;
-var createStore_1 = require("./createStore");
-exports.createStore = createStore_1.default;
-var resetModules_1 = require("./resetModules");
-exports.resetModules = resetModules_1.resetModules;
-exports.moduleToReducer = function (module) {
-    return reducer_1.default(module.mutations, module.state);
-};
-//# sourceMappingURL=index.js.map
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports.createStore = exports.createSagas = exports.createModule = exports.connectStore = void 0;
+var _createStore = _interopRequireDefault(require("./createStore"));
+exports.createStore = _createStore["default"];
+var _connectStore = _interopRequireDefault(require("./connectStore"));
+exports.connectStore = _connectStore["default"];
+var _createSagas = _interopRequireDefault(require("./createSagas"));
+exports.createSagas = _createSagas["default"];
+var _createModule = _interopRequireDefault(require("./createModule"));
+exports.createModule = _createModule["default"];

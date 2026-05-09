@@ -1,74 +1,67 @@
 "use strict";
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var effects_1 = require("redux-saga/effects");
-/*
-    Syntactic sugar for easily accessing sagas
-*/
-function createSagas(saga_list) {
-    var arr = [];
-    var GeneratorFunction = Object.getPrototypeOf(function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
-    }); }).constructor;
-    var saga_keys = Object.keys(saga_list);
-    saga_keys.forEach(function (key) {
-        var action = key.split(".")[0];
-        var worker_saga = saga_list[key];
-        var mode = key.split(".")[1] || "latest";
-        var watcher = null;
-        if (mode == "latest") {
-            watcher = function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, effects_1.takeLatest(action, worker_saga)];
-                        case 1:
-                            _a.sent();
-                            return [2 /*return*/];
-                    }
-                });
-            };
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _effects = require("redux-saga/effects");
+/**
+ * @typedef {Object} SagaObject - Object containing watcher and worker sagas
+ * @property {Generator=} watcher - watcher saga
+ * @property {Generator=} worker - worker saga
+ * @property {('every'| 'latest')=} watchFor - Accepts
+ */
+
+/**
+ * Function to create watcher and worker sagas for redux store
+ * @example
+ * createSagas({
+ *  FETCH_USERS: function* fetchUser(){
+ *    const users = yield call(api.fetchUsers);
+ *   }
+ * })
+ * @param {Object<ActionName, Generator|SagaObject>} sagasObject
+ * Object containing module's sagas.
+ * The key is name of  the action that triggers the saga and value is generator or SagaObject
+ * @returns {Generator[]}  array of watcher sagas
+ *
+ */
+function createSagas(sagasObject) {
+  var arr = [];
+  var delimiter = '__@';
+  var sagaKeys = Object.keys(sagasObject);
+  sagaKeys.forEach(function (key) {
+    var action = key.split(delimiter)[0];
+    var workerSaga = sagasObject[key];
+    var mode = key.split(delimiter)[1] || 'latest';
+    var watcher = /*#__PURE__*/_regenerator["default"].mark(function watcher() {
+      return _regenerator["default"].wrap(function (_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 1;
+            return (0, _effects.takeLatest)(action, workerSaga);
+          case 1:
+          case "end":
+            return _context.stop();
         }
-        else if (mode == "every") {
-            watcher = function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, effects_1.takeEvery(action, worker_saga)];
-                        case 1:
-                            _a.sent();
-                            return [2 /*return*/];
-                    }
-                });
-            };
-        }
-        arr.push(watcher());
+      }, watcher);
     });
-    return arr;
+    if (mode === 'every') {
+      watcher = /*#__PURE__*/_regenerator["default"].mark(function watcher() {
+        return _regenerator["default"].wrap(function (_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 1;
+              return (0, _effects.takeEvery)(action, workerSaga);
+            case 1:
+            case "end":
+              return _context2.stop();
+          }
+        }, watcher);
+      });
+    }
+    arr.push(watcher());
+  });
+  return arr;
 }
-exports.default = createSagas;
-//# sourceMappingURL=createSagas.js.map
+var _default = exports["default"] = createSagas;

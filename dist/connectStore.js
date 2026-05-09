@@ -1,82 +1,64 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var react_redux_1 = require("react-redux");
-var helpers_1 = require("./helpers");
-var attachModuleSelectors = function (moduleInstance, stateObj, state, props) {
-    var module = null;
-    if (moduleInstance.module && moduleInstance.get) {
-        module = moduleInstance.module;
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = void 0;
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+var _reactRedux = require("react-redux");
+/**
+ * Connects the state, selectors and dispatchers to components.
+ * @example
+ * import { connectStore } from "redux-box";
+ * import { selectors, dispatchers } from "./store/userModule";
+ *
+ * connectStore({
+ *  mapState: state => ({ name: state.user.name }),
+ *  mapSelectors: { userProfile : getProfile },
+ *  mapDispatchers: { getProfile: fetchProfile }
+ * })
+ *
+ * @param {Object} connectParams - context object for connecting store to component
+ * @param {Function} connectParams.mapState - maps store-state to component-props
+ * @param {Object | Function} connectParams.mapDispatchers - maps module-dispatchers to component-props
+ * @param {Object} connectParams.mapSelectors - maps module-selectors to component-props
+ * @param {Function} connectParams.mergeProps - merges returned values from mapState, mapSelectors and mapDispatchers to return final component-props
+ * @param {Object} connectParams.options - optional object passed to react-redux's connect function as fourth argument
+ * @returns {Function} - return the output of connect() from react-redux
+ */
+
+function connectStore(connectParams) {
+  if (connectParams === void 0) {
+    connectParams = {};
+  }
+  var _connectParams = connectParams,
+    _connectParams$mapSta = _connectParams.mapState,
+    mapState = _connectParams$mapSta === void 0 ? undefined : _connectParams$mapSta,
+    _connectParams$mapDis = _connectParams.mapDispatchers,
+    mapDispatchers = _connectParams$mapDis === void 0 ? {} : _connectParams$mapDis,
+    _connectParams$mapSel = _connectParams.mapSelectors,
+    mapSelectors = _connectParams$mapSel === void 0 ? {} : _connectParams$mapSel,
+    _connectParams$mergeP = _connectParams.mergeProps,
+    mergeProps = _connectParams$mergeP === void 0 ? undefined : _connectParams$mergeP,
+    _connectParams$option = _connectParams.options,
+    options = _connectParams$option === void 0 ? undefined : _connectParams$option;
+
+  /* Map state and selectors to component-props */
+  function mapStateToProps(state, props) {
+    var finalProps = {};
+    if (mapState && typeof mapState === 'function') {
+      finalProps = (0, _extends2["default"])({}, mapState(state, props));
     }
-    else {
-        module = moduleInstance;
-    }
-    if (typeof module.selectors == "object") {
-        Object.keys(module.selectors).forEach(function (selector_name) {
-            var selector = module.selectors[selector_name];
-            stateObj[selector_name] = selector(state[module.name], state);
-        });
-    }
-    return stateObj;
-};
-/*
-    Connect a component to any module
-    TODO: namespacing
-*/
-function connectStore(modules) {
-    var mapStateToProps = function (state, props) {
-        var finalState = {};
-        Object.keys(modules).forEach(function (key) {
-            var moduleInstance = modules[key];
-            var module_name = moduleInstance.module
-                ? moduleInstance.module.name
-                : moduleInstance.name;
-            var stateObj = state[module_name];
-            if (moduleInstance.get) {
-                var filter_array = moduleInstance.get.split(",");
-                stateObj = helpers_1.pluck(stateObj, filter_array);
-            }
-            stateObj = attachModuleSelectors(moduleInstance, stateObj, state, props);
-            finalState[key] = stateObj;
-        });
-        return finalState;
-    };
-    var mapDispatchToProps = function (dispatch) {
-        var finalProps = {};
-        Object.keys(modules).forEach(function (key) {
-            var moduleInstance = modules[key];
-            var actions_obj = {};
-            var module_actions = (moduleInstance.module &&
-                moduleInstance.module.actions) ||
-                moduleInstance.actions;
-            if (module_actions) {
-                Object.keys(module_actions).forEach(function (action_key) {
-                    var action = module_actions[action_key];
-                    actions_obj[action_key] = function () {
-                        var args = [];
-                        for (var _i = 0; _i < arguments.length; _i++) {
-                            args[_i] = arguments[_i];
-                        }
-                        return dispatch(action.apply(void 0, args));
-                    };
-                });
-                finalProps[key] = actions_obj;
-            }
-        });
-        return finalProps;
-    };
-    var mergeProps = function (state, actions, ownProps) {
-        var finalModule = {};
-        Object.keys(state).forEach(function (key) {
-            var module_state = state[key];
-            var module_actions = actions[key];
-            finalModule[key] = Object.assign({}, module_state, module_actions);
-        });
-        return Object.assign({}, finalModule, ownProps);
-    };
-    return react_redux_1.connect(mapStateToProps, mapDispatchToProps, mergeProps, {
-        pure: true,
-        areStatePropsEqual: function (a, b) { return helpers_1.areSame(a, b); }
+
+    /* Call all selectors with  */
+    Object.entries(mapSelectors).forEach(function (_ref) {
+      var propName = _ref[0],
+        selector = _ref[1];
+      finalProps[propName] = selector.call(undefined, state, props);
     });
+    return finalProps;
+  }
+
+  // connect
+  return (0, _reactRedux.connect)(mapStateToProps, mapDispatchers, mergeProps, options);
 }
-exports.default = connectStore;
-//# sourceMappingURL=connectStore.js.map
+var _default = exports["default"] = connectStore;

@@ -1,6 +1,11 @@
 import composeEnhancers from '../src/composeEnhancers';
 import { compose } from 'redux';
 
+declare global {
+  // eslint-disable-next-line no-var
+  var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: ((options?: any) => any) | undefined;
+}
+
 describe('composeEnhancers', () => {
   it('should return default composer', () => {
     const composer = composeEnhancers({ enableDevTools: () => false });
@@ -8,7 +13,7 @@ describe('composeEnhancers', () => {
   });
 
   it('should throw warning', () => {
-    const composer = composeEnhancers({ enableDevTools: {} });
+    const composer = composeEnhancers({ enableDevTools: {} as any });
     expect(composer).toBe(compose);
   });
 
@@ -18,7 +23,7 @@ describe('composeEnhancers', () => {
   });
 
   it('should return compose function', () => {
-    function mockCompose(composer) {
+    function mockCompose(_composer: any) {
       return 1;
     }
     const composer = composeEnhancers({ composeRedux: () => mockCompose });
@@ -31,7 +36,7 @@ describe('composeEnhancers', () => {
     global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ = function mockCompose() {
       return mockDevToolReturn;
     };
-    global.process = {
+    (global as any).process = {
       env: {
         NODE_ENV: 'development',
       },

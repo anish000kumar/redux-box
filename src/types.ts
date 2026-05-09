@@ -1,44 +1,56 @@
-import { Middleware, Reducer, StoreEnhancer } from "redux";
+import type { Reducer, Action, Middleware } from 'redux';
 
-export declare namespace ReduxBox {
-  type DecorateReducer = (reducer: Reducer<any>) => Reducer<any>;
-  type EnableDevTools = (isDevelopmentMode: boolean) => boolean;
-
-  interface IModule {
-    name: string;
-    state: object;
-    mutations?: object;
-    actions?: object;
-    selectors?: any[];
-    sagas?: object;
-    decorateReducer?: DecorateReducer;
+/**
+ * Augment the global Window type with the redux devtools compose hook so
+ * `composeEnhancers` can reference it without `as any` casts.
+ */
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: (options?: any) => any;
   }
+}
 
-  interface IStoreConfig {
-    middlewares?: Middleware[];
-    preloadedState?: object;
-    sagas?: object[];
-    reducers?: { [key: string]: Reducer<any> };
-    decorateReducer?: DecorateReducer;
-    composeRedux?: StoreEnhancer<any>;
-    enableDevTools?: EnableDevTools;
-    sagaConfig?: {
-      onError?: Function;
-      retryDelay?: number;
-    };
-  }
+export type Mutations = Record<string, (state: any, action: any) => void>;
 
-  interface IModuleWithKeys {
-    module: IModule;
-    get: string;
-  }
+/**
+ * A redux-box module. `id` is optional because it is added by `createModule`,
+ * but `createStore` also accepts plain module objects passed directly.
+ */
+export interface Module {
+  id?: string;
+  name?: string;
+  state?: any;
+  mutations?: Mutations;
+  sagas?: any[];
+  selectors?: Record<string, (...args: any[]) => any>;
+  dispatchers?: Record<string, (...args: any[]) => Action>;
+  decorateReducer?: (reducer: Reducer) => Reducer;
+  [key: string]: any;
+}
 
-  interface IModuleSelectKeys {
-    [key: string]: IModuleWithKeys;
-  }
+/**
+ * A module after it has been processed by `createModule` - same as `Module`
+ * but with `id` guaranteed to be set.
+ */
+export type RegisteredModule = Module & { id: string };
 
-  interface IModuleAllKeys {
-    [key: string]: IModule;
-  }
-  type IModules = IModuleAllKeys | IModuleSelectKeys;
+export interface StoreConfig {
+  middlewares?: Middleware[];
+  reducers?: Record<string, Reducer>;
+  sagas?: any[];
+  preloadedState?: any;
+  devToolOptions?: any;
+  enableDevTools?: () => boolean;
+  composeRedux?: (compose: any) => any;
+  decorateReducer?: (reducer: Reducer) => Reducer;
+}
+
+export type SelectorFn = (state: any, props?: any) => any;
+
+export interface ConnectParams {
+  mapState?: (state: any, props?: any) => Record<string, any>;
+  mapDispatchers?: any;
+  mapSelectors?: Record<string, SelectorFn>;
+  mergeProps?: any;
+  options?: any;
 }

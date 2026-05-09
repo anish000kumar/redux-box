@@ -15,7 +15,7 @@ const api = {
 };
 
 export default createSagas({
-  [ACTIONS.FETCH_PROFILE]: function* fetchProfile() {
+  [ACTIONS.FETCH_PROFILE]: function* fetchProfile(): Generator<any, void, any> {
     const profile = yield call(api.fetchProfile);
     yield put(dispatchers.setFirstname(profile.name.split(' ')[0]));
     yield put(dispatchers.setLastname(profile.name.split(' ')[1]));

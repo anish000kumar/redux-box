@@ -21,8 +21,8 @@ import { takeLatest, takeEvery } from 'redux-saga/effects';
  * @returns {Generator[]}  array of watcher sagas
  *
  */
-function createSagas(sagasObject) {
-  const arr = [];
+function createSagas(sagasObject: Record<string, (...args: any[]) => any>) {
+  const arr: any[] = [];
   const delimiter = '__@';
   const sagaKeys = Object.keys(sagasObject);
   sagaKeys.forEach(key => {

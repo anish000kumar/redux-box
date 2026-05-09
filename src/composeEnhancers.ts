@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import get from './utils/get';
+import type { StoreConfig } from './types';
 
 /**
  * compose function for redux.
@@ -11,7 +12,7 @@ import get from './utils/get';
  * @param {Function} config.composeRedux -  Use a custom compose function for redux, it has existing compose function as the argument
  * @returns {Function} composer - compose function fed to redux
  */
-function composeEnhancers(config = {}) {
+function composeEnhancers(config: StoreConfig = {}) {
   const devCompose =
     typeof window === 'object' &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
@@ -35,7 +36,7 @@ function composeEnhancers(config = {}) {
   return composer;
 }
 
-function shouldEnableDevTools(config) {
+function shouldEnableDevTools(config: StoreConfig) {
   const enableToolsFn = get(config, 'enableDevTools');
   /* if user provides enableDevTools function use that */
   if (enableToolsFn && typeof enableToolsFn !== 'function') {

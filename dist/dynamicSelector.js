@@ -1,13 +1,9 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+exports.__esModule = true;
 exports.DYNAMIC_SELECTOR = void 0;
 exports["default"] = dynamicSelector;
-
-var DYNAMIC_SELECTOR = '__reduxBoxDynamicSelector';
-exports.DYNAMIC_SELECTOR = DYNAMIC_SELECTOR;
+var DYNAMIC_SELECTOR = exports.DYNAMIC_SELECTOR = '__reduxBoxDynamicSelector';
 
 /**
  * Marks a selector so connectStore passes it as a callable prop.
@@ -20,7 +16,6 @@ function dynamicSelector(selector) {
   if (typeof selector !== 'function') {
     throw new TypeError('dynamicSelector expects a function');
   }
-
   selector[DYNAMIC_SELECTOR] = true;
   return selector;
 }

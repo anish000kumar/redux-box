@@ -6,12 +6,12 @@ module.exports = api => {
 
   return {
     presets: [
-      ['@babel/preset-env', { loose, modules: isTest ? 'commonjs' : false }],
+      ['@babel/preset-env', { loose, modules: 'commonjs' }],
       '@babel/preset-react',
     ],
     plugins: [
       ['@babel/plugin-proposal-decorators', { legacy: true }],
-      ['@babel/plugin-transform-runtime', { useESModules: !isTest }],
+      ['@babel/plugin-transform-runtime', { useESModules: false }],
     ],
   };
 };

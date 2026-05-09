@@ -1,7 +1,7 @@
 export const redirects = JSON.parse("{}")
 
 export const routes = Object.fromEntries([
-  ["/advanced-example.html", { loader: () => import(/* webpackChunkName: "advanced-example.html" */"/Users/akumar52/apps/redux-box/docs/advanced-example.md"), meta: {"title":""} }],
+  ["/advanced-example.html", { loader: () => import(/* webpackChunkName: "advanced-example.html" */"/Users/akumar52/apps/redux-box/docs/advanced-example.md"), meta: {"title":"Advanced example: async API requests"} }],
   ["/getting-started.html", { loader: () => import(/* webpackChunkName: "getting-started.html" */"/Users/akumar52/apps/redux-box/docs/getting-started.md"), meta: {"title":""} }],
   ["/", { loader: () => import(/* webpackChunkName: "index.html" */"/Users/akumar52/apps/redux-box/docs/readme.md"), meta: {"title":""} }],
   ["/readme1.html", { loader: () => import(/* webpackChunkName: "readme1.html" */"/Users/akumar52/apps/redux-box/docs/readme1.md"), meta: {"title":"Redux Box"} }],

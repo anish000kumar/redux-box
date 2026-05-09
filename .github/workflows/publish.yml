@@ -1,0 +1,42 @@
+name: Publish to NPM
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions: 
+      # Permissions for the publish workflow
+      contents: write
+      issues: write
+      pull-requests: write
+      # Required for OIDC
+      id-token: write
+
+    # Only publish on master branch
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Essential for versioning tools to see history
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install Dependencies 
+        run: yarn
+
+      - name: Build
+        run: yarn build && yarn docs:jsdoc && yarn docs:build
+
+      # Example using Semantic Release for automatic bumping & publishing
+      - name: Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

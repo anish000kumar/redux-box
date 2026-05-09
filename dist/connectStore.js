@@ -1,87 +1,64 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = void 0;
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+var _reactRedux = require("react-redux");
+/**
+ * Connects the state, selectors and dispatchers to components.
+ * @example
+ * import { connectStore } from "redux-box";
+ * import { selectors, dispatchers } from "./store/userModule";
+ *
+ * connectStore({
+ *  mapState: state => ({ name: state.user.name }),
+ *  mapSelectors: { userProfile : getProfile },
+ *  mapDispatchers: { getProfile: fetchProfile }
+ * })
+ *
+ * @param {Object} connectParams - context object for connecting store to component
+ * @param {Function} connectParams.mapState - maps store-state to component-props
+ * @param {Object | Function} connectParams.mapDispatchers - maps module-dispatchers to component-props
+ * @param {Object} connectParams.mapSelectors - maps module-selectors to component-props
+ * @param {Function} connectParams.mergeProps - merges returned values from mapState, mapSelectors and mapDispatchers to return final component-props
+ * @param {Object} connectParams.options - optional object passed to react-redux's connect function as fourth argument
+ * @returns {Function} - return the output of connect() from react-redux
+ */
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-exports.default = connectStore;
-
-var _reactRedux = require('react-redux');
-
-var _helpers = require('./helpers');
-
-var attachModuleSelectors = function attachModuleSelectors(moduleInstance, stateObj, state, props) {
-  var module = null;
-  if (moduleInstance.module && moduleInstance.get) {
-    module = moduleInstance.module;
-  } else {
-    module = moduleInstance;
+function connectStore(connectParams) {
+  if (connectParams === void 0) {
+    connectParams = {};
   }
+  var _connectParams = connectParams,
+    _connectParams$mapSta = _connectParams.mapState,
+    mapState = _connectParams$mapSta === void 0 ? undefined : _connectParams$mapSta,
+    _connectParams$mapDis = _connectParams.mapDispatchers,
+    mapDispatchers = _connectParams$mapDis === void 0 ? {} : _connectParams$mapDis,
+    _connectParams$mapSel = _connectParams.mapSelectors,
+    mapSelectors = _connectParams$mapSel === void 0 ? {} : _connectParams$mapSel,
+    _connectParams$mergeP = _connectParams.mergeProps,
+    mergeProps = _connectParams$mergeP === void 0 ? undefined : _connectParams$mergeP,
+    _connectParams$option = _connectParams.options,
+    options = _connectParams$option === void 0 ? undefined : _connectParams$option;
 
-  if (_typeof(module.selectors) == 'object') {
-    Object.keys(module.selectors).forEach(function (selector_name) {
-      var selector = module.selectors[selector_name];
-      stateObj[selector_name] = selector(state[module.name], state);
-    });
-  }
-
-  return stateObj;
-};
-
-/*
-	Connect a component to any module
-	TODO: namespacing
-*/
-function connectStore(modules) {
-  var mapStateToProps = function mapStateToProps(state, props) {
-    var finalState = {};
-    Object.keys(modules).forEach(function (key) {
-      var moduleInstance = modules[key];
-      var module_name = moduleInstance.module && moduleInstance.module.name || moduleInstance.name;
-      var stateObj = state[module_name];
-      if (moduleInstance.get) {
-        var filter_array = moduleInstance.get.split(",");
-        stateObj = (0, _helpers.pluck)(stateObj, filter_array);
-      }
-      stateObj = attachModuleSelectors(moduleInstance, stateObj, state, props);
-      finalState[key] = stateObj;
-    });
-    return finalState;
-  };
-
-  var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  /* Map state and selectors to component-props */
+  function mapStateToProps(state, props) {
     var finalProps = {};
-    Object.keys(modules).forEach(function (key) {
-      var moduleInstance = modules[key];
-      var actions_obj = {};
-      var module_actions = moduleInstance.module && moduleInstance.module.actions || moduleInstance.actions;
-      if (module_actions) {
-        Object.keys(module_actions).forEach(function (action_key) {
-          var action = module_actions[action_key];
-          actions_obj[action_key] = function () {
-            return dispatch(action.apply(undefined, arguments));
-          };
-        });
-        finalProps[key] = actions_obj;
-      }
+    if (mapState && typeof mapState === 'function') {
+      finalProps = (0, _extends2["default"])({}, mapState(state, props));
+    }
+
+    /* Call all selectors with  */
+    Object.entries(mapSelectors).forEach(function (_ref) {
+      var propName = _ref[0],
+        selector = _ref[1];
+      finalProps[propName] = selector.call(undefined, state, props);
     });
     return finalProps;
-  };
-  var mergeProps = function mergeProps(state, actions, ownProps) {
-    var finalModule = {};
-    Object.keys(state).forEach(function (key) {
-      var module_state = state[key];
-      var module_actions = actions[key];
-      finalModule[key] = Object.assign({}, module_state, module_actions);
-    });
-    return Object.assign({}, finalModule, ownProps);
-  };
-  return (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps, mergeProps, {
-    pure: true,
-    areStatePropsEqual: function areStatePropsEqual(a, b) {
-      return (0, _helpers.areSame)(a, b);
-    }
-  });
-};
+  }
+
+  // connect
+  return (0, _reactRedux.connect)(mapStateToProps, mapDispatchers, mergeProps, options);
+}
+var _default = exports["default"] = connectStore;

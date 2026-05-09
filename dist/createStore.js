@@ -1,114 +1,111 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = createStore;
-
-var _composeEnhancers = require("./composeEnhancers");
-
-var _composeEnhancers2 = _interopRequireDefault(_composeEnhancers);
-
-var _reduxSaga = require("redux-saga");
-
-var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
-
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _reduxSaga = _interopRequireDefault(require("redux-saga"));
 var _effects = require("redux-saga/effects");
-
-var _reducer = require("./reducer");
-
-var _reducer2 = _interopRequireDefault(_reducer);
-
 var _redux = require("redux");
+var _get = _interopRequireDefault(require("./utils/get"));
+var _composeEnhancers = _interopRequireDefault(require("./composeEnhancers"));
+var _moduleRegistry = _interopRequireDefault(require("./moduleRegistry"));
+var _getReducer = _interopRequireDefault(require("./getReducer"));
+/**
+ * @typedef {Object} Module - Object representing module
+ * @property {Object=} state - Initial state for the module
+ * @property {Object<String, Function>=} dispatchers - Action dispatchers for the module
+ * @property {Object<String, Generator>=} sagas - Sagas for the module
+ * @property {Object<String, Function>=} mutations - Mutations for the module
+ * @property {Object<String, Function>=} selectors - Selector for the module
+ */
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/**
+ * Creates redux store
+ * @example
+ * import { createStore } from "redux-box";
+ * import userModule from "./modules/user";
+ * import marketplaceModule from "./modules/marketplace";
+ *
+ * createStore({userModule, marketplaceModule},{
+ *  enableDevTools: () => true,
+ *  devToolOptions: {}
+ * })
+ *
+ * @param {Object<String, Module>} modules - Object containing all modules to be attached to store
+ * @param {Function=} config.enableDevTools - (Optional)enable devtool conditionally
+ * @param {Object} config -  Contains configuration for store
+ * @param {Function[]} config.middlewares - Array of middlewares to be used in store
+ * @param {Object<String, Function>=} config.reducers - (Optional) Object containing reducers to be used in store
+ * @param {Generator[]} config.sagas - Array of watcher sagas to be used in store
+ * @param {Object=} config.preloadedState - (Optional) Preloaded state for store
+ * @param {Object=} config.devToolOptions - (Optional) options for redux dev tool
+ * @param {Function=} config.decorateReducer - (Optional) decorator function for reducer formed by redux-box, has formed reducer as first argument
+ * @returns {Object} store
+ */
+function createStore(modules, config) {
+  var _marked = /*#__PURE__*/_regenerator["default"].mark(rootSaga);
+  if (config === void 0) {
+    config = {};
+  }
+  //  Array containing names of all registered modules
+  var moduleNames = Object.keys(modules);
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-/*
-Iterate through each module and keep stacking our reducers 
-and sagas in their respective arrays. Finally 
-we use these arrays to initialize the store using 
-'createStore' from redux.
-*/
-function createStore(modules) {
-  var _marked = /*#__PURE__*/regeneratorRuntime.mark(rootSaga);
-
-  var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-
-  //Initialize middleware array
-  var sagaMiddleware = (0, _reduxSaga2.default)();
+  // Initialize the middleware array
+  var sagaMiddleware = (0, _reduxSaga["default"])();
   var middlewares = [sagaMiddleware];
 
-  //push the provided middlewares in config object, to the middleware array
-  if (config && config.middlewares && config.middlewares.length > 0) {
+  // push the provided middlewares in config object, to the middleware array
+  if ((0, _get["default"])(config, 'middlewares.length', 0) > 0) {
     middlewares = middlewares.concat(config.middlewares);
   }
+
+  // an object containing reducers for all modules, to  be fed to combineReducer
   var reducerList = Object.assign({}, config.reducers);
   var sagas = [];
 
-  //iterate through each module and push the sagas and reducers of each module in thier respective array
-  modules.forEach(function (module) {
-    sagas = sagas.concat(module.sagas);
-    var moduleReducer = (0, _reducer2.default)(module.mutations, module.state, module.name);
+  // iterate through each module and push the sagas and reducers of each module in thier respective array
+  moduleNames.forEach(function (moduleName) {
+    var module = modules[moduleName];
+    _moduleRegistry["default"].register(moduleName, module);
+    sagas = sagas.concat(module.sagas || []);
+    var moduleReducer = (0, _getReducer["default"])(module.mutations || {}, module.state);
     if (module.decorateReducer) moduleReducer = module.decorateReducer(moduleReducer);
-    reducerList[module.name] = moduleReducer;
+    reducerList[moduleName] = moduleReducer;
   });
   sagas = config.sagas ? sagas.concat(config.sagas) : sagas;
-
   var combinedReducer = (0, _redux.combineReducers)(reducerList);
   if (config.decorateReducer) {
     combinedReducer = config.decorateReducer(combinedReducer);
   }
   var preloadedState = config.preloadedState || {};
-  var composeRedux = (0, _composeEnhancers2.default)(config);
-  //initialize the store using preloaded state, reducers and middlewares
-  var store = (0, _redux.createStore)(combinedReducer, preloadedState, composeRedux(_redux.applyMiddleware.apply(undefined, _toConsumableArray(middlewares))));
+  var composer = (0, _composeEnhancers["default"])(config);
+  // initialize the store using preloaded state, reducers and middlewares
+  var store = (0, _redux.createStore)(combinedReducer, preloadedState, composer(_redux.applyMiddleware.apply(void 0, middlewares)));
 
-  // Default configuration for sagas
-  var sagaConfig = Object.assign({}, {
-    retryDelay: 2000,
-    onError: function onError(err) {}
-  }, config.sagaConfig);
-
+  // rootsaga
   function rootSaga() {
-    return regeneratorRuntime.wrap(function rootSaga$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            if (!true) {
-              _context.next = 13;
-              break;
-            }
-
-            _context.prev = 1;
-            _context.next = 4;
-            return (0, _effects.all)(sagas);
-
-          case 4:
-            _context.next = 11;
-            break;
-
-          case 6:
-            _context.prev = 6;
-            _context.t0 = _context["catch"](1);
-
-            sagaConfig.onError(_context.t0);
-            _context.next = 11;
-            return (0, _effects.call)(_reduxSaga.delay, sagaConfig.retryDelay);
-
-          case 11:
-            _context.next = 0;
-            break;
-
-          case 13:
-          case "end":
-            return _context.stop();
-        }
+    var _t;
+    return _regenerator["default"].wrap(function (_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _context.prev = 0;
+          _context.next = 1;
+          return (0, _effects.all)(sagas);
+        case 1:
+          _context.next = 3;
+          break;
+        case 2:
+          _context.prev = 2;
+          _t = _context["catch"](0);
+          console.error('[ERROR] Something went wrong in rootSaga: ', _t);
+        case 3:
+        case "end":
+          return _context.stop();
       }
-    }, _marked, this, [[1, 6]]);
+    }, _marked, null, [[0, 2]]);
   }
   sagaMiddleware.run(rootSaga);
   return store;
-};
+}
+var _default = exports["default"] = createStore;

@@ -20,7 +20,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies 
-        run: yarn i
+        run: yarn
 
       - name: Build
         run: yarn build

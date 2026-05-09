@@ -56,10 +56,11 @@ function connectStore(connectParams) {
         selector = _ref[1];
       if (selector[_dynamicSelector.DYNAMIC_SELECTOR]) {
         finalProps[propName] = function () {
+          var _ref2;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
-          return selector.call.apply(selector, [undefined, state, props].concat(args));
+          return (_ref2 = selector).call.apply(_ref2, [undefined, state, props].concat(args));
         };
       } else {
         finalProps[propName] = selector.call(undefined, state, props);

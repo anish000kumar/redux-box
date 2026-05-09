@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { DYNAMIC_SELECTOR } from './dynamicSelector';
+import type { ConnectParams, SelectorFn } from './types';
 
 /**
  * Connects the state, selectors and dispatchers to components.
@@ -22,7 +23,7 @@ import { DYNAMIC_SELECTOR } from './dynamicSelector';
  * @returns {Function} - return the output of connect() from react-redux
  */
 
-function connectStore(connectParams = {}) {
+function connectStore(connectParams: ConnectParams = {}) {
   const {
     mapState = undefined,
     mapDispatchers = {},
@@ -32,8 +33,8 @@ function connectStore(connectParams = {}) {
   } = connectParams;
 
   /* Map state and selectors to component-props */
-  function mapStateToProps(state, props) {
-    let finalProps = {};
+  function mapStateToProps(state: any, props: any) {
+    let finalProps: Record<string, any> = {};
 
     if (mapState && typeof mapState === 'function') {
       finalProps = { ...mapState(state, props) };
@@ -41,11 +42,19 @@ function connectStore(connectParams = {}) {
 
     /* Call all selectors with state and own props. */
     Object.entries(mapSelectors).forEach(([propName, selector]) => {
-      if (selector[DYNAMIC_SELECTOR]) {
-        finalProps[propName] = (...args) =>
-          selector.call(undefined, state, props, ...args);
+      if (
+        (selector as SelectorFn & { [DYNAMIC_SELECTOR]?: true })[
+          DYNAMIC_SELECTOR
+        ]
+      ) {
+        finalProps[propName] = (...args: any[]) =>
+          (selector as SelectorFn).call(undefined, state, props, ...args);
       } else {
-        finalProps[propName] = selector.call(undefined, state, props);
+        finalProps[propName] = (selector as SelectorFn).call(
+          undefined,
+          state,
+          props
+        );
       }
     });
 

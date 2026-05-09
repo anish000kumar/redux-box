@@ -1,9 +1,3 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-exports.__esModule = true;
-exports["default"] = void 0;
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 /**
  * Internal singleton that keeps track of every module attached to the redux
  * store and the key it was mounted under. The registry is populated by
@@ -22,11 +16,14 @@ var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends")
  *
  * @class ModuleRegistry
  */
-var ModuleRegistry = /*#__PURE__*/function () {
-  function ModuleRegistry() {
-    this.modules = {};
-  }
-  var _proto = ModuleRegistry.prototype;
+interface RegisteredModule {
+  name: string;
+  [key: string]: any;
+}
+
+class ModuleRegistry {
+  modules: Record<string, RegisteredModule> = {};
+
   /**
    * Registers a module under the key it is mounted with in the store.
    * Called automatically by {@link createStore} for every entry of the
@@ -36,10 +33,14 @@ var ModuleRegistry = /*#__PURE__*/function () {
    * @param {Object} module - The module object returned by {@link createModule}. Must have an `id`.
    * @returns {void}
    */
-  _proto.register = function register(name, module) {
-    this.modules[module.id] = (0, _extends2["default"])({
-      name: name
-    }, module);
+  register(
+    name: string,
+    module: { id?: string; [key: string]: any }
+  ): void {
+    this.modules[module.id as string] = {
+      name,
+      ...module,
+    };
   }
 
   /**
@@ -47,11 +48,12 @@ var ModuleRegistry = /*#__PURE__*/function () {
    *
    * @param {String} id - The unique id assigned to the module by {@link createModule}.
    * @returns {String|null} The mounted slice key, or `null` if the module is not registered.
-   */;
-  _proto.getName = function getName(id) {
+   */
+  getName(id: string): string | null {
     return this.modules[id] ? this.modules[id].name : null;
-  };
-  return ModuleRegistry;
-}();
-var registry = new ModuleRegistry();
-var _default = exports["default"] = registry;
+  }
+}
+
+const registry = new ModuleRegistry();
+
+export default registry;

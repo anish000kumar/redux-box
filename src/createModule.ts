@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import dynamicSelector from './dynamicSelector';
 import moduleRegistry from './moduleRegistry';
+import type { Module, RegisteredModule } from './types';
 
 /**
  * Generates an RFC4122-style v4 UUID. Used internally by {@link createModule}
@@ -54,32 +55,35 @@ export function generateId() {
  *   - `getSelector()` {Function} - returns a `(state) => moduleState` selector.
  *   - `select(fn)` {Function} - builds a memoized reselect selector over the module state.
  */
-function createModule(moduleObj) {
+function createModule(moduleObj: Module) {
   const id = `${generateId()}`;
-  const finalObj = {
+  const finalObj: RegisteredModule & {
+    __name?: string | null;
+    getName: () => string | null;
+    getSelector: () => (state?: any) => any;
+    select: (cb: (...args: any[]) => any) => any;
+    dynamicSelect: (cb: (state: any, ...args: any[]) => any) => any;
+  } = {
     ...moduleObj,
     id,
     getName() {
       return moduleRegistry.getName(id);
     },
     getSelector() {
-      return function(state) {
+      return function(state?: any) {
         if (!finalObj.__name) {
           finalObj.__name = moduleRegistry.getName(id);
         }
-        return finalObj.__name ? state[finalObj.__name] : null;
+        return finalObj.__name && state ? state[finalObj.__name] : null;
       };
     },
-    select(cb) {
+    select(cb: (...args: any[]) => any) {
       const getModuleState = finalObj.getSelector();
-      return createSelector(
-        getModuleState,
-        cb
-      );
+      return createSelector(getModuleState, cb);
     },
-    dynamicSelect(cb) {
+    dynamicSelect(cb: (state: any, ...args: any[]) => any) {
       const getModuleState = finalObj.getSelector();
-      return dynamicSelector((state, props, ...args) =>
+      return dynamicSelector((state: any, props: any, ...args: any[]) =>
         cb(getModuleState(state), ...args)
       );
     },

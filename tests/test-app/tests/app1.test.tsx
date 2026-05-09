@@ -5,7 +5,10 @@ import '@testing-library/jest-dom';
 import App1 from '../App1';
 import testStore from '../store/index';
 
-function renderWithRedux(ui, { store = testStore } = {}) {
+function renderWithRedux(
+  ui: React.ReactElement,
+  { store = testStore }: { store?: typeof testStore } = {}
+) {
   return {
     ...render(<Provider store={store}>{ui}</Provider>),
     store,
@@ -31,9 +34,9 @@ test('sagas work correctly', async () => {
   await waitFor(() => {
     expect(getByTestId('username').textContent).toBe('anish kumar');
   });
-  const userModule = testStore.getState().user;
-  expect(userModule.firstname).toBe('anish');
-  expect(userModule.lastname).toBe('kumar');
+  const userState = (testStore.getState() as any).user;
+  expect(userState.firstname).toBe('anish');
+  expect(userState.lastname).toBe('kumar');
   expect(getByTestId('country').textContent).toBe('India');
   expect(getByTestId('dynamic-country').textContent).toBe('India');
 });

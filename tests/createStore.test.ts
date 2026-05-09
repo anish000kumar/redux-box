@@ -1,15 +1,17 @@
+import type { Reducer } from 'redux';
 import { createStore } from '../src';
+import type { StoreConfig } from '../src/types';
 import testModule from './testModule';
 
 const modules = {
   testModule,
 };
 
-const config = {
+const config: StoreConfig = {
   reducers: {},
   middlewares: [],
   sagas: [],
-  decorateReducer: function(reducer) {
+  decorateReducer: function(reducer: Reducer) {
     return reducer;
   },
 };

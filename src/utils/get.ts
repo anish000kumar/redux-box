@@ -20,16 +20,16 @@
  * @param {*} [defaultVal] - Value returned when the path resolves to `undefined`.
  * @returns {*} The resolved value, or `defaultVal` if the path could not be resolved.
  */
-function get(object, keys, defaultVal = undefined) {
+function get(object: any, keys: string | string[], defaultVal: any = undefined): any {
   if (typeof object !== 'object') {
     return defaultVal;
   }
-  keys = Array.isArray(keys) ? keys : keys.split('.');
-  object = object[keys[0]];
-  if (object && keys.length > 1) {
-    return get(object, keys.slice(1), defaultVal);
+  const keyList: string[] = Array.isArray(keys) ? keys : keys.split('.');
+  const next = object[keyList[0]];
+  if (next && keyList.length > 1) {
+    return get(next, keyList.slice(1), defaultVal);
   }
-  return object === undefined ? defaultVal : object;
+  return next === undefined ? defaultVal : next;
 }
 
 export default get;

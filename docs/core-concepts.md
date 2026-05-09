@@ -1,7 +1,7 @@
 # Core Concepts
 
 A Redux Box application is a collection of **modules**. Each module is a
-self-contained slice of your store: its initial state, the mutations that
+self-contained state of your store: its initial state, the mutations that
 update it, the action creators that trigger those mutations, the side effects
 (sagas), and the derived selectors.
 
@@ -14,7 +14,7 @@ import { createModule, createSagas } from 'redux-box';
 import { call, put } from 'redux-saga/effects';
 
 const state = {
-  /* initial slice */
+  /* initial state */
 };
 
 export const dispatchers = {

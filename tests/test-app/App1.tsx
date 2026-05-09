@@ -3,7 +3,15 @@ import { connectStore } from '../../src';
 import userDispatchers from './store/user/dispatchers';
 import userSelectors from './store/user/selectors';
 
-class App extends Component {
+interface AppProps {
+  username: string;
+  country: string;
+  getAddressField: (fieldName: string) => string;
+  setFirstname: (firstname: string) => void;
+  fetchProfile: () => void;
+}
+
+class App extends Component<AppProps> {
   render() {
     return (
       <div>
@@ -23,7 +31,7 @@ class App extends Component {
 }
 
 export default connectStore({
-  mapState: state => ({
+  mapState: (state: any) => ({
     country: state.user.address.country,
   }),
   mapSelectors: {

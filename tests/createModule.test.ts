@@ -12,14 +12,14 @@ describe('createModule', () => {
 
   it('should return correct module name', () => {
     const module = createModule(testModule);
-    const store = createStore({ userModule: module });
+    createStore({ userModule: module });
     expect(module.id).toBeTruthy();
     expect(module.getName()).toBe('userModule');
   });
 
   it('should return correct module selector', () => {
     const module = createModule(testModule);
-    const store = createStore({ userModule: module });
+    createStore({ userModule: module });
     const selector = module.getSelector();
     expect(selector({ userModule: { hi: 1 } })).toEqual({ hi: 1 });
   });
@@ -27,7 +27,9 @@ describe('createModule', () => {
   it('should create dynamic module selectors', () => {
     const module = createModule(testModule);
     createStore({ userModule: module });
-    const selector = module.dynamicSelect((state, fieldName) => state[fieldName]);
+    const selector = module.dynamicSelect(
+      (state: Record<string, string>, fieldName: string) => state[fieldName]
+    );
     expect(selector({ userModule: { name: 'John' } }, {}, 'name')).toBe('John');
     expect(selector.__reduxBoxDynamicSelector).toBe(true);
   });

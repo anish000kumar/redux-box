@@ -30,7 +30,14 @@ export default {
           children: [
             { text: 'A simple counter', link: '/simple-example.html' },
             { text: 'Async data fetching', link: '/advanced-example.html' },
-            { text: 'GraphQL: Apollo & React Query', link: '/graphql-integration.html' },
+          ],
+        },
+        {
+          text: 'GraphQL integration',
+          collapsible: false,
+          children: [
+            { text: 'Apollo Client', link: '/graphql-apollo.html' },
+            { text: 'React Query (TanStack Query)', link: '/graphql-react-query.html' },
           ],
         },
         {

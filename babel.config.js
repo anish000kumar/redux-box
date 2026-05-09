@@ -8,6 +8,7 @@ module.exports = api => {
     presets: [
       ['@babel/preset-env', { loose, modules: 'commonjs' }],
       '@babel/preset-react',
+      '@babel/preset-typescript',
     ],
     plugins: [
       ['@babel/plugin-proposal-decorators', { legacy: true }],

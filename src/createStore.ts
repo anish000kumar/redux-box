@@ -9,6 +9,7 @@ import get from './utils/get';
 import composeEnhancers from './composeEnhancers';
 import moduleRegistry from './moduleRegistry';
 import getReducer from './getReducer';
+import type { Module, StoreConfig } from './types';
 
 /**
  * @typedef {Object} Module - Object representing module
@@ -42,29 +43,32 @@ import getReducer from './getReducer';
  * @param {Function=} config.decorateReducer - (Optional) decorator function for reducer formed by redux-box, has formed reducer as first argument
  * @returns {Object} store
  */
-function createStore(modules, config = {}) {
+function createStore(
+  modules: Record<string, Module>,
+  config: StoreConfig = {}
+) {
   //  Array containing names of all registered modules
   const moduleNames = Object.keys(modules);
 
   // Initialize the middleware array
   const sagaMiddleware = createSagaMiddleware();
-  let middlewares = [sagaMiddleware];
+  let middlewares: any[] = [sagaMiddleware];
 
   // push the provided middlewares in config object, to the middleware array
   if (get(config, 'middlewares.length', 0) > 0) {
-    middlewares = middlewares.concat(config.middlewares);
+    middlewares = middlewares.concat(config.middlewares as any[]);
   }
 
   // an object containing reducers for all modules, to  be fed to combineReducer
-  const reducerList = Object.assign({}, config.reducers);
-  let sagas = [];
+  const reducerList: Record<string, any> = Object.assign({}, config.reducers);
+  let sagas: any[] = [];
 
   // iterate through each module and push the sagas and reducers of each module in thier respective array
   moduleNames.forEach(moduleName => {
     const module = modules[moduleName];
     moduleRegistry.register(moduleName, module);
-    sagas = sagas.concat(module.sagas);
-    let moduleReducer = getReducer(module.mutations, module.state);
+    sagas = sagas.concat(module.sagas || []);
+    let moduleReducer = getReducer(module.mutations || {}, module.state);
 
     if (module.decorateReducer)
       moduleReducer = module.decorateReducer(moduleReducer);

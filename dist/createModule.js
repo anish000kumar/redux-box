@@ -71,7 +71,7 @@ function createModule(moduleObj) {
         if (!finalObj.__name) {
           finalObj.__name = _moduleRegistry["default"].getName(id);
         }
-        return finalObj.__name ? state[finalObj.__name] : null;
+        return finalObj.__name && state ? state[finalObj.__name] : null;
       };
     },
     select: function select(cb) {

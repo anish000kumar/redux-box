@@ -31,11 +31,11 @@ function get(object, keys, defaultVal) {
   if (typeof object !== 'object') {
     return defaultVal;
   }
-  keys = Array.isArray(keys) ? keys : keys.split('.');
-  object = object[keys[0]];
-  if (object && keys.length > 1) {
-    return get(object, keys.slice(1), defaultVal);
+  var keyList = Array.isArray(keys) ? keys : keys.split('.');
+  var next = object[keyList[0]];
+  if (next && keyList.length > 1) {
+    return get(next, keyList.slice(1), defaultVal);
   }
-  return object === undefined ? defaultVal : object;
+  return next === undefined ? defaultVal : next;
 }
 var _default = exports["default"] = get;

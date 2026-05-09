@@ -1,0 +1,1 @@
+export const siteData = JSON.parse("{\"base\":\"/\",\"lang\":\"en-US\",\"title\":\"Redux Box\",\"description\":\"Container for redux applications\",\"head\":[],\"locales\":{\"/\":{\"lang\":\"en-US\",\"title\":\"Redux Box\",\"description\":\"Container for redux applications\"}}}")

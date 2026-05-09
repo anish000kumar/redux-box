@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="generator" content="VuePress 2.0.0-rc.29" />
+    <style>
+      :root {
+        --vp-c-bg: #fff;
+      }
+
+      [data-theme='dark'] {
+        --vp-c-bg: #1b1b1f;
+      }
+
+      html,
+      body {
+        background-color: var(--vp-c-bg);
+      }
+    </style>
+    <script>
+      const useChoice = localStorage.getItem('vuepress-color-scheme')
+      const systemStatus =
+        'matchMedia' in window
+          ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          : false
+
+      if (useChoice === 'light') {
+        document.documentElement.dataset.theme = 'light'
+      } else if (useChoice === 'dark' || systemStatus) {
+        document.documentElement.dataset.theme = 'dark'
+      }
+    </script>
+    <title>Redux Box</title><meta name="description" content="Container for redux applications">
+    <link rel="stylesheet" href="/assets/css/styles.7ef7b66d.css">
+    <link rel="preload" href="/assets/js/runtime~app.c3dbc8d6.js" as="script"><link rel="preload" href="/assets/css/styles.7ef7b66d.css" as="style"><link rel="preload" href="/assets/js/648.8b1a6b15.js" as="script"><link rel="preload" href="/assets/js/app.211e7b77.js" as="script">
+    <link rel="prefetch" href="/assets/js/readme1.html.20930c71.js" as="script"><link rel="prefetch" href="/assets/js/api_createStore.html.ebfd8d6f.js" as="script"><link rel="prefetch" href="/assets/js/api_connectStore.html.bfc77312.js" as="script"><link rel="prefetch" href="/assets/js/api_createSagas.html.1dfcb864.js" as="script"><link rel="prefetch" href="/assets/js/index.html.c4625bed.js" as="script"><link rel="prefetch" href="/assets/js/getting-started.html.d3d56498.js" as="script"><link rel="prefetch" href="/assets/js/testing-practises.html.c270b3dc.js" as="script"><link rel="prefetch" href="/assets/css/556.styles.0ae76e37.css" as="style"><link rel="prefetch" href="/assets/js/advanced-example.html.8999e52c.js" as="script"><link rel="prefetch" href="/assets/js/simple-example.html.88c63e0e.js" as="script"><link rel="prefetch" href="/assets/js/recipes.html.70fed380.js" as="script"><link rel="prefetch" href="/assets/js/api_index.html.6697071c.js" as="script"><link rel="prefetch" href="/assets/js/api_moduleRegistry.html.179d8147.js" as="script"><link rel="prefetch" href="/assets/js/api_createModule.html.6ff2f8a4.js" as="script"><link rel="prefetch" href="/assets/js/api_src-index.html.9288bd33.js" as="script"><link rel="prefetch" href="/assets/js/api_utils_get.html.99e0b84d.js" as="script"><link rel="prefetch" href="/assets/js/404.html.a879a18f.js" as="script">
+  </head>
+  <body>
+    <div id="app"><!--[--><div class="vp-theme-container" vp-container data-v-15b3c462><main class="page" data-v-15b3c462><div vp-content data-v-15b3c462><h1 data-v-15b3c462>404</h1><blockquote data-v-15b3c462>There&#39;s nothing here.</blockquote><a class="route-link" href="/" data-v-15b3c462>Take me home</a></div></main></div><!--[--><!----><!--]--><!--]--></div>
+    <script src="/assets/js/runtime~app.c3dbc8d6.js" defer></script><script src="/assets/js/648.8b1a6b15.js" defer></script><script src="/assets/js/app.211e7b77.js" defer></script>
+  </body>
+</html>

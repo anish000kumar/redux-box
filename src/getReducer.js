@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 
 /**
  * Returns reducer for the module, given the module's mutations and initialState

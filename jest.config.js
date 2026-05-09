@@ -1,9 +1,7 @@
 module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'json'],
+  testEnvironment: 'jsdom',
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
-  transform: {
-    '.js$': `${__dirname}/babel-transformer.jest.js`,
-  },
   coverageThreshold: {
     global: {
       functions: 90,

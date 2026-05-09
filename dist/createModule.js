@@ -1,7 +1,13 @@
-import _extends from "@babel/runtime/helpers/esm/extends";
-import { createSelector } from 'reselect';
-import moduleRegistry from './moduleRegistry';
-export function generateId() {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = createModule;
+exports.generateId = generateId;
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+var _reselect = require("reselect");
+var _moduleRegistry = _interopRequireDefault(require("./moduleRegistry"));
+function generateId() {
   var RFC4122_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
   return RFC4122_TEMPLATE.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0,
@@ -15,24 +21,24 @@ export function generateId() {
  * @param {Module} moduleObj - Module object
  * @returns {Object}
  */
-export default function createModule(moduleObj) {
+function createModule(moduleObj) {
   var id = "" + generateId();
-  var finalObj = _extends({}, moduleObj, {
+  var finalObj = (0, _extends2["default"])({}, moduleObj, {
     id: id,
     getName: function getName() {
-      return moduleRegistry.getName(id);
+      return _moduleRegistry["default"].getName(id);
     },
     getSelector: function getSelector() {
       return function (state) {
         if (!finalObj.__name) {
-          finalObj.__name = moduleRegistry.getName(id);
+          finalObj.__name = _moduleRegistry["default"].getName(id);
         }
         return finalObj.__name ? state[finalObj.__name] : null;
       };
     },
     select: function select(cb) {
       var getModuleState = finalObj.getSelector();
-      return createSelector(getModuleState, cb);
+      return (0, _reselect.createSelector)(getModuleState, cb);
     }
   });
   return finalObj;

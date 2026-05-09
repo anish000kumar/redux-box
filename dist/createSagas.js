@@ -1,6 +1,10 @@
-import _regeneratorRuntime from "@babel/runtime/regenerator";
-import { takeLatest, takeEvery } from 'redux-saga/effects';
+"use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _effects = require("redux-saga/effects");
 /**
  * @typedef {Object} SagaObject - Object containing watcher and worker sagas
  * @property {Generator=} watcher - watcher saga
@@ -30,12 +34,12 @@ function createSagas(sagasObject) {
     var action = key.split(delimiter)[0];
     var workerSaga = sagasObject[key];
     var mode = key.split(delimiter)[1] || 'latest';
-    var watcher = /*#__PURE__*/_regeneratorRuntime.mark(function watcher() {
-      return _regeneratorRuntime.wrap(function (_context) {
+    var watcher = /*#__PURE__*/_regenerator["default"].mark(function watcher() {
+      return _regenerator["default"].wrap(function (_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             _context.next = 1;
-            return takeLatest(action, workerSaga);
+            return (0, _effects.takeLatest)(action, workerSaga);
           case 1:
           case "end":
             return _context.stop();
@@ -43,12 +47,12 @@ function createSagas(sagasObject) {
       }, watcher);
     });
     if (mode === 'every') {
-      watcher = /*#__PURE__*/_regeneratorRuntime.mark(function watcher() {
-        return _regeneratorRuntime.wrap(function (_context2) {
+      watcher = /*#__PURE__*/_regenerator["default"].mark(function watcher() {
+        return _regenerator["default"].wrap(function (_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 1;
-              return takeEvery(action, workerSaga);
+              return (0, _effects.takeEvery)(action, workerSaga);
             case 1:
             case "end":
               return _context2.stop();
@@ -60,4 +64,4 @@ function createSagas(sagasObject) {
   });
   return arr;
 }
-export default createSagas;
+var _default = exports["default"] = createSagas;

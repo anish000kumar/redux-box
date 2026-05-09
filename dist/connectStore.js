@@ -1,6 +1,10 @@
-import _extends from "@babel/runtime/helpers/esm/extends";
-import { connect } from 'react-redux';
+"use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = void 0;
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+var _reactRedux = require("react-redux");
 /**
  * Connects the state, selectors and dispatchers to components.
  * @example
@@ -42,7 +46,7 @@ function connectStore(connectParams) {
   function mapStateToProps(state, props) {
     var finalProps = {};
     if (mapState && typeof mapState === 'function') {
-      finalProps = _extends({}, mapState(state, props));
+      finalProps = (0, _extends2["default"])({}, mapState(state, props));
     }
 
     /* Call all selectors with  */
@@ -55,6 +59,6 @@ function connectStore(connectParams) {
   }
 
   // connect
-  return connect(mapStateToProps, mapDispatchers, mergeProps, options);
+  return (0, _reactRedux.connect)(mapStateToProps, mapDispatchers, mergeProps, options);
 }
-export default connectStore;
+var _default = exports["default"] = connectStore;

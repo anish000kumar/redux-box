@@ -1,12 +1,16 @@
-import _regeneratorRuntime from "@babel/runtime/regenerator";
-import createSagaMiddleware from 'redux-saga';
-import { all } from 'redux-saga/effects';
-import { applyMiddleware, combineReducers, createStore as storeCreator } from 'redux';
-import get from './utils/get';
-import composeEnhancers from './composeEnhancers';
-import moduleRegistry from './moduleRegistry';
-import getReducer from './getReducer';
+"use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _reduxSaga = _interopRequireDefault(require("redux-saga"));
+var _effects = require("redux-saga/effects");
+var _redux = require("redux");
+var _get = _interopRequireDefault(require("./utils/get"));
+var _composeEnhancers = _interopRequireDefault(require("./composeEnhancers"));
+var _moduleRegistry = _interopRequireDefault(require("./moduleRegistry"));
+var _getReducer = _interopRequireDefault(require("./getReducer"));
 /**
  * @typedef {Object} Module - Object representing module
  * @property {Object=} state - Initial state for the module
@@ -40,7 +44,7 @@ import getReducer from './getReducer';
  * @returns {Object} store
  */
 function createStore(modules, config) {
-  var _marked = /*#__PURE__*/_regeneratorRuntime.mark(rootSaga);
+  var _marked = /*#__PURE__*/_regenerator["default"].mark(rootSaga);
   if (config === void 0) {
     config = {};
   }
@@ -48,11 +52,11 @@ function createStore(modules, config) {
   var moduleNames = Object.keys(modules);
 
   // Initialize the middleware array
-  var sagaMiddleware = createSagaMiddleware();
+  var sagaMiddleware = (0, _reduxSaga["default"])();
   var middlewares = [sagaMiddleware];
 
   // push the provided middlewares in config object, to the middleware array
-  if (get(config, 'middlewares.length', 0) > 0) {
+  if ((0, _get["default"])(config, 'middlewares.length', 0) > 0) {
     middlewares = middlewares.concat(config.middlewares);
   }
 
@@ -63,31 +67,31 @@ function createStore(modules, config) {
   // iterate through each module and push the sagas and reducers of each module in thier respective array
   moduleNames.forEach(function (moduleName) {
     var module = modules[moduleName];
-    moduleRegistry.register(moduleName, module);
+    _moduleRegistry["default"].register(moduleName, module);
     sagas = sagas.concat(module.sagas);
-    var moduleReducer = getReducer(module.mutations, module.state);
+    var moduleReducer = (0, _getReducer["default"])(module.mutations, module.state);
     if (module.decorateReducer) moduleReducer = module.decorateReducer(moduleReducer);
     reducerList[moduleName] = moduleReducer;
   });
   sagas = config.sagas ? sagas.concat(config.sagas) : sagas;
-  var combinedReducer = combineReducers(reducerList);
+  var combinedReducer = (0, _redux.combineReducers)(reducerList);
   if (config.decorateReducer) {
     combinedReducer = config.decorateReducer(combinedReducer);
   }
   var preloadedState = config.preloadedState || {};
-  var composer = composeEnhancers(config);
+  var composer = (0, _composeEnhancers["default"])(config);
   // initialize the store using preloaded state, reducers and middlewares
-  var store = storeCreator(combinedReducer, preloadedState, composer(applyMiddleware.apply(void 0, middlewares)));
+  var store = (0, _redux.createStore)(combinedReducer, preloadedState, composer(_redux.applyMiddleware.apply(void 0, middlewares)));
 
   // rootsaga
   function rootSaga() {
     var _t;
-    return _regeneratorRuntime.wrap(function (_context) {
+    return _regenerator["default"].wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
           _context.next = 1;
-          return all(sagas);
+          return (0, _effects.all)(sagas);
         case 1:
           _context.next = 3;
           break;
@@ -104,4 +108,4 @@ function createStore(modules, config) {
   sagaMiddleware.run(rootSaga);
   return store;
 }
-export default createStore;
+var _default = exports["default"] = createStore;

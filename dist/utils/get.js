@@ -1,5 +1,9 @@
+"use strict";
+
+exports.__esModule = true;
+exports["default"] = get;
 /* eslint-disable no-param-reassign */
-export default function get(object, keys, defaultVal) {
+function get(object, keys, defaultVal) {
   if (defaultVal === void 0) {
     defaultVal = undefined;
   }

@@ -1,6 +1,10 @@
-import { compose } from 'redux';
-import get from './utils/get';
+"use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+exports.__esModule = true;
+exports["default"] = void 0;
+var _redux = require("redux");
+var _get = _interopRequireDefault(require("./utils/get"));
 /**
  * compose function for redux.
  * Detects the environment using config.enableDevtools,
@@ -18,7 +22,7 @@ function composeEnhancers(config) {
   var devCompose = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(config.devToolOptions || {});
 
   /* if devtools should be enabled, use devTools if available, else use default compose function */
-  var composer = shouldEnableDevTools(config) ? devCompose || compose : compose;
+  var composer = shouldEnableDevTools(config) ? devCompose || _redux.compose : _redux.compose;
   /* if use wants to override above composer function, use that */
   if (!!config && !!config.composeRedux) {
     var finalComposer = config.composeRedux(composer);
@@ -30,17 +34,17 @@ function composeEnhancers(config) {
   return composer;
 }
 function shouldEnableDevTools(config) {
-  var enableToolsFn = get(config, 'enableDevTools');
+  var enableToolsFn = (0, _get["default"])(config, 'enableDevTools');
   /* if user provides enableDevTools function use that */
   if (enableToolsFn && typeof enableToolsFn !== 'function') {
     console.warn("config.enableDevTools should be a function returning true or false you \n       have provided " + typeof enableToolsFn + ": " + enableToolsFn);
   } else if (enableToolsFn) return enableToolsFn();
   /* else, check for the development environment to enable dev tools */
-  if (typeof process === 'object' && get(process, 'env.NODE_ENV') !== 'production') {
+  if (typeof process === 'object' && (0, _get["default"])(process, 'env.NODE_ENV') !== 'production') {
     return true;
   }
 
   /* else, return false */
   return false;
 }
-export default composeEnhancers;
+var _default = exports["default"] = composeEnhancers;

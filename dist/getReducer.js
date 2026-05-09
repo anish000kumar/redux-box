@@ -1,13 +1,4 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _immer = _interopRequireDefault(require("immer"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+import { produce } from 'immer';
 
 /**
  * Returns reducer for the module, given the module's mutations and initialState
@@ -17,21 +8,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
  * @returns {Function} reducer
  */
 function getReducer(mutations, initialState) {
-  return function _reducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-    var action = arguments.length > 1 ? arguments[1] : undefined;
+  return function _reducer(state, action) {
+    if (state === void 0) {
+      state = initialState;
+    }
     var mutationMethod = mutations[action.type];
-
     if (mutationMethod) {
-      var nextState = (0, _immer["default"])(state, function (draftState) {
+      var nextState = produce(state, function (draftState) {
         mutationMethod(draftState, action);
       });
       return nextState;
     }
-
     return state;
   };
 }
-
-var _default = getReducer;
-exports["default"] = _default;
+export default getReducer;

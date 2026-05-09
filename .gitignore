@@ -7,3 +7,4 @@ example/node_modules/
 coverage/
 .babelrc
 yarn-error.log
+.gitconfig

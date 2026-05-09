@@ -6,7 +6,28 @@ const require = createRequire(import.meta.url);
 const { sidebarTree } = require('../api/config.js');
 
 export default {
-  bundler: webpackBundler(),
+  bundler: webpackBundler({
+    // The default vuepress target list (es2020 + safari14) trips esbuild
+    // >= 0.27 because the default theme's compiled `.vue` files use
+    // destructuring patterns that esbuild can no longer downlevel for
+    // safari14 / es2020. Lifting to es2022 + safari16 covers everything
+    // the theme emits today without dropping browser support that this
+    // docs site actually needs.
+    chainWebpack: (config) => {
+      const targets = ['es2022', 'edge88', 'firefox78', 'chrome87', 'safari16'];
+      ['js', 'ts'].forEach((lang) => {
+        if (config.module.rules.has(lang)) {
+          const rule = config.module.rule(lang);
+          if (rule.uses.has('esbuild-loader')) {
+            rule.use('esbuild-loader').tap((opts = {}) => ({
+              ...opts,
+              target: targets,
+            }));
+          }
+        }
+      });
+    },
+  }),
   base: process.env.DOCS_BASE || '/',
   title: 'Redux Box',
   description: 'Container for redux applications',

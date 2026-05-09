@@ -3,11 +3,12 @@
   "version": "2.1.0",
   "description": "A redux container to scaffold redux based applications in simplest possible way.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "jest --coverage --collectCoverageFrom=src/**/*.ts",
     "test:coveralls": "jest --coverage --collectCoverageFrom=src/**/*.ts --coverageReporters=text-lcov | coveralls",
-    "build": "babel src --out-dir dist --extensions .ts",
+    "build": "babel src --out-dir dist --extensions .ts && tsc -p tsconfig.build.json",
     "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude getReducer.js,composeEnhancers.js",
     "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
     "docs:build": "vuepress build docs",

@@ -10,7 +10,6 @@ import * as clientConfig8 from '/Users/akumar52/apps/redux-box/docs/.vuepress/.t
 import * as clientConfig9 from '/Users/akumar52/apps/redux-box/node_modules/@vuepress/plugin-theme-data/dist/client/config.js'
 import * as clientConfig10 from '/Users/akumar52/apps/redux-box/node_modules/@vuepress/theme-default/dist/client/config.js'
 
-
 export const clientConfigs = [
   clientConfig0,
   clientConfig1,

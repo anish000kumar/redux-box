@@ -16,18 +16,38 @@ export default {
     editLink: true,
     sidebar: {
       '/': [
-        { text: 'Getting Started', link: '/getting-started.html' },
-        { text: 'Creating a simple app', link: '/simple-example.html' },
-        { text: 'Advanced example app', link: '/advanced-example.html' },
-        { text: 'Recipes', link: '/recipes.html' },
-        { text: 'Testing', link: '/testing-practises.html' },
+        {
+          text: 'Guide',
+          collapsible: false,
+          children: [
+            { text: 'Introduction', link: '/getting-started.html' },
+            { text: 'Core Concepts', link: '/core-concepts.html' },
+          ],
+        },
+        {
+          text: 'Examples',
+          collapsible: false,
+          children: [
+            { text: 'A simple counter', link: '/simple-example.html' },
+            { text: 'Async data fetching', link: '/advanced-example.html' },
+          ],
+        },
+        {
+          text: 'Going further',
+          collapsible: false,
+          children: [
+            { text: 'Recipes', link: '/recipes.html' },
+            { text: 'Testing', link: '/testing-practises.html' },
+          ],
+        },
       ],
       ...sidebarTree('Redux Box API'),
     },
     navbar: [
-      { text: 'Home', link: '/' },
       { text: 'Guide', link: '/getting-started.html' },
+      { text: 'Examples', link: '/simple-example.html' },
       { text: 'API', link: '/api/' },
+      { text: 'GitHub', link: 'https://github.com/anish000kumar/redux-box' },
     ],
   }),
 };

@@ -7,8 +7,9 @@ on:
 #
 #   1. `library`  – runs the redux-box unit tests, builds `dist/`, and
 #                   uploads the artefact for the `examples` job to consume.
-#   2. `docs`     – mirrors `deploy-docs.yml` so we catch VuePress / theme /
-#                   esbuild regressions before they break the live docs.
+#   2. `docs`     – mirrors the docs build inside `deploy-site.yml` so we
+#                   catch VuePress / theme / esbuild regressions before
+#                   they break the live docs.
 #   3. `examples` – matrix over `crud-rest` and `trello-graphql`: install,
 #                   typecheck, test, and produce a production build using
 #                   the same `VITE_BASE_PATH` the deploy workflow uses.
@@ -58,9 +59,10 @@ jobs:
         with:
           node-version: '22'
           cache: yarn
-      # Mirrors `deploy-docs.yml` exactly so this PR check fails for the
-      # same reasons the deploy would. yarn + frozen-lockfile pins the
-      # esbuild version that the docs config is calibrated against.
+      # Mirrors the docs build in `deploy-site.yml` exactly so this PR
+      # check fails for the same reasons the deploy would. yarn +
+      # frozen-lockfile pins the esbuild version that the docs config is
+      # calibrated against.
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-engines --ignore-scripts
       - name: Generate API docs

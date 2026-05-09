@@ -18,6 +18,9 @@ const post = (overrides: Partial<Post> = {}): Post => ({
   ...overrides,
 });
 
+/** Sagas now dispatch `{ error: ErrorLike }` instead of a bare string. */
+const errLike = (message: string, name = 'Error') => ({ name, message });
+
 // --- fetch ---------------------------------------------------------------
 
 describe('fetchPostsWorker', () => {
@@ -34,23 +37,23 @@ describe('fetchPostsWorker', () => {
     expect(gen.next().done).toBe(true);
   });
 
-  test('sad path: API throws → REJECTED with message', () => {
+  test('sad path: API throws → REJECTED with an ErrorLike', () => {
     const gen = fetchPostsWorker();
     gen.next(); // PENDING
     gen.next(); // call
 
     expect(gen.throw(new Error('boom')).value).toEqual(
-      put({ type: types.FETCH_REJECTED, error: 'boom' })
+      put({ type: types.FETCH_REJECTED, error: errLike('boom') })
     );
     expect(gen.next().done).toBe(true);
   });
 
-  test('non-Error rejections fall back to a generic message', () => {
+  test('non-Error rejections fall back to the generic ErrorLike', () => {
     const gen = fetchPostsWorker();
     gen.next();
     gen.next();
     expect(gen.throw('weird' as any).value).toEqual(
-      put({ type: types.FETCH_REJECTED, error: 'Unknown error' })
+      put({ type: types.FETCH_REJECTED, error: errLike('weird') })
     );
   });
 });
@@ -82,14 +85,14 @@ describe('createPostWorker', () => {
     expect(gen.next().done).toBe(true);
   });
 
-  test('on API failure emits REJECTED with the same temp id', () => {
+  test('on API failure emits REJECTED with the same temp id and an ErrorLike', () => {
     const gen = createPostWorker({ type: types.CREATE, draft });
     const pending = gen.next().value as any;
     const tempId = pending.payload.action.tempId;
     gen.next(); // call(...)
 
     expect(gen.throw(new Error('nope')).value).toEqual(
-      put({ type: types.CREATE_REJECTED, tempId, error: 'nope' })
+      put({ type: types.CREATE_REJECTED, tempId, error: errLike('nope') })
     );
   });
 });
@@ -127,7 +130,7 @@ describe('updatePostWorker', () => {
       put({
         type: types.UPDATE_REJECTED,
         previous,
-        error: 'oh no',
+        error: errLike('oh no'),
       })
     );
   });
@@ -172,7 +175,7 @@ describe('deletePostWorker', () => {
         type: types.DELETE_REJECTED,
         previous,
         index: 3,
-        error: 'nope',
+        error: errLike('nope'),
       })
     );
   });
@@ -188,23 +191,29 @@ describe('deletePostWorker', () => {
 // --- select inputs are well-formed --------------------------------------
 
 describe('saga select inputs', () => {
-  test('updatePostWorker reads previous from state.posts.byId', () => {
+  test('updatePostWorker reads previous from state.posts.list.data.byId', () => {
     const next = post({ id: 5 });
     const gen = updatePostWorker({ type: types.UPDATE, post: next });
     const sel = gen.next().value as ReturnType<typeof select>;
     const fakeState = {
-      posts: { byId: { 5: post({ id: 5, title: 'snapshot' }) } },
+      posts: {
+        list: {
+          data: { byId: { 5: post({ id: 5, title: 'snapshot' }) } },
+        },
+      },
     };
     expect((sel as any).payload.selector(fakeState)).toEqual(
       post({ id: 5, title: 'snapshot' })
     );
   });
 
-  test('deletePostWorker reads index from state.posts.allIds', () => {
+  test('deletePostWorker reads index from state.posts.list.data.allIds', () => {
     const gen = deletePostWorker({ type: types.DELETE, id: 9 });
     gen.next(); // SELECT previous
     const sel = gen.next(post({ id: 9 })).value as ReturnType<typeof select>;
-    const fakeState = { posts: { allIds: [1, 9, 12] } };
+    const fakeState = {
+      posts: { list: { data: { allIds: [1, 9, 12] } } },
+    };
     expect((sel as any).payload.selector(fakeState)).toBe(1);
   });
 });

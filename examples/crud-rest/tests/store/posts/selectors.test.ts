@@ -2,6 +2,10 @@ import { createStore } from 'redux-box';
 
 import postsModule, { type Post } from '../../../src/store/posts';
 import {
+  initialState,
+  type PostsState,
+} from '../../../src/store/posts/state';
+import {
   getError,
   getIsLoading,
   getIsSaving,
@@ -28,13 +32,21 @@ const post = (overrides: Partial<Post> = {}): Post => ({
   ...overrides,
 });
 
-const stateWith = (...posts: Post[]) => ({
+/**
+ * Build a fake root state with the posts slice populated by the given
+ * cards. Mirrors what FETCH_FULFILLED would produce, layered on top of
+ * the slice's idle XHR scaffolding.
+ */
+const stateWith = (...posts: Post[]): { posts: PostsState } => ({
   posts: {
-    byId: Object.fromEntries(posts.map(p => [p.id, p])),
-    allIds: posts.map(p => p.id),
-    isLoading: false,
-    isSaving: false,
-    error: null,
+    ...initialState,
+    list: {
+      ...initialState.list,
+      data: {
+        byId: Object.fromEntries(posts.map(p => [p.id, p])),
+        allIds: posts.map(p => p.id),
+      },
+    },
   },
 });
 
@@ -51,19 +63,71 @@ describe('eager selectors', () => {
     expect(getPostCount(stateWith(post({ id: 1 }), post({ id: 2 })))).toBe(2);
   });
 
-  test('getIsLoading / getIsSaving / getError surface their flags', () => {
-    const state = {
+  test('getIsLoading reflects list.loading', () => {
+    const state: { posts: PostsState } = {
       posts: {
-        byId: {},
-        allIds: [],
-        isLoading: true,
-        isSaving: true,
-        error: 'oh no',
+        ...initialState,
+        list: { ...initialState.list, loading: true },
       },
     };
     expect(getIsLoading(state)).toBe(true);
-    expect(getIsSaving(state)).toBe(true);
-    expect(getError(state)).toBe('oh no');
+  });
+
+  test('getIsSaving is true when any of create/update/remove is loading', () => {
+    const base = stateWith();
+
+    expect(getIsSaving(base)).toBe(false);
+
+    expect(
+      getIsSaving({
+        posts: {
+          ...base.posts,
+          create: { ...base.posts.create, loading: true },
+        },
+      })
+    ).toBe(true);
+
+    expect(
+      getIsSaving({
+        posts: {
+          ...base.posts,
+          update: { ...base.posts.update, loading: true },
+        },
+      })
+    ).toBe(true);
+
+    expect(
+      getIsSaving({
+        posts: {
+          ...base.posts,
+          remove: { ...base.posts.remove, loading: true },
+        },
+      })
+    ).toBe(true);
+  });
+
+  test('getError returns the first non-null ErrorLike across the four slots', () => {
+    const base = stateWith();
+
+    expect(getError(base)).toBeNull();
+
+    const listErr = { name: 'ApiError', message: 'oh no' };
+    expect(
+      getError({
+        posts: { ...base.posts, list: { ...base.posts.list, error: listErr } },
+      })
+    ).toEqual(listErr);
+
+    // create wins when list has none.
+    const createErr = { name: 'ApiError', message: 'create failed' };
+    expect(
+      getError({
+        posts: {
+          ...base.posts,
+          create: { ...base.posts.create, error: createErr },
+        },
+      })
+    ).toEqual(createErr);
   });
 
   test('getPosts is reselect-memoised: same slice -> same array reference', () => {

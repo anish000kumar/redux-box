@@ -8,6 +8,7 @@ import postsModule, {
   dispatchers as postDispatchers,
   type Post,
 } from '../../src/store/posts';
+import type { PostsState } from '../../src/store/posts/state';
 import uiModule from '../../src/store/ui';
 import PostList from '../../src/components/PostList';
 import { postsApi } from '../../src/api/posts';
@@ -32,7 +33,7 @@ const post = (overrides: Partial<Post> = {}): Post => ({
 });
 
 interface AppState {
-  posts: { error: string | null };
+  posts: PostsState;
   ui: {
     isEditorOpen: boolean;
     editingPostId: number | null;
@@ -92,7 +93,9 @@ describe('<PostList />', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /dismiss/i }));
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    expect(stateOf(store).posts.error).toBeNull();
+    // Dismiss clears every XHR slot's error. We assert via the list slot
+    // (the one the failing fetch landed in).
+    expect(stateOf(store).posts.list.error).toBeNull();
   });
 
   test('clicking "New post" opens the editor in create mode', async () => {

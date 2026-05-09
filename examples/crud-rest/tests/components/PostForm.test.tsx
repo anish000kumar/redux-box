@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux-box';
 
 import postsModule, { type Post } from '../../src/store/posts';
+import { initialState as postsInitial } from '../../src/store/posts/state';
 import uiModule, { dispatchers as uiDispatchers } from '../../src/store/ui';
 import PostForm from '../../src/components/PostForm';
 import { postsApi } from '../../src/api/posts';
@@ -38,13 +39,16 @@ function renderForm(preload?: { posts?: Post[]; editingId?: number | null }) {
       preloadedState: preload?.posts
         ? {
             posts: {
-              byId: Object.fromEntries(
-                preload.posts.map(p => [p.id, p])
-              ),
-              allIds: preload.posts.map(p => p.id),
-              isLoading: false,
-              isSaving: false,
-              error: null,
+              ...postsInitial,
+              list: {
+                ...postsInitial.list,
+                data: {
+                  byId: Object.fromEntries(
+                    preload.posts.map(p => [p.id, p])
+                  ),
+                  allIds: preload.posts.map(p => p.id),
+                },
+              },
             },
             ui: {
               search: '',

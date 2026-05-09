@@ -66,7 +66,7 @@ describe('posts module — integration', () => {
     ]);
   });
 
-  test('fetch failure surfaces the error message', async () => {
+  test('fetch failure surfaces the error message via getError', async () => {
     mockedApi.list.mockRejectedValue(new Error('network down'));
 
     const store = makeStore();
@@ -74,7 +74,7 @@ describe('posts module — integration', () => {
     await flushSagas();
 
     expect(getIsLoading(store.getState())).toBe(false);
-    expect(getError(store.getState())).toBe('network down');
+    expect(getError(store.getState())?.message).toBe('network down');
   });
 
   test('create flow: optimistic insert at top, then id reconciliation', async () => {
@@ -99,6 +99,7 @@ describe('posts module — integration', () => {
     const optimisticPosts = getPosts(store.getState());
     expect(optimisticPosts).toHaveLength(1);
     expect(optimisticPosts[0]?.id).toBeLessThan(0); // temp id
+    expect(getIsSaving(store.getState())).toBe(true);
 
     resolveCreate(post({ id: 99, title: 'Optimistic' }));
     await flushSagas();
@@ -118,7 +119,7 @@ describe('posts module — integration', () => {
     await flushSagas();
 
     expect(getPosts(store.getState())).toEqual([]);
-    expect(getError(store.getState())).toBe('nope');
+    expect(getError(store.getState())?.message).toBe('nope');
   });
 
   test('update flow: optimistic local edit, server confirmation', async () => {
@@ -157,7 +158,7 @@ describe('posts module — integration', () => {
     await flushSagas();
 
     expect(getPosts(store.getState())[0]?.title).toBe('old');
-    expect(getError(store.getState())).toBe('nope');
+    expect(getError(store.getState())?.message).toBe('nope');
   });
 
   test('delete flow: optimistic removal, server confirmation', async () => {
@@ -199,16 +200,16 @@ describe('posts module — integration', () => {
     await flushSagas();
 
     expect(getPosts(store.getState()).map(p => p.id)).toEqual([1, 2, 3]);
-    expect(getError(store.getState())).toBe('nope');
+    expect(getError(store.getState())?.message).toBe('nope');
   });
 
-  test('clearError dispatcher resets the error field', async () => {
+  test('clearError dispatcher resets every XHR slot', async () => {
     mockedApi.list.mockRejectedValue(new Error('fail'));
 
     const store = makeStore();
     store.dispatch(dispatchers.fetchPosts());
     await flushSagas();
-    expect(getError(store.getState())).toBe('fail');
+    expect(getError(store.getState())?.message).toBe('fail');
 
     store.dispatch(dispatchers.clearError());
     expect(getError(store.getState())).toBeNull();

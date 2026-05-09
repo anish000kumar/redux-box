@@ -68,8 +68,8 @@ function createStore(modules, config) {
   moduleNames.forEach(function (moduleName) {
     var module = modules[moduleName];
     _moduleRegistry["default"].register(moduleName, module);
-    sagas = sagas.concat(module.sagas);
-    var moduleReducer = (0, _getReducer["default"])(module.mutations, module.state);
+    sagas = sagas.concat(module.sagas || []);
+    var moduleReducer = (0, _getReducer["default"])(module.mutations || {}, module.state);
     if (module.decorateReducer) moduleReducer = module.decorateReducer(moduleReducer);
     reducerList[moduleName] = moduleReducer;
   });

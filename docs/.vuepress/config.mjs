@@ -30,6 +30,7 @@ export default {
           children: [
             { text: 'A simple counter', link: '/simple-example.html' },
             { text: 'Async data fetching', link: '/advanced-example.html' },
+            { text: 'GraphQL: Apollo & React Query', link: '/graphql-integration.html' },
           ],
         },
         {
@@ -45,7 +46,15 @@ export default {
     },
     navbar: [
       { text: 'Guide', link: '/getting-started.html' },
-      { text: 'Examples', link: '/simple-example.html' },
+      {
+        text: 'Examples',
+        children: [
+          { text: 'A simple counter', link: '/simple-example.html' },
+          { text: 'Async data fetching', link: '/advanced-example.html' },
+          { text: 'GraphQL: Apollo', link: '/graphql-apollo.html' },
+          { text: 'GraphQL: React Query', link: '/graphql-react-query.html' },
+        ],
+      },
       { text: 'API', link: '/api/' },
       { text: 'GitHub', link: 'https://github.com/anish000kumar/redux-box' },
     ],

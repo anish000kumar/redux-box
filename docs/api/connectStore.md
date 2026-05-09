@@ -17,7 +17,7 @@ Connects the state, selectors and dispatchers to components.
 | connectParams | <code>Object</code> | context object for connecting store to component |
 | connectParams.mapState | <code>function</code> | maps store-state to component-props |
 | connectParams.mapDispatchers | <code>Object</code> \| <code>function</code> | maps module-dispatchers to component-props |
-| connectParams.mapSelectors | <code>Object</code> | maps module-selectors to component-props. Selectors marked with <code>dynamicSelector</code> are mapped as functions and evaluated on demand. |
+| connectParams.mapSelectors | <code>Object</code> | maps module-selectors to component-props. Selectors marked with dynamicSelector are mapped as functions and evaluated on demand. |
 | connectParams.mergeProps | <code>function</code> | merges returned values from mapState, mapSelectors and mapDispatchers to return final component-props |
 | connectParams.options | <code>Object</code> | optional object passed to react-redux's connect function as fourth argument |
 
@@ -30,17 +30,5 @@ connectStore({
  mapState: state => ({ name: state.user.name }),
  mapSelectors: { userProfile : getProfile },
  mapDispatchers: { getProfile: fetchProfile }
-})
-```
-
-```js
-import { connectStore, dynamicSelector } from "redux-box";
-
-const getTodoByType = dynamicSelector((state, props, type) =>
-  state.todos.filter(todo => todo.type === type)
-);
-
-connectStore({
-  mapSelectors: { getTodoByType }
 })
 ```

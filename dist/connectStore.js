@@ -1,9 +1,10 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 exports.__esModule = true;
 exports["default"] = void 0;
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 var _reactRedux = require("react-redux");
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
  * Connects state, eager selectors, lazy (parameterized) selectors and
  * dispatchers to a component.
@@ -91,7 +92,7 @@ function connectStore(connectParams) {
       stateRef.current = state;
       var finalProps = {};
       if (mapState && typeof mapState === 'function') {
-        finalProps = _extends({}, mapState(state, ownProps));
+        finalProps = (0, _extends2["default"])({}, mapState(state, ownProps));
       }
       Object.entries(mapSelectors).forEach(function (_ref3) {
         var propName = _ref3[0],

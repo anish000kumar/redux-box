@@ -31,15 +31,22 @@ jobs:
         run: npm install --ignore-scripts
       - name: Run library tests
         run: npm test
-      - name: Build library (so the examples can link to dist/)
+      - name: Build library
         run: npm run build
-      - name: Upload built dist
+      # Pack the library exactly the way `npm publish` would. This is what
+      # the `examples` job installs, so the CI flow exercises the real
+      # consumer path (a tarball with hoisted deps) instead of the
+      # `file:../..` symlink that local dev uses — the symlink layout
+      # makes redux-box's runtime requires resolve from the repo root,
+      # which has no `node_modules/` in the artefact-only flow.
+      - name: Pack library tarball
+        run: npm pack
+      - name: Upload library tarball
         uses: actions/upload-artifact@v4
         with:
-          name: redux-box-dist
-          path: |
-            dist
-            package.json
+          name: redux-box-tarball
+          path: redux-box-*.tgz
+          if-no-files-found: error
 
   docs:
     name: Docs build
@@ -77,16 +84,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      # Pull in the freshly built library so each example's
-      # `"redux-box": "file:../.."` link resolves to a real `dist/`.
-      - name: Restore built library
+      # Pull in the freshly packed library tarball.
+      - name: Restore packed library
         uses: actions/download-artifact@v4
         with:
-          name: redux-box-dist
+          name: redux-box-tarball
           path: .
       - name: Install example deps
         working-directory: examples/${{ matrix.example }}
-        run: npm install --ignore-scripts
+        # First install everything per the example's own package.json
+        # (which links redux-box via `file:../..` for local-dev DX), then
+        # overwrite that symlinked install with the packed tarball so
+        # redux-box lives as a real, hoist-friendly package inside this
+        # example's node_modules. `--no-save` keeps package.json clean.
+        run: |
+          npm install --ignore-scripts
+          npm install --ignore-scripts --no-save "$GITHUB_WORKSPACE"/redux-box-*.tgz
       - name: Typecheck
         working-directory: examples/${{ matrix.example }}
         run: npm run typecheck

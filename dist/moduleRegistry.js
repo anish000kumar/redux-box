@@ -1,8 +1,9 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 exports.__esModule = true;
 exports["default"] = void 0;
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 /**
  * Internal singleton that keeps track of every module attached to the redux
  * store and the key it was mounted under. The registry is populated by
@@ -36,7 +37,7 @@ var ModuleRegistry = /*#__PURE__*/function () {
    * @returns {void}
    */
   _proto.register = function register(name, module) {
-    this.modules[module.id] = _extends({
+    this.modules[module.id] = (0, _extends2["default"])({
       name: name
     }, module);
   }

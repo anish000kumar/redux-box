@@ -1,12 +1,12 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 exports.__esModule = true;
 exports["default"] = void 0;
 exports.generateId = generateId;
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 var _reselect = require("reselect");
 var _moduleRegistry = _interopRequireDefault(require("./moduleRegistry"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /**
  * Generates an RFC4122-style v4 UUID. Used internally by {@link createModule}
  * to give every module a stable, unique id so it can be looked up in the
@@ -70,7 +70,7 @@ function generateId() {
  */
 function createModule(moduleObj) {
   var id = "" + generateId();
-  var finalObj = _extends({}, moduleObj, {
+  var finalObj = (0, _extends2["default"])({}, moduleObj, {
     id: id,
     getName: function getName() {
       return _moduleRegistry["default"].getName(id);

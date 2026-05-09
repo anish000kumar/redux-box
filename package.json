@@ -12,7 +12,7 @@
     "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude getReducer.js,composeEnhancers.js",
     "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "prepare": "husky"
+    "prepare": "command -v husky >/dev/null 2>&1 && husky || true"
   },
   "repository": {
     "type": "git",

@@ -29,9 +29,6 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Upgrade npm (required for OIDC trusted publishing)
-        run: npm install -g npm@latest
-
       - name: Install Dependencies 
         run: yarn
 

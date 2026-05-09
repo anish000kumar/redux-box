@@ -24,6 +24,14 @@ describe('createModule', () => {
     expect(selector({ userModule: { hi: 1 } })).toEqual({ hi: 1 });
   });
 
+  it('should create dynamic module selectors', () => {
+    const module = createModule(testModule);
+    createStore({ userModule: module });
+    const selector = module.dynamicSelect((state, fieldName) => state[fieldName]);
+    expect(selector({ userModule: { name: 'John' } }, {}, 'name')).toBe('John');
+    expect(selector.__reduxBoxDynamicSelector).toBe(true);
+  });
+
   it('should return random and unique id', () => {
     expect(typeof generateId()).toBe('string');
     expect(generateId()).not.toBe(generateId());

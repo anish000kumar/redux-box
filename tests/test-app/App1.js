@@ -9,6 +9,9 @@ class App extends Component {
       <div>
         <h1 data-testid="username">{this.props.username}</h1>
         <h2 data-testid="country">{this.props.country}</h2>
+        <h3 data-testid="dynamic-country">
+          {this.props.getAddressField('country')}
+        </h3>
         <button
           data-testid="change-firstname"
           onClick={this.props.setFirstname.bind(this, 'anish')}
@@ -26,6 +29,7 @@ export default connectStore({
   mapSelectors: {
     username: userSelectors.getName,
     address: userSelectors.getAddress,
+    getAddressField: userSelectors.getAddressField,
   },
   mapDispatchers: {
     setFirstname: userDispatchers.setFirstname,

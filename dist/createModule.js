@@ -8,6 +8,8 @@ exports["default"] = createModule;
 
 var _reselect = require("reselect");
 
+var _dynamicSelector = _interopRequireDefault(require("./dynamicSelector"));
+
 var _moduleRegistry = _interopRequireDefault(require("./moduleRegistry"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -53,6 +55,16 @@ function createModule(moduleObj) {
     select: function select(cb) {
       var getModuleState = finalObj.getSelector();
       return (0, _reselect.createSelector)(getModuleState, cb);
+    },
+    dynamicSelect: function dynamicSelect(cb) {
+      var getModuleState = finalObj.getSelector();
+      return (0, _dynamicSelector["default"])(function (state, props) {
+        for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+          args[_key - 2] = arguments[_key];
+        }
+
+        return cb.apply(void 0, [getModuleState(state)].concat(args));
+      });
     }
   });
 

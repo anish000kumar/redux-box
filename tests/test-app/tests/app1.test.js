@@ -21,6 +21,7 @@ test('can render with redux with defaults', () => {
   const { getByTestId } = renderWithRedux(<App1 testProp="hi" />);
   expect(getByTestId('username').textContent).toBe('a b');
   expect(getByTestId('country').textContent).toBe('USA');
+  expect(getByTestId('dynamic-country').textContent).toBe('USA');
 });
 
 test('mutations work correctly', () => {
@@ -39,6 +40,7 @@ test('sagas work correctly', done => {
     expect(userModule.lastname).toBe('kumar');
     expect(getByTestId('username').textContent).toBe('anish kumar');
     expect(getByTestId('country').textContent).toBe('India');
+    expect(getByTestId('dynamic-country').textContent).toBe('India');
     done();
   }, 1000);
 });

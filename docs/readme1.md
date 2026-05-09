@@ -284,6 +284,30 @@ export default class AppComponent extends Component {
 }
 ```
 
+#### dynamic selectors
+
+If a component needs to pass arguments to a selector at render time, create the
+selector with `module.dynamicSelect`. `connectStore` will pass it to the
+component as a function instead of executing it immediately.
+
+```javascript
+const getTodosByType = userModule.dynamicSelect((state, type) =>
+  state.todos.filter(todo => todo.type === type)
+);
+
+@connectStore({
+  mapSelectors: {
+    getTodosByType
+  }
+})
+export default class AppComponent extends Component {
+  render() {
+    const completedTodos = this.props.getTodosByType(1);
+    return <p>{completedTodos.length}</p>;
+  }
+}
+```
+
 #### or through render props
 
 ```javascript

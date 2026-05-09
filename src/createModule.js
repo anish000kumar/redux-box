@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import dynamicSelector from './dynamicSelector';
 import moduleRegistry from './moduleRegistry';
 
 export function generateId() {
@@ -36,6 +37,12 @@ export default function createModule(moduleObj) {
       return createSelector(
         getModuleState,
         cb
+      );
+    },
+    dynamicSelect(cb) {
+      const getModuleState = finalObj.getSelector();
+      return dynamicSelector((state, props, ...args) =>
+        cb(getModuleState(state), ...args)
       );
     },
   };

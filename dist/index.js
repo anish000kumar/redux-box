@@ -27,6 +27,12 @@ Object.defineProperty(exports, "createModule", {
     return _createModule["default"];
   }
 });
+Object.defineProperty(exports, "dynamicSelector", {
+  enumerable: true,
+  get: function get() {
+    return _dynamicSelector["default"];
+  }
+});
 
 var _createStore = _interopRequireDefault(require("./createStore"));
 
@@ -35,5 +41,7 @@ var _connectStore = _interopRequireDefault(require("./connectStore"));
 var _createSagas = _interopRequireDefault(require("./createSagas"));
 
 var _createModule = _interopRequireDefault(require("./createModule"));
+
+var _dynamicSelector = _interopRequireDefault(require("./dynamicSelector"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }

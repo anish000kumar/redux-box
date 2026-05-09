@@ -7,6 +7,8 @@ exports["default"] = void 0;
 
 var _reactRedux = require("react-redux");
 
+var _dynamicSelector = require("./dynamicSelector");
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -36,7 +38,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  * @param {Object} connectParams - context object for connecting store to component
  * @param {Function} connectParams.mapState - maps store-state to component-props
  * @param {Object | Function} connectParams.mapDispatchers - maps module-dispatchers to component-props
- * @param {Object} connectParams.mapSelectors - maps module-selectors to component-props
+ * @param {Object} connectParams.mapSelectors - maps module-selectors to component-props. Selectors marked with dynamicSelector are mapped as functions and evaluated on demand.
  * @param {Function} connectParams.mergeProps - merges returned values from mapState, mapSelectors and mapDispatchers to return final component-props
  * @param {Object} connectParams.options - optional object passed to react-redux's connect function as fourth argument
  * @returns {Function} - return the output of connect() from react-redux
@@ -61,7 +63,7 @@ function connectStore() {
     if (mapState && typeof mapState === 'function') {
       finalProps = _objectSpread({}, mapState(state, props));
     }
-    /* Call all selectors with  */
+    /* Call all selectors with state and own props. */
 
 
     Object.entries(mapSelectors).forEach(function (_ref) {
@@ -69,7 +71,17 @@ function connectStore() {
           propName = _ref2[0],
           selector = _ref2[1];
 
-      finalProps[propName] = selector.call(undefined, state, props);
+      if (selector[_dynamicSelector.DYNAMIC_SELECTOR]) {
+        finalProps[propName] = function () {
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          return selector.call.apply(selector, [undefined, state, props].concat(args));
+        };
+      } else {
+        finalProps[propName] = selector.call(undefined, state, props);
+      }
     });
     return finalProps;
   } // connect

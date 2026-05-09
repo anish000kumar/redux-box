@@ -238,8 +238,12 @@ export default App;
 
 ```javascript
 import React, { Component } from "react";
-import { connectStore } from "redux-box";
+import { connectStore, dynamicSelector } from "redux-box";
 import { getTodos, getCompletedTodos, dispatchers } from "./user";
+
+const getTodosByType = dynamicSelector((state, props, type) =>
+  state.user.todos.filter(todo => todo.type === type)
+);
 
 @connectStore({
   mapState: state => ({
@@ -248,7 +252,8 @@ import { getTodos, getCompletedTodos, dispatchers } from "./user";
 
   mapSelectors: {
     todos: getTodos,
-    completedTodos: getCompletedTodos
+    completedTodos: getCompletedTodos,
+    getTodosByType
   }, 
 
   mapDispatchers: {
@@ -265,6 +270,7 @@ export default class AppComponent extends Component {
 	    email : 'john@doe.com',
 	    getTodos: [{ name: "First", type: 1 }, { name: "Second", type: 0 }],
 	    getCompletedTodos: [{ name: "First", type: 1 }],
+	    getTodosByType : fn(type),
 	    setName : fn(arg),
 	    setEmail : fn(arg)
 	}
@@ -286,6 +292,23 @@ export default class AppComponent extends Component {
     );
   }
 }
+```
+
+Selectors marked with `dynamicSelector` are not executed immediately by
+`connectStore`. They are passed to the component as functions, so the component
+can evaluate them on demand with runtime arguments:
+
+```javascript
+const completedTodos = this.props.getTodosByType(1);
+```
+
+When creating selectors from a module, the shorthand `module.dynamicSelect`
+passes the module state as the first argument:
+
+```javascript
+const getTodoByName = userModule.dynamicSelect((state, name) =>
+  state.todos.find(todo => todo.name === name)
+);
 ```
 
 ## Live Examples (For ReduxBox@1.x.x only)

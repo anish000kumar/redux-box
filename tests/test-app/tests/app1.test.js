@@ -1,18 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render, fireEvent, cleanup } from 'react-testing-library';
-import 'jest-dom/extend-expect';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import App1 from '../App1';
 import testStore from '../store/index';
-
-afterEach(cleanup);
 
 function renderWithRedux(ui, { store = testStore } = {}) {
   return {
     ...render(<Provider store={store}>{ui}</Provider>),
-    // adding `store` to the returned utilities to allow us
-    // to reference it in our tests (just try to avoid using
-    // this to test implementation details).
     store,
   };
 }
@@ -26,21 +21,19 @@ test('can render with redux with defaults', () => {
 
 test('mutations work correctly', () => {
   const { getByTestId } = renderWithRedux(<App1 testProp="hi" />);
-  getByTestId('change-firstname').click();
+  fireEvent.click(getByTestId('change-firstname'));
   expect(getByTestId('username').textContent).toBe('anish b');
 });
 
-test('sagas work correctly', done => {
+test('sagas work correctly', async () => {
   const { getByTestId } = renderWithRedux(<App1 testProp="hi" />);
-  getByTestId('fetchProfile').click();
-  setTimeout(() => {
-    const store = testStore;
-    const userModule = store.getState().user;
-    expect(userModule.firstname).toBe('anish');
-    expect(userModule.lastname).toBe('kumar');
+  fireEvent.click(getByTestId('fetchProfile'));
+  await waitFor(() => {
     expect(getByTestId('username').textContent).toBe('anish kumar');
-    expect(getByTestId('country').textContent).toBe('India');
-    expect(getByTestId('dynamic-country').textContent).toBe('India');
-    done();
-  }, 1000);
+  });
+  const userModule = testStore.getState().user;
+  expect(userModule.firstname).toBe('anish');
+  expect(userModule.lastname).toBe('kumar');
+  expect(getByTestId('country').textContent).toBe('India');
+  expect(getByTestId('dynamic-country').textContent).toBe('India');
 });

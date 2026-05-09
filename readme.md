@@ -323,6 +323,10 @@ Here are some examples to let you play around with redux-box
 5. Example showing usage of preloaded state for SSR:  https://stackblitz.com/edit/react-qcasn4?file=store/index.js
 6. Using redux-observable: https://stackblitz.com/edit/react-zu8qjn?file=store%2Fuser%2Fepics.js
 
+For Redux Box 2, see the [advanced async API example](docs/advanced-example.md)
+for a module that uses redux-saga to fetch data, update loading and error state,
+and connect selectors and dispatchers to a React component.
+
 ## Upcoming Features
 *No pending feature requests*
 > *[Suggest a new feature here](https://github.com/anish000kumar/redux-box/labels/feature)*

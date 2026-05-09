@@ -4,12 +4,13 @@
   "description": "A redux container to scaffold redux based applications in simplest possible way.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest  --coverage --collectCoverageFrom=src/**/*.js",
-    "test:coveralls": "jest  --coverage --collectCoverageFrom=src/**/*.js --coverageReporters=text-lcov | coveralls",
+    "test": "jest --coverage --collectCoverageFrom=src/**/*.js",
+    "test:coveralls": "jest --coverage --collectCoverageFrom=src/**/*.js --coverageReporters=text-lcov | coveralls",
     "build": "babel src --out-dir dist",
     "docs:jsdoc": "vuepress-jsdoc --source ./src --dist ./docs --folder api --title API --exclude ./src/getReducer.js,./src/composeEnhancers.js ",
     "docs:dev": "npm run docs:jsdoc && vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -28,49 +29,37 @@
     "url": "https://github.com/anish000kumar/redux-box/issues"
   },
   "dependencies": {
-    "immer": "^8.0.1",
-    "react": "^16.9.0",
-    "react-redux": "^7.1.1",
-    "redux": "^4.0.4",
-    "redux-saga": "^1.0.5",
-    "regenerator-runtime": "^0.13.3",
-    "reselect": "^4.0.0"
+    "immer": "^10.1.1",
+    "react": "^18.3.1",
+    "react-redux": "^9.1.2",
+    "redux": "^5.0.1",
+    "redux-saga": "^1.3.0",
+    "regenerator-runtime": "^0.14.1",
+    "reselect": "^5.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-proposal-decorators": "^7.4.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
-    "@babel/plugin-transform-react-display-name": "^7.2.0",
-    "@babel/plugin-transform-react-jsx": "^7.3.0",
-    "@babel/plugin-transform-runtime": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-react": "^7.0.0",
-    "babel-jest": "^24.9.0",
-    "babel-polyfill": "^6.26.0",
-    "coveralls": "^3.0.6",
-    "create-react-class": "^15.6.3",
-    "husky": "^1.3.1",
-    "jest": "^24.7.1",
-    "jest-dom": "^3.1.3",
-    "jsdoc": "^3.5.5",
-    "jsdoc-template": "^1.2.0",
-    "jsdoc-to-markdown": "^4.0.1",
-    "prop-types": "^15.7.2",
-    "react-addons-test-utils": "15.2.0",
-    "react-dom": "^16.8.6",
-    "react-test-renderer": "^15.4.1",
-    "react-testing-library": "^6.1.2",
-    "semantic-release": "^17.2.3",
-    "vuepress": "^0.14.10",
-    "vuepress-jsdoc": "^1.7.0"
+    "@babel/cli": "^7.25.6",
+    "@babel/core": "^7.25.2",
+    "@babel/plugin-proposal-decorators": "^7.24.7",
+    "@babel/plugin-transform-runtime": "^7.25.4",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-react": "^7.24.7",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@vuepress/bundler-vite": "^2.0.0-rc.28",
+    "@vuepress/theme-default": "^2.0.0-rc.42",
+    "babel-jest": "^29.7.0",
+    "coveralls": "^3.1.1",
+    "husky": "^9.1.6",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "react-dom": "^18.3.1",
+    "semantic-release": "^24.1.1",
+    "vue": "^3.5.6",
+    "vuepress": "^2.0.0-rc.28",
+    "vuepress-jsdoc": "^5.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test && npm run build",
-      "pre-push": "npm test",
-      "pre-release": "npm test && npm run build"
-    }
-  },
-  "homepage": "https://github.com/anish000kumar/redux-box#readme"
+  "homepage": "https://github.com/anish000kumar/redux-box#readme",
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

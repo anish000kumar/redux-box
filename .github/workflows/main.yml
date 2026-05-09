@@ -1,18 +1,136 @@
 name: PR Tests
 on:
   pull_request:
-    branches: [ "master" ] # Runs when a PR is opened against 'main'
+    branches: ["master"]
+
+# Three independent gates run before a PR can land on `master`:
+#
+#   1. `library`  – runs the redux-box unit tests, builds `dist/`, and
+#                   uploads the artefact for the `examples` job to consume.
+#   2. `docs`     – mirrors `deploy-docs.yml` so we catch VuePress / theme /
+#                   esbuild regressions before they break the live docs.
+#   3. `examples` – matrix over `crud-rest` and `trello-graphql`: install,
+#                   typecheck, test, and produce a production build using
+#                   the same `VITE_BASE_PATH` the deploy workflow uses.
+#
+# Configure these as required status checks on the `master` branch in the
+# repo's branch protection rules so a merge cannot happen until all of
+# them are green.
 
 jobs:
-  test:
+  library:
+    name: Library tests & build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4   # Pulls your code into the runner
-      - name: Set up environment
-        uses: actions/setup-node@v4 # Or setup-python, setup-java, etc.
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Install dependencies
-        run: npm install
-      - name: Run tests
+        run: npm install --ignore-scripts
+      - name: Run library tests
         run: npm test
+      - name: Build library
+        run: npm run build
+      # Pack the library exactly the way `npm publish` would. This is what
+      # the `examples` job installs, so the CI flow exercises the real
+      # consumer path (a tarball with hoisted deps) instead of the
+      # `file:../..` symlink that local dev uses — the symlink layout
+      # makes redux-box's runtime requires resolve from the repo root,
+      # which has no `node_modules/` in the artefact-only flow.
+      - name: Pack library tarball
+        run: npm pack
+      - name: Upload library tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: redux-box-tarball
+          path: redux-box-*.tgz
+          if-no-files-found: error
+
+  docs:
+    name: Docs build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: yarn
+      # Mirrors `deploy-docs.yml` exactly so this PR check fails for the
+      # same reasons the deploy would. yarn + frozen-lockfile pins the
+      # esbuild version that the docs config is calibrated against.
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --ignore-engines --ignore-scripts
+      - name: Generate API docs
+        run: yarn docs:jsdoc
+      - name: Build site
+        env:
+          DOCS_BASE: /redux-box/
+        run: yarn docs:build
+
+  examples:
+    name: Build & test ${{ matrix.example }}
+    needs: library
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [crud-rest, trello-graphql]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # Pull in the freshly packed library tarball.
+      - name: Restore packed library
+        uses: actions/download-artifact@v4
+        with:
+          name: redux-box-tarball
+          path: .
+      - name: Install example deps
+        working-directory: examples/${{ matrix.example }}
+        # First install everything per the example's own package.json
+        # (which links redux-box via `file:../..` for local-dev DX), then
+        # overwrite that symlinked install with the packed tarball so
+        # redux-box lives as a real, hoist-friendly package inside this
+        # example's node_modules. `--no-save` keeps package.json clean.
+        run: |
+          npm install --ignore-scripts
+          npm install --ignore-scripts --no-save "$GITHUB_WORKSPACE"/redux-box-*.tgz
+      - name: Typecheck
+        working-directory: examples/${{ matrix.example }}
+        run: npm run typecheck
+      - name: Test
+        working-directory: examples/${{ matrix.example }}
+        run: npm test -- --coverage=false
+      - name: Production build
+        working-directory: examples/${{ matrix.example }}
+        env:
+          # Mirror the prod base path so the build catches asset-path
+          # regressions before they hit Pages.
+          VITE_BASE_PATH: /redux-box/examples/${{ matrix.example }}/
+        run: npm run build
+
+  # Convenience aggregator so branch protection only needs to require a
+  # single status check ("PR Gate") regardless of how many matrix legs
+  # the `examples` job grows in the future.
+  pr-gate:
+    name: PR Gate
+    if: always()
+    needs: [library, docs, examples]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all gates passed
+        run: |
+          if [[ "${{ needs.library.result }}" != "success" \
+             || "${{ needs.docs.result }}"    != "success" \
+             || "${{ needs.examples.result }}" != "success" ]]; then
+            echo "One or more gates failed:"
+            echo "  library:  ${{ needs.library.result }}"
+            echo "  docs:     ${{ needs.docs.result }}"
+            echo "  examples: ${{ needs.examples.result }}"
+            exit 1
+          fi

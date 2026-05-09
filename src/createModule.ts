@@ -69,11 +69,21 @@ function createModule(moduleObj: Module) {
     __name?: string | null;
     getName: () => string | null;
     getSelector: () => (state?: any) => any;
-    select: (cb: (...args: any[]) => any) => any;
-    lazySelect: (
-      cb: (moduleState: any, ...args: any[]) => any,
+    /**
+     * `select` is generic so the type of `cb`'s return propagates into
+     * the call-site selector — `getError(state)` is `string | null`,
+     * not `any`.
+     */
+    select: <R>(cb: (moduleState: any) => R) => (state: any) => R;
+    /**
+     * Same idea for `lazySelect`: the inner callback's signature drives
+     * the call-site signature, so `getById(state, id)` is
+     * `Post | undefined` rather than `any`.
+     */
+    lazySelect: <R, A extends any[]>(
+      cb: (moduleState: any, ...args: A) => R,
       opts?: { memoize?: <F extends (...a: any[]) => any>(fn: F) => F }
-    ) => (state: any, ...args: any[]) => any;
+    ) => (state: any, ...args: A) => R;
   } = {
     ...moduleObj,
     id,

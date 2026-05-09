@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Redux Box · Live Examples</title>
+    <meta
+      name="description"
+      content="Two end-to-end Redux Box example apps deployed live: a CRUD REST app on JSONPlaceholder and a Trello-style board on a public GraphQL API."
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #1a1f36;
+        --muted: #525f7f;
+        --accent: #5469d4;
+        --border: #e3e8ef;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0e1117;
+          --card: #161b22;
+          --text: #e6edf3;
+          --muted: #8b949e;
+          --accent: #79c0ff;
+          --border: #30363d;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 64px 24px;
+        font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        justify-content: center;
+      }
+      main { max-width: 880px; width: 100%; }
+      header { margin-bottom: 48px; }
+      h1 {
+        font-size: clamp(28px, 4vw, 40px);
+        margin: 0 0 12px;
+        letter-spacing: -0.02em;
+      }
+      header p { color: var(--muted); max-width: 60ch; margin: 0; }
+      .grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+      a.card {
+        display: block;
+        padding: 28px;
+        border-radius: 14px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.12s ease, border-color 0.12s ease;
+      }
+      a.card:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+      }
+      .card h2 {
+        margin: 0 0 6px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .card h2 .badge {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: var(--accent);
+        color: var(--bg);
+        font-weight: 600;
+      }
+      .card p { margin: 0 0 12px; color: var(--muted); }
+      .card ul { margin: 0; padding-left: 20px; color: var(--muted); }
+      .card li { margin: 4px 0; }
+      footer {
+        margin-top: 48px;
+        color: var(--muted);
+        font-size: 14px;
+        text-align: center;
+      }
+      footer a { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Redux Box · Live Examples</h1>
+        <p>
+          Two end-to-end TypeScript apps that exercise the Redux Box
+          conventions on real public APIs. Both are open in their full
+          source under
+          <a href="https://github.com/anish000kumar/redux-box/tree/master/examples">
+            examples/
+          </a>
+          in the repository.
+        </p>
+      </header>
+
+      <section class="grid">
+        <a class="card" href="./crud-rest/">
+          <h2>CRUD · REST <span class="badge">Live</span></h2>
+          <p>
+            List, create, edit and delete posts against
+            <a
+              href="https://jsonplaceholder.typicode.com/"
+              target="_blank"
+              rel="noreferrer noopener"
+              >JSONPlaceholder</a
+            >.
+          </p>
+          <ul>
+            <li>Optimistic UI with snapshot rollback</li>
+            <li>Normalised <code>byId</code> / <code>allIds</code> state</li>
+            <li>Debounced search via a lazy selector</li>
+            <li>Cross-module saga driving toasts on lifecycle events</li>
+          </ul>
+        </a>
+
+        <a class="card" href="./trello-graphql/">
+          <h2>Trello · GraphQL <span class="badge">Live</span></h2>
+          <p>
+            Three-column Kanban board on
+            <a
+              href="https://graphqlzero.almansi.me/"
+              target="_blank"
+              rel="noreferrer noopener"
+              >GraphQL Zero</a
+            >, with native HTML5 drag-and-drop.
+          </p>
+          <ul>
+            <li>Optimistic create / rename / delete with rollback</li>
+            <li>Move-card saga with same-status short-circuit</li>
+            <li>Per-card pending flag via lazy selector</li>
+            <li>Tiny zero-dep <code>fetch</code>-based GraphQL client</li>
+          </ul>
+        </a>
+      </section>
+
+      <footer>
+        Built with
+        <a href="https://github.com/anish000kumar/redux-box">redux-box</a>,
+        TypeScript, redux-saga, immer and reselect.
+      </footer>
+    </main>
+  </body>
+</html>

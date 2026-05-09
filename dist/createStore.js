@@ -74,6 +74,17 @@ function createStore(modules, config) {
     reducerList[moduleName] = moduleReducer;
   });
   sagas = config.sagas ? sagas.concat(config.sagas) : sagas;
+
+  // Modules built with `createSagas` ship watcher *factories* (zero-arg
+  // functions returning a fresh generator). Plain generator instances
+  // are still accepted for backwards-compatibility and for callers that
+  // build their own watchers. Calling the factories here means each
+  // `createStore` invocation gets its own brand-new generators, which is
+  // essential when the same module objects are reused across multiple
+  // stores - e.g. in tests that spin a fresh store per case.
+  sagas = sagas.map(function (s) {
+    return typeof s === 'function' ? s() : s;
+  });
   var combinedReducer = (0, _redux.combineReducers)(reducerList);
   if (config.decorateReducer) {
     combinedReducer = config.decorateReducer(combinedReducer);

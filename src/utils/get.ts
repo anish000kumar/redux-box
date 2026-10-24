@@ -21,12 +21,12 @@
  * @returns {*} The resolved value, or `defaultVal` if the path could not be resolved.
  */
 function get(object: any, keys: string | string[], defaultVal: any = undefined): any {
-  if (typeof object !== 'object') {
+  if (object === null || typeof object !== 'object') {
     return defaultVal;
   }
   const keyList: string[] = Array.isArray(keys) ? keys : keys.split('.');
   const next = object[keyList[0]];
-  if (next && keyList.length > 1) {
+  if (keyList.length > 1) {
     return get(next, keyList.slice(1), defaultVal);
   }
   return next === undefined ? defaultVal : next;

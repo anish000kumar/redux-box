@@ -20,4 +20,17 @@ describe('composeEnhancers', () => {
     expect(get(test, 'name.first.value')).toBe('anish');
     expect(get(test, 'something')).toBe('2');
   });
+
+  it('returns the default when the root or an intermediate value is nullish or primitive', () => {
+    const fallback = 'fallback';
+
+    expect(get(null, 'name.first', fallback)).toBe(fallback);
+    expect(get({ name: null }, 'name.first', fallback)).toBe(fallback);
+    expect(get({ name: false }, 'name.first', fallback)).toBe(fallback);
+  });
+
+  it('preserves explicit falsey values at the end of a path', () => {
+    expect(get({ enabled: false }, 'enabled', true)).toBe(false);
+    expect(get({ value: null }, 'value', 'fallback')).toBeNull();
+  });
 });

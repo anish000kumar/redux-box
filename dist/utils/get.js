@@ -28,12 +28,12 @@ function get(object, keys, defaultVal) {
   if (defaultVal === void 0) {
     defaultVal = undefined;
   }
-  if (typeof object !== 'object') {
+  if (object === null || typeof object !== 'object') {
     return defaultVal;
   }
   var keyList = Array.isArray(keys) ? keys : keys.split('.');
   var next = object[keyList[0]];
-  if (next && keyList.length > 1) {
+  if (keyList.length > 1) {
     return get(next, keyList.slice(1), defaultVal);
   }
   return next === undefined ? defaultVal : next;
